@@ -1,0 +1,34 @@
+require 'rake/testtask'
+
+$:.unshift ENV['JAH_GRRR_RB_DEV_DIR'] + '/lib'
+
+task :default => :tests
+
+task :tests => [:test_grrr, :test_unstable, :test_grrr_ruby]
+
+Rake::TestTask.new(:test_grrr) do |t|
+	t.libs << "test"
+	t.pattern = "test/tc_grrr.rb"
+end
+
+Rake::TestTask.new(:test_unstable) do |t|
+	t.libs << "test"
+	t.pattern = "test/tc_unstable.rb"
+end
+
+Rake::TestTask.new(:test_grrr_ruby) do |t|
+	t.libs << "test"
+	t.pattern = "test/tc_grrr_ruby.rb"
+end
+
+task :irb => :environment do
+	require 'irb'
+	ARGV.clear
+	IRB.start
+end
+
+task :environment do
+	require 'grrr'
+	require 'unstable'
+	require 'screengrid' if using_jruby?
+end

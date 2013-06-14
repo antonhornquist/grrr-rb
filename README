@@ -1,0 +1,40 @@
+NAME
+
+	grrr-rb
+
+SYNOPSIS
+
+	UI library for grid based controllers
+
+DESCRIPTION
+
+	This is a port of my SuperCollider project grrr-sc to ruby targeting the jruby platform. It requires scext-rb. The ruby version primarily exists since i wanted to run test suites from the command prompt. For real-time performances use grrr-sc.
+
+EXAMPLES
+
+	# Example 1
+
+	a = ScreenGrid.new
+
+	b = GridButton.new(a, "0@0")
+	b.action = lambda { |value| puts "the first button's value was changed to #{value}!" }
+
+	c = GridButton.new_momentary(a, "1@1", 2, 2)
+	c.action = lambda { |value| puts "the second button's value was changed to #{value}!" }
+
+	a.remove_all
+
+	# Example 2
+
+	b = GridButton.new_decoupled(a, "0@0")
+	b.button_pressed_action = lambda { puts "the first button was pressed!" }
+	b.button_released_action = lambda { puts "the first button was released!" }
+
+
+HISTORY
+
+COPYRIGHT
+
+	Anton Hörnquist
+	http://www.hornquist.se
+	Released under GPL

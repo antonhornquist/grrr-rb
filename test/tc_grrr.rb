@@ -1,9 +1,10 @@
 require 'test/unit'
-require 'test_helper'
 
 testdir = File.expand_path('.')
 libdir = File.expand_path('../lib')
 [testdir, libdir].each { |path| $LOAD_PATH.unshift(path) unless $LOAD_PATH.include?(path) }
+
+require 'test_helper'
 
 GRRR_DO_NOT_POST_JRUBY_WARNINGS = true
 

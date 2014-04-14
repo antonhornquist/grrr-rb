@@ -51,7 +51,7 @@ class Grrr::View
 	end
 
 	def to_points_from(origin)
-		View.bounds_to_points(origin, @num_cols, @num_rows)
+		self.class.bounds_to_points(origin, @num_cols, @num_rows)
 	end
 
 	def self.bounds_to_points(origin, num_cols, num_rows)
@@ -300,7 +300,7 @@ class Grrr::View
 	end
 
 	def points_pressed_within_bounds(origin, num_cols, num_rows)
-		@points_pressed.select { |point| View.bounds_contain_point?(origin, num_cols, num_rows, point) }
+		@points_pressed.select { |point| self.class.bounds_contain_point?(origin, num_cols, num_rows, point) }
 	end
 
 	# Leds and Refresh
@@ -316,7 +316,7 @@ class Grrr::View
 	def refresh_bounds(origin, num_cols, num_rows, refresh_children=true)
 		if @enabled
 			validate_contains_bounds origin, num_cols, num_rows
-			View.bounds_to_points(origin, num_cols, num_rows).each { |point| refresh_point(point, refresh_children) }
+			self.class.bounds_to_points(origin, num_cols, num_rows).each { |point| refresh_point(point, refresh_children) }
 		else
 			raise "view is disabled"
 		end
@@ -382,7 +382,7 @@ class Grrr::View
 	end
 
 	def indicate_bounds(origin, num_cols, num_rows, repeat=nil, interval=nil)
-		indicate_points(View.bounds_to_points(origin, num_cols, num_rows), repeat, interval)
+		indicate_points(self.class.bounds_to_points(origin, num_cols, num_rows), repeat, interval)
 	end
 
 	def indicate_point(point, repeat=nil, interval=nil)
@@ -414,7 +414,7 @@ class Grrr::View
 	end
 
 	def flash_bounds(origin, num_cols, num_rows, delay=nil)
-		flash_points(View.bounds_to_points(origin, num_cols, num_rows), delay)
+		flash_points(self.class.bounds_to_points(origin, num_cols, num_rows), delay)
 	end
 
 	def flash_point(point, delay=nil)

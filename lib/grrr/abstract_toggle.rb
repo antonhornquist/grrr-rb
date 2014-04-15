@@ -123,7 +123,7 @@ class Grrr::AbstractToggle < Grrr::View
 	end
 
 	def num_values
-		@num_cols / @thumb_width * @num_rows / @thumb_height
+		num_values_x * num_values_y
 	end
 
 	def value_at(point)

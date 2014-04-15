@@ -111,6 +111,10 @@ class Grrr::MultiButtonView < Grrr::ContainerView
 		@buttons[x][y].value
 	end
 
+	def flash_button(x, y, delay)
+		@buttons[x][y].flash(delay)
+	end
+
 	def set_button_value(x, y, val)
 		@buttons[x][y].value = val
 	end

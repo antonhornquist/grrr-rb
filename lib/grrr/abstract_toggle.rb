@@ -110,20 +110,20 @@ class Grrr::AbstractToggle < Grrr::View
 		@values_pressed.size
 	end
 
-	def num_values_x
-		@num_cols / @thumb_width
-	end
-
-	def num_values_y
-		@num_rows / @thumb_height
-	end
-
 	def maximum_value
 		num_values-1
 	end
 
 	def num_values
 		num_values_x * num_values_y
+	end
+
+	def num_values_x
+		@num_cols / @thumb_width
+	end
+
+	def num_values_y
+		@num_rows / @thumb_height
 	end
 
 	def value_at(point)

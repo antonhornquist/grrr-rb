@@ -144,6 +144,10 @@ class Grrr::MultiToggleView < Grrr::ContainerView
 		@toggles[i].value
 	end
 
+	def flash_toggle(i, delay)
+		@toggles[i].flash(delay)
+	end
+
 	def set_toggle_value(i, val)
 		@toggles[i].value = val
 	end

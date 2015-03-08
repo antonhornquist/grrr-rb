@@ -1,40 +1,32 @@
-NAME
+# grrr-rb
 
-	grrr-rb
+Grid controller UI widget library for Ruby targeting the JRuby platform
 
-SYNOPSIS
+## Description
 
-	UI library for grid based controllers
+This is a Ruby port of my SuperCollider library Grrr-sc targeting the JRuby platform. It requires scext-rb. The Ruby version primarily exists to run test suites from the command prompt and to explore the commonalities between SuperCollider and Ruby. For real-time performances one should probably go SuperCollider and use Grrr-sc.
 
-DESCRIPTION
+## Examples
 
-	This is a port of my SuperCollider project grrr-sc to ruby targeting the jruby platform. It requires scext-rb. The ruby version primarily exists since i wanted to run test suites from the command prompt. For real-time performances use grrr-sc.
+### Example 1
 
-EXAMPLES
+a = ScreenGrid.new
 
-	# Example 1
+b = GridButton.new(a, "0@0")
+b.action = lambda { |value| puts "the first button's value was changed to #{value}!" }
 
-	a = ScreenGrid.new
+c = GridButton.new_momentary(a, "1@1", 2, 2)
+c.action = lambda { |value| puts "the second button's value was changed to #{value}!" }
 
-	b = GridButton.new(a, "0@0")
-	b.action = lambda { |value| puts "the first button's value was changed to #{value}!" }
+a.remove_all
 
-	c = GridButton.new_momentary(a, "1@1", 2, 2)
-	c.action = lambda { |value| puts "the second button's value was changed to #{value}!" }
+# Example 2
 
-	a.remove_all
-
-	# Example 2
-
-	b = GridButton.new_decoupled(a, "0@0")
-	b.button_pressed_action = lambda { puts "the first button was pressed!" }
-	b.button_released_action = lambda { puts "the first button was released!" }
+b = GridButton.new_decoupled(a, "0@0")
+b.button_pressed_action = lambda { puts "the first button was pressed!" }
+b.button_released_action = lambda { puts "the first button was released!" }
 
 
-HISTORY
+## License
 
-COPYRIGHT
-
-	Anton Hörnquist
-	http://www.hornquist.se
-	Released under GPL
+Copyright (c) Anton Hörnquist

@@ -5,17 +5,17 @@ task :default => :tests
 task :tests => [:test_grrr, :test_unstable, :test_grrr_ruby]
 
 Rake::TestTask.new(:test_grrr) do |t|
-	t.test_files = "test/tc_grrr.rb"
+	t.test_files = ["test/tc_grrr.rb"]
 	t.warning = true
 end
 
 Rake::TestTask.new(:test_unstable) do |t|
-	t.test_files = "test/tc_unstable.rb"
+	t.test_files = ["test/tc_unstable.rb"]
 	t.warning = true
 end
 
 Rake::TestTask.new(:test_grrr_ruby) do |t|
-	t.test_files = "test/tc_grrr_ruby.rb"
+	t.test_files = ["test/tc_grrr_ruby.rb"]
 	t.warning = true
 end
 

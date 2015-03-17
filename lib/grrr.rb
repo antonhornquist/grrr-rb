@@ -6,7 +6,7 @@ end
 
 if using_jruby?
 	require 'java'
-	%w{screen_grid_button screen_grid key_grid}.each do |s|
+	%w{screen_grid_button screen_grid}.each do |s|
 		require "grrr/#{s}"
 	end
 else

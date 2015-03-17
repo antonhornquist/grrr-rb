@@ -14,7 +14,7 @@ class Grrr::Button < Grrr::View
 		@coupled = coupled
 		@behavior = behavior
 		@value = false
-		@is_lit_at_func = lambda { @value }
+		@is_lit_at_func = lambda { |point| @value }
 		@view_button_state_changed_action = lambda { |point, pressed|
 			button_is_pressed = is_pressed?
 			if @button_was_pressed != button_is_pressed

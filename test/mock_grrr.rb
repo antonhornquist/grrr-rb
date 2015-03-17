@@ -86,14 +86,14 @@ end
 class MockLitView < View
 	def initialize(parent, origin, num_cols=nil, num_rows=nil, enabled=true)
 		super
-		@is_lit_at_func = lambda { true }
+		@is_lit_at_func = lambda { |point| true }
 	end
 end
 
 class MockUnlitView < View
 	def initialize(parent, origin, num_cols=nil, num_rows=nil, enabled=true)
 		super
-		@is_lit_at_func = lambda { false }
+		@is_lit_at_func = lambda { |point| false }
 	end
 end
 
@@ -107,7 +107,7 @@ end
 class MockLitContainerView < ContainerView
 	def initialize(parent, origin, num_cols=nil, num_rows=nil, enabled=true, press_through=false)
 		super
-		@is_lit_at_func = lambda { true }
+		@is_lit_at_func = lambda { |point| true }
 	end
 end
 

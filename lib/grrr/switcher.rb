@@ -16,14 +16,19 @@ class Grrr::Switcher < Grrr::ContainerView
 	end
 
 	def remove_child(view)
-		super(view)
 		if view == @current_view
-			if @children.empty?
+			if @children.size == 1
 				@current_view = nil
 			else
-				@current_view = @children.first
+				current_value = value
+				if current_value == 0
+					self.value=(1)
+				else
+					self.value=(current_value-1)
+				end
 			end
 		end
+		super(view)
 	end
 
 	def validate_ok_to_enable_child(child)
@@ -64,7 +69,7 @@ class Grrr::Switcher < Grrr::ContainerView
 
 	def value=(index)
 		if index == nil
-			raise "it is not allowed to set switcher value to nil"
+			raise "it is not allowed to set switcher value to nil" # TODO: why? perhaps we should allow?
 		end
 		if (index < 0 or index >= @children.size)
 			raise "bad child index #{index}. view has #{@children.size} children."

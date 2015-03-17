@@ -115,20 +115,23 @@ class TestSwitcher < Test::Unit::TestCase
 	test "when switcher is non empty after removal of current view the child view prior to current view or first child view should be set as current view" do
 		switcher = @switcher
 		view1 = View.new(switcher, Point.new(0, 0), 4, 4)
+		view1.id = :view1
 		view2 = View.new(switcher, Point.new(0, 0), 4, 4)
+		view2.id = :view2
 		view3 = View.new(switcher, Point.new(0, 0), 4, 4)
+		view3.id = :view3
 		switcher.value = 2
 
 		switcher.remove_child(view3)
 
-		assert(view2, switcher.current_view)
+		assert_equal(view2, switcher.current_view)
 
 		view4 = View.new(switcher, Point.new(0, 0), 4, 4)
 		switcher.value = 0
 
 		switcher.remove_child(view1)
 
-		assert(view2, switcher.current_view)
+		assert_equal(view2, switcher.current_view)
 	end
 
 	test "it should not be possible to disable a child view of a switcher" do

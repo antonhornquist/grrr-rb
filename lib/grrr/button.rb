@@ -11,10 +11,17 @@ class Grrr::Button < Grrr::View
 
 	def initialize(parent, origin, num_cols=nil, num_rows=nil, enabled=true, coupled=true, behavior=:toggle)
 		super(parent, origin, num_cols ? num_cols : DEFAULT_NUM_COLS, num_rows ? num_rows : (num_cols ? num_cols : DEFAULT_NUM_ROWS), enabled)
+
+		@button_pressed_action = nil
+		@button_released_action = nil
+
 		@coupled = coupled
 		@behavior = behavior
 		@value = false
 		@is_lit_at_func = lambda { |point| @value }
+
+		@button_was_pressed = false
+
 		@view_button_state_changed_action = lambda { |point, pressed|
 			button_is_pressed = is_pressed?
 			if @button_was_pressed != button_is_pressed

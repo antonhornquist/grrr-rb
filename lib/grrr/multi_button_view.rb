@@ -7,6 +7,10 @@ class Grrr::MultiButtonView < Grrr::ContainerView
 
 	def initialize(parent, origin, num_cols=nil, num_rows=nil, enabled=true, coupled=true, behavior=:toggle)
 		super(nil, nil, num_cols, num_rows, enabled, true)
+
+		@button_pressed_action = nil
+		@button_value_changed_action = nil
+
 		@coupled = coupled
 		@behavior = behavior
 		@button_array_size = [@num_cols, @num_rows]

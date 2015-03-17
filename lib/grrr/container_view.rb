@@ -169,7 +169,7 @@ class Grrr::ContainerView < Grrr::View
 				view = get_enabled_child_at(point)
 
 				if TRACE_BUTTON_EVENTS
-					puts (
+					puts(
 						"in % - button %s at %s (source: [%s]) forwarded to [%s] at %s" %
 						[
 							"Method " + self.class.to_s + "#handle_view_button_event",
@@ -202,7 +202,7 @@ class Grrr::ContainerView < Grrr::View
 				view = get_enabled_child_at(point)
 
 				if TRACE_LED_EVENTS
-					puts (
+					puts(
 						"refresh at %s forwarded to [%s] at %s" %
 						[
 							point.to_s,
@@ -226,7 +226,7 @@ class Grrr::ContainerView < Grrr::View
 			view = get_enabled_child_at(point)
 
 			if TRACE_LED_EVENTS
-				puts (
+				puts(
 					"is_lit_at? at %s forwarded to [%s] at %s" %
 					[
 						point.to_s,

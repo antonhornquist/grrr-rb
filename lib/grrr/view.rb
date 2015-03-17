@@ -16,6 +16,16 @@ class Grrr::View
 	attr_accessor :action
 
 	def initialize(parent, origin, num_cols=nil, num_rows=nil, enabled=true)
+		@parent = nil
+		@id = nil
+		@view_led_refreshed_action = nil
+		@action = nil
+		@is_lit_at_func = nil
+		@value = nil
+		@view_button_state_changed_action = nil
+		@view_was_enabled_action = nil
+		@view_was_disabled_action = nil
+
 		@num_cols = num_cols ? num_cols : DEFAULT_NUM_COLS
 		@num_rows = num_rows ? num_rows : (num_cols ? num_cols : DEFAULT_NUM_ROWS)
 		raise "minimum size is 1x1" if @num_cols < 1 or @num_rows < 1
@@ -263,7 +273,7 @@ class Grrr::View
 				@view_button_state_changed_action.call(point, pressed) if @view_button_state_changed_action
 
 				if TRACE_BUTTON_EVENTS
-					puts (
+					puts(
 						"in %s - button %s at %s (source: [%s]) handled in [%s]" %
 						[
 							"Method " + self.class.to_s + "#handle_view_button_event",
@@ -278,7 +288,7 @@ class Grrr::View
 				[{:view => self, :point => point}]
 			else
 				if TRACE_BUTTON_EVENTS
-					puts (
+					puts(
 						"in %s - button state is already %s in [%s] at %s %s" %
 						[
 							"Method " + self.class.to_s + "#handle_view_button_event",
@@ -600,7 +610,7 @@ class Grrr::View
  			if @parent.has_view_led_refreshed_action? and @parent.is_enabled?
 
 				if TRACE_LED_EVENTS
-					puts (
+					puts(
 						"led %s at %s (source: [%s]) forwarded to [%s]" %
 						[
 							on ? 'on' : 'off',
@@ -621,7 +631,7 @@ class Grrr::View
 						"parent is disabled"
 					end
 
-					puts (
+					puts(
 						"led %s at %s (source: [%s]) not forwarded to [%s] - %s" %
 						[
 							on ? 'on' : 'off',

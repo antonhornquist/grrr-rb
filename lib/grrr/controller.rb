@@ -14,6 +14,8 @@ class Grrr::Controller
 	attr_accessor :on_remove
 
 	def initialize(num_cols=nil, num_rows=nil, view=nil, origin=nil, create_top_view_if_none_is_supplied=true)
+		@view = nil
+
 		if num_cols == nil or num_rows == nil
 			raise "num_cols and num_rows are mandatory"
 		end
@@ -107,10 +109,10 @@ class Grrr::Controller
 	end
 
 	def pr_attach(view, origin)
-		raise ("[%s] is already attached to a view" % [self]) if is_attached?
+		raise("[%s] is already attached to a view" % [self]) if is_attached?
 
 		if not view.contains_bounds?(origin, @num_cols, @num_rows)
-			raise ("[%s] at origin %s not within bounds of view [%s]" % [self, origin, view])
+			raise("[%s] at origin %s not within bounds of view [%s]" % [self, origin, view])
 		end
 
 		@view = view
@@ -141,7 +143,7 @@ class Grrr::Controller
 	end
 
 	def detach
-		raise ("[%s] is already detached" % [self]) if is_detached?
+		raise("[%s] is already detached" % [self]) if is_detached?
 		remove_button_state_changed_action(@view_button_state_changed_listener)
 		remove_led_refreshed_action(@view_led_refreshed_listener)
 

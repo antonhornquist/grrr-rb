@@ -11,6 +11,14 @@ class Grrr::MultiToggleView < Grrr::ContainerView
 
 	def initialize(parent, origin, num_cols=nil, num_rows=nil, orientation=:vertical, enabled=true, coupled=true, nillable=false)
 		super(nil, nil, num_cols, num_rows, enabled, true)
+
+		@toggle_pressed_action = nil
+		@toggle_value_pressed_action = nil
+		@toggle_value_changed_action = nil
+		@thumb_width = nil
+		@thumb_height = nil
+		@values_are_inverted = nil
+
 		@orientation = orientation
 		@coupled = coupled
 		@nillable = nillable
@@ -204,11 +212,11 @@ class Grrr::MultiToggleView < Grrr::ContainerView
 			if @values_are_inverted
 				toggle.values_are_inverted = @values_are_inverted
 			end
-			if @thumb_size # TODO: what's this?
-				if toggle.is_valid_thumb_size?(@thumb_size)
-					toggle.thumb_size = @thumb_size
+			if thumb_size != [nil, nil] # TODO: what's this?
+				if toggle.is_valid_thumb_size?(thumb_size)
+					toggle.thumb_size = thumb_size
 				else
-					@thumb_size = toggle.thumb_size
+					self.thumb_size_(toggle.thumb_size)
 				end
 			end
 			pr_add_actions(toggle, i)

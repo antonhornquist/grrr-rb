@@ -1,6 +1,11 @@
 class Grrr::Switcher < Grrr::ContainerView
 	attr_reader :current_view
 
+	def initialize(parent, origin, num_cols=nil, num_rows=nil, enabled=true, press_through=false)
+		super(parent, origin, num_cols, num_rows, enabled, press_through)
+		@current_view = nil
+	end
+
 	def add_child(view, origin)
 		if @current_view
 			if view.is_enabled?

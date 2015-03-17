@@ -19,7 +19,6 @@ class Grrr::ScreenGrid < Grrr::Controller
 			origin,
 			create_top_view_if_none_is_supplied
 		)
-		@key_control_enabled = KEY_CONTROL_ENABLED_BY_DEFAULT
 		@current_key_control_area = 0
 		@show_current_key_control_area = false
 		@modifier_caps_is_on = false
@@ -27,6 +26,24 @@ class Grrr::ScreenGrid < Grrr::Controller
 		@modifier_ctrl_is_pressed = false
 		@modifier_alt_is_pressed = false
 
+		@@keymaps = {
+			:swedish => {
+				:keys => [ 
+					49, 50, 51, 52, 53, 54, 55, 56,
+					81, 87, 69, 82, 84, 89, 85, 73,
+					65, 83, 68, 70, 71, 72, 74, 75,
+					90, 88, 67, 86, 66, 78, 77, 44
+				],
+				:arrow_key_left => 37,
+				:arrow_key_right => 39,
+				:arrow_key_down => 40,
+				:arrow_key_up => 38,
+				:backspace => 8
+			}
+		}
+		ScreenGrid.set_keymap(:swedish)
+
+		@key_control_enabled = KEY_CONTROL_ENABLED_BY_DEFAULT
 		@read_only = read_only
 
 		@key_control_area_origins = Array.fill2d(
@@ -36,21 +53,10 @@ class Grrr::ScreenGrid < Grrr::Controller
 			Point.new(x * KEY_CONTROL_AREA_NUM_COLS, y * KEY_CONTROL_AREA_NUM_ROWS)
 		end.flatten
 
-		@@keymaps = {
-			:swedish => [ 
-				49, 50, 51, 52, 53, 54, 55, 56,
-				81, 87, 69, 82, 84, 89, 85, 73,
-				65, 83, 68, 70, 71, 72, 74, 75,
-				90, 88, 67, 86, 66, 78, 77, 44
-			]
-		}
-		ScreenGrid.set_keymap(:swedish)
-
 		pr_create_window
 		pr_configure_keyboard_actions
 
 		front
-
 		refresh
 	end
 
@@ -63,7 +69,12 @@ class Grrr::ScreenGrid < Grrr::Controller
 	end
 
 	def self.set_keymap(keymap_name)
-		@@keymap = @@keymaps[keymap_name]
+		@@keymap_keys = @@keymaps[keymap_name][:keys]
+		@@keymap_backspace = @@keymaps[keymap_name][:backspace]
+		@@keymap_left = @@keymaps[keymap_name][:arrow_key_left]
+		@@keymap_right = @@keymaps[keymap_name][:arrow_key_right]
+		@@keymap_down = @@keymaps[keymap_name][:arrow_key_down]
+		@@keymap_up = @@keymaps[keymap_name][:arrow_key_up]
 	end
 
 	def self.stroke_rect(g, x, y, width, height, pen_width, color)
@@ -158,8 +169,8 @@ Press buttons with mouse, or enable key control with ctrl-backspace and use keyb
 	end
 
 	def handle_key_control_event(keycode, pressed)
-		if keymap_index = @@keymap.index(keycode)
-			handle_key_control_keymap_event(keymap_index, pressed)
+		if keymap_keys_index = @@keymap_keys.index(keycode)
+			handle_key_control_keymap_event(keymap_keys_index, pressed)
 		elsif is_arrow_keycode?(keycode)
 			handle_key_control_arrow_event(arrow_keycode_to_direction(keycode), pressed)
 		end
@@ -196,10 +207,10 @@ Press buttons with mouse, or enable key control with ctrl-backspace and use keyb
 		end
 	end
 
-	def handle_key_control_keymap_event(keymap_index, pressed)
+	def handle_key_control_keymap_event(keymap_keys_index, pressed)
 		if !(hold_modifier and not pressed) # Ignore key released if caps on or shift pressed
 			key_control_area_for_this_key_event = @modifier_alt_is_pressed ? next_key_control_area : @current_key_control_area
-			if button = lookup_screen_grid_button(key_control_area_for_this_key_event, keymap_index)
+			if button = lookup_screen_grid_button(key_control_area_for_this_key_event, keymap_keys_index)
 				if @modifier_caps_is_on
 					button.toggle_action
 				else
@@ -215,10 +226,10 @@ Press buttons with mouse, or enable key control with ctrl-backspace and use keyb
 
 	def arrow_keycode_to_direction(keycode)
 		case keycode
-		when 37 then :left
-		when 38 then :up
-		when 39 then :right
-		when 40 then :down
+		when @@keymap_left then :left
+		when @@keymap_right then :right
+		when @@keymap_down then :down
+		when @@keymap_up then :up
 		end
 	end
 
@@ -226,8 +237,8 @@ Press buttons with mouse, or enable key control with ctrl-backspace and use keyb
 		(@current_key_control_area + 1) % @key_control_area_origins.size
 	end
 
-	def lookup_screen_grid_button(area_index, keymap_index)
-		point = @key_control_area_origins[area_index]+Point.new(keymap_index % KEY_CONTROL_AREA_NUM_COLS, keymap_index / KEY_CONTROL_AREA_NUM_COLS)
+	def lookup_screen_grid_button(area_index, keymap_keys_index)
+		point = @key_control_area_origins[area_index]+Point.new(keymap_keys_index % KEY_CONTROL_AREA_NUM_COLS, keymap_keys_index / KEY_CONTROL_AREA_NUM_COLS)
 		if contains_point?(point) then @buttons[point.x][point.y] end
 	end
 
@@ -319,7 +330,6 @@ Press buttons with mouse, or enable key control with ctrl-backspace and use keyb
 		modifier_ctrl_keycode = 17
 		modifier_alt_keycode = 18
 		modifier_caps_keycode = 20
-		backspace_keycode = 8
 
 		key_listener = java.awt.event.KeyListener.impl do |name, event|
 			keycode = event.get_key_code
@@ -344,7 +354,7 @@ Press buttons with mouse, or enable key control with ctrl-backspace and use keyb
 						@modifier_alt_is_pressed = true
 						release_all_screen_grid_buttons_within_key_control_area_bounds_unless_hold_modifier(@current_key_control_area)
 					end
-				when backspace_keycode
+				when @@keymap_backspace
 					toggle_key_control if @modifier_ctrl_is_pressed
 				else
 					handle_key_control_event(keycode, true) if @key_control_enabled

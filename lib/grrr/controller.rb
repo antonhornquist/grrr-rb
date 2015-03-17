@@ -30,7 +30,7 @@ class Grrr::Controller
 				raise "if an origin is supplied a view must also be supplied"
 			end
 			if create_top_view_if_none_is_supplied
-				pr_attach(TopView.new(num_cols, num_rows), Point.new(0, 0))
+				pr_attach(Grrr::TopView.new(num_cols, num_rows), Point.new(0, 0))
 			end
 		end
 		@is_removed = false

@@ -1,16 +1,13 @@
 require 'test/unit'
 
-testdir = File.expand_path('.')
-libdir = File.expand_path('../lib')
-[testdir, libdir].each { |path| $LOAD_PATH.unshift(path) unless $LOAD_PATH.include?(path) }
-
-require 'test_helper'
+require File.expand_path('../test_helper', __FILE__)
 
 GRRR_DO_NOT_POST_JRUBY_WARNINGS = true
 
 require 'grrr'
-require 'mock_grrr'
+
+require File.expand_path('../mock_grrr', __FILE__)
 
 %w{view button toggle container_view top_view controller keyboard switcher multi_button_view multi_toggle_view}.each do |s|
-	require "grrr/#{s}_test"
+	require File.expand_path("../grrr/#{s}_test", __FILE__)
 end

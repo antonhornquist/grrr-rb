@@ -1,15 +1,11 @@
 require 'test/unit'
 
-testdir = File.expand_path('.')
-libdir = File.expand_path('../lib')
-[testdir, libdir].each { |path| $LOAD_PATH.unshift(path) unless $LOAD_PATH.include?(path) }
-
-require 'test_helper'
+require File.expand_path('../test_helper', __FILE__)
 
 GRRR_DO_NOT_POST_JRUBY_WARNINGS = true
 
 require 'grrr'
 
 %w{view container_view}.each do |s|
-	require "grrr_ruby/#{s}_test"
+	require File.expand_path("../grrr_ruby/#{s}_test", __FILE__)
 end

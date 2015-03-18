@@ -316,7 +316,7 @@ Press buttons with mouse, or enable key control with ctrl-backspace and use keyb
 				end
 			}
 			if not @read_only
-				button.action = lambda do
+				button.action = lambda do |view|
 					emit_button_event(Point.new(x, y), button.value)
 				end
 			end

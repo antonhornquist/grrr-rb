@@ -192,7 +192,6 @@ class TestToggle < Test::Unit::TestCase
 
 	test "if a non nillable toggle is set to a nil value an error should be thrown" do
 		toggle = @small_horizontal_toggle_4x1
-		view_led_refreshed_listener = MockViewLedRefreshedListener.new(toggle)
 
 		assert_raise(RuntimeError) { toggle.value = nil }
 	end

@@ -1,6 +1,6 @@
 class Controller
 	class << self
-		attr_accessor :all
+		attr_writer :all
 	end
 end
 

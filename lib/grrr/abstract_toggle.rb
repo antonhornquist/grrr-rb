@@ -19,7 +19,7 @@ class Grrr::AbstractToggle < Grrr::View
 			when :horizontal
 				@thumb_width = 1
 				@thumb_height = @num_rows
-			end
+		end
 
 		@values_pressed = Array.new
 	end

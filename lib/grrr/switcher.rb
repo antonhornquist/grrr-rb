@@ -60,7 +60,7 @@ class Grrr::Switcher < Grrr::ContainerView
 			raise "children in switcher do not have unique ids. it is not allowed to switch by id."
 		end
 
-		child = @children.detect { |child| child.id == id }
+		child = @children.detect { |c| c.id == id }
 		if child
 			self.value=(@children.index(child))
 		else

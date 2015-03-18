@@ -41,7 +41,7 @@ class Grrr::Keyboard < Grrr::View
 									set_note_pressed_action(note)
 								when :toggle
 									toggle_note_action(note)
-								end
+							end
 						end
 					end
 				else
@@ -291,12 +291,12 @@ class Grrr::Keyboard < Grrr::View
 		if @not_shown_note_state_changed_action.respond_to? :call
 			@not_shown_note_state_changed_action.call(self, note, pressed)
 		elsif (@not_shown_note_state_changed_action == :flash_edge_on_press and pressed) or (@not_shown_note_state_changed_action == :flash_edge_on_press_and_release)
-				if note < min_note_shown
-					flash_left_edge
-				elsif note > max_note_shown
-					flash_right_edge
-				end
+			if note < min_note_shown
+				flash_left_edge
+			elsif note > max_note_shown
+				flash_right_edge
 			end
+		end
 	end
 
 	def value_action=(value)

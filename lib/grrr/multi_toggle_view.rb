@@ -233,19 +233,19 @@ class Grrr::MultiToggleView < Grrr::ContainerView
 	end
 
 	def pr_add_actions(toggle, index)
-		toggle.toggle_pressed_action = lambda { |toggle|
+		toggle.toggle_pressed_action = lambda { |view|
 			@toggle_pressed_action.call(self, index) if @toggle_pressed_action
 		}
-		toggle.toggle_released_action = lambda { |toggle|
+		toggle.toggle_released_action = lambda { |view|
 			@toggle_released_action.call(self, index) if @toggle_released_action
 		}
-		toggle.toggle_value_pressed_action = lambda { |toggle, affected_value|
+		toggle.toggle_value_pressed_action = lambda { |view, affected_value|
 			@toggle_value_pressed_action.call(self, index, affected_value) if @toggle_value_pressed_action
 		}
-		toggle.toggle_range_pressed_action = lambda { |toggle, range|
+		toggle.toggle_range_pressed_action = lambda { |view, range|
 			@toggle_range_pressed_action.call(self, index, range) if @toggle_range_pressed_action
 		}
-		toggle.action = lambda { |toggle, value|
+		toggle.action = lambda { |view, value|
 			@toggle_value_changed_action.call(self, index, value) if @toggle_value_changed_action
 			do_action
 		}

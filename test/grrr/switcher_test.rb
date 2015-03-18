@@ -76,14 +76,14 @@ class TestSwitcher < Test::Unit::TestCase
 		switcher = @switcher
 		view1 = View.new(switcher, Point.new(0, 0), 4, 4)
 
-		view2 = View.new(switcher, Point.new(0, 0), 4, 4)
+		View.new(switcher, Point.new(0, 0), 4, 4)
 
 		assert_equal(view1, switcher.current_view)
 	end
 
 	test "when an enabled child view is added to a non empty switcher it should be disabled" do
 		switcher = @switcher
-		view1 = View.new(switcher, Point.new(0, 0), 4, 4)
+		View.new(switcher, Point.new(0, 0), 4, 4)
 		view2 = View.new(switcher, Point.new(0, 0), 4, 4)
 
 		assert(view2.is_disabled?)
@@ -97,8 +97,8 @@ class TestSwitcher < Test::Unit::TestCase
 
 	test "a non empty switchers value should be the same as the index of the current view among all the child views" do
 		switcher = @switcher
-		view1 = View.new(switcher, Point.new(0, 0), 4, 4)
-		view2 = View.new(switcher, Point.new(0, 0), 4, 4)
+		View.new(switcher, Point.new(0, 0), 4, 4)
+		View.new(switcher, Point.new(0, 0), 4, 4)
 
 		assert_equal(0, switcher.value)
 	end
@@ -126,7 +126,7 @@ class TestSwitcher < Test::Unit::TestCase
 
 		assert_equal(view2, switcher.current_view)
 
-		view4 = View.new(switcher, Point.new(0, 0), 4, 4)
+		View.new(switcher, Point.new(0, 0), 4, 4)
 		switcher.value = 0
 
 		switcher.remove_child(view1)
@@ -143,7 +143,7 @@ class TestSwitcher < Test::Unit::TestCase
 
 	test "it should not be possible to enable a child view of a switcher" do
 		switcher = @switcher
-		view1 = View.new(switcher, Point.new(0, 0), 2, 2)
+		View.new(switcher, Point.new(0, 0), 2, 2)
 		view2 = View.new(switcher, Point.new(2, 2), 2, 2)
 
 		assert_raise(RuntimeError) { view2.enable }
@@ -152,7 +152,7 @@ class TestSwitcher < Test::Unit::TestCase
 	# view switching
 	test "it should be possible to switch between views by index" do
 		switcher = @switcher
-		child1 = View.new(switcher, Point.new(0, 0), 4, 4)
+		View.new(switcher, Point.new(0, 0), 4, 4)
 		child2 = View.new_disabled(switcher, Point.new(0, 0), 4, 4)
 
 		switcher.value = 1
@@ -173,23 +173,23 @@ class TestSwitcher < Test::Unit::TestCase
 
 	test "it should not be possible to switch to a view index out of bounds" do
 		switcher = @switcher
-		child1 = View.new(switcher, Point.new(0, 0), 4, 4)
-		child2 = View.new_disabled(switcher, Point.new(0, 0), 4, 4)
+		View.new(switcher, Point.new(0, 0), 4, 4)
+		View.new_disabled(switcher, Point.new(0, 0), 4, 4)
 
 		assert_raise(RuntimeError) { switcher.value = 2 }
 	end
 
 	test "it should not be possible to set a switcher value to nil" do
 		switcher = @switcher
-		child1 = View.new(switcher, Point.new(0, 0), 4, 4)
-		child2 = View.new_disabled(switcher, Point.new(0, 0), 4, 4)
+		View.new(switcher, Point.new(0, 0), 4, 4)
+		View.new_disabled(switcher, Point.new(0, 0), 4, 4)
 
 		assert_raise(RuntimeError) { switcher.value = nil }
 	end
 
 	test "it should be possible to switch between views by view" do
 		switcher = @switcher
-		child1 = View.new(switcher, Point.new(0, 0), 4, 4)
+		View.new(switcher, Point.new(0, 0), 4, 4)
 		child2 = View.new_disabled(switcher, Point.new(0, 0), 4, 4)
 
 		switcher.switch_to_view(child2)
@@ -199,7 +199,7 @@ class TestSwitcher < Test::Unit::TestCase
 
 	test "it should not be possible to switch between views by view to a view that is not a children of switcher" do
 		switcher = @switcher
-		child = View.new(switcher, Point.new(0, 0), 4, 4)
+		View.new(switcher, Point.new(0, 0), 4, 4)
 		detached_view = View.new_detached(4, 4)
 
 		assert_raise(RuntimeError) { switcher.switch_to_view(detached_view) }

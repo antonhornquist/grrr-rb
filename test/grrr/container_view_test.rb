@@ -8,7 +8,9 @@ class TestContainerView < Test::Unit::TestCase
 		child_container.id = :child_container
 		view = MockLitView.new(child_container, Point.new(1, 1), 2, 2)
 		view.id = :view
-		@view_tree = [top_container, child_container, view]
+		@top_container = top_container
+		@child_container = child_container
+		@view = view
 	end
 
 	def teardown
@@ -103,10 +105,10 @@ class TestContainerView < Test::Unit::TestCase
 
 	test "it should be possible to remove all child views of a container view" do
 		container = ContainerView.new_detached(4, 4)
-		view1 = View.new(container, Point.new(0, 0), 2, 2)
-		view2 = View.new(container, Point.new(2, 0), 2, 2)
-		view3 = View.new(container, Point.new(2, 2), 2, 2)
-		view4 = View.new(container, Point.new(0, 2), 2, 2)
+		View.new(container, Point.new(0, 0), 2, 2)
+		View.new(container, Point.new(2, 0), 2, 2)
+		View.new(container, Point.new(2, 2), 2, 2)
+		View.new(container, Point.new(0, 2), 2, 2)
 
 		container.remove_all_children
 
@@ -138,8 +140,8 @@ class TestContainerView < Test::Unit::TestCase
 
 	test "it should be possible to determine whether any enabled or disabled child views cover a specific point" do
 		container = ContainerView.new_detached(4, 4)
-		view1 = View.new(container, Point.new(1, 1), 2, 2)
-		view2 = View.new_disabled(container, Point.new(2, 2), 2, 2)
+		View.new(container, Point.new(1, 1), 2, 2)
+		View.new_disabled(container, Point.new(2, 2), 2, 2)
 
 		assert(container.has_child_at?(Point.new(2, 2)))
 		assert_equal( false, container.has_child_at?(Point.new(0, 3)) )
@@ -157,8 +159,8 @@ class TestContainerView < Test::Unit::TestCase
 
 	test "it should be possible to determine if an enabled child view cover a specific point" do
 		container = ContainerView.new_detached(4, 4)
-		view1 = View.new(container, Point.new(1, 1), 2, 2)
-		view2 = View.new_disabled(container, Point.new(2, 2), 2, 2)
+		View.new(container, Point.new(1, 1), 2, 2)
+		View.new_disabled(container, Point.new(2, 2), 2, 2)
 
 		assert(container.has_enabled_child_at?(Point.new(2, 2)))
 		assert_equal( false, container.has_enabled_child_at?(Point.new(3, 3)) )
@@ -168,7 +170,7 @@ class TestContainerView < Test::Unit::TestCase
 	test "it should be possible to retrieve the enabled child view that cover a specific point" do
 		container = ContainerView.new_detached(4, 4)
 		view1 = View.new(container, Point.new(1, 1), 2, 2)
-		view2 = View.new_disabled(container, Point.new(2, 2), 2, 2)
+		View.new_disabled(container, Point.new(2, 2), 2, 2)
 
 		assert_equal( view1, container.get_enabled_child_at(Point.new(2, 2)) )
 		assert_equal( nil, container.get_enabled_child_at(Point.new(0, 1)) )
@@ -343,10 +345,9 @@ class TestContainerView < Test::Unit::TestCase
 
 	# led events and refresh
 	test "if a point of a container is refreshed and an enabled child view cover the point the child view led state should override container led state" do
-		top_container, child_container, view = @view_tree
-		view_led_refreshed_listener = MockViewLedRefreshedListener.new(top_container)
+		view_led_refreshed_listener = MockViewLedRefreshedListener.new(@top_container)
 
-		top_container.refresh_point(Point.new(0, 0))
+		@top_container.refresh_point(Point.new(0, 0))
 
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(
@@ -358,7 +359,7 @@ class TestContainerView < Test::Unit::TestCase
 
 		view_led_refreshed_listener.reset_notifications
 
-		top_container.refresh_point(Point.new(1, 1))
+		@top_container.refresh_point(Point.new(1, 1))
 
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(
@@ -370,7 +371,7 @@ class TestContainerView < Test::Unit::TestCase
 
 		view_led_refreshed_listener.reset_notifications
 
-		top_container.refresh_point(Point.new(2, 2))
+		@top_container.refresh_point(Point.new(2, 2))
 
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(
@@ -382,10 +383,9 @@ class TestContainerView < Test::Unit::TestCase
 	end
 
 	test "when an area of a container is refreshed on the points where enabled child views are the child view led state should override container led state" do
-		top_container, child_container, view = @view_tree
-		view_led_refreshed_listener = MockViewLedRefreshedListener.new(top_container)
+		view_led_refreshed_listener = MockViewLedRefreshedListener.new(@top_container)
 
-		top_container.refresh_bounds(Point.new(1, 1), 3, 2)
+		@top_container.refresh_bounds(Point.new(1, 1), 3, 2)
 
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(
@@ -402,10 +402,9 @@ class TestContainerView < Test::Unit::TestCase
 	end
 
 	test "when an entire container is refreshed on the points where enabled child views are the child view led state should override container led state" do
-		top_container, child_container, view = @view_tree
-		view_led_refreshed_listener = MockViewLedRefreshedListener.new(top_container)
+		view_led_refreshed_listener = MockViewLedRefreshedListener.new(@top_container)
 
-		top_container.refresh
+		@top_container.refresh
 
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(
@@ -432,10 +431,9 @@ class TestContainerView < Test::Unit::TestCase
 	end
 
 	test "when an enabled view that has a parent is refreshed led state should automatically be forwarded to the parent" do
-		top_container, child_container, view = @view_tree
-		view_led_refreshed_listener = MockViewLedRefreshedListener.new(top_container)
+		view_led_refreshed_listener = MockViewLedRefreshedListener.new(@top_container)
 
-		view.refresh
+		@view.refresh
 
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(
@@ -464,10 +462,9 @@ class TestContainerView < Test::Unit::TestCase
 	end
 
 	test "it should be possible to refresh only the points of a container where led state is not overridden by any child view" do
-		top_container, child_container, view = @view_tree
-		view_led_refreshed_listener = MockViewLedRefreshedListener.new(top_container)
+		view_led_refreshed_listener = MockViewLedRefreshedListener.new(@top_container)
 
-		top_container.refresh(false)
+		@top_container.refresh(false)
 
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(

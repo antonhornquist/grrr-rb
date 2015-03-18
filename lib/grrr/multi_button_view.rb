@@ -106,7 +106,7 @@ class Grrr::MultiButtonView < Grrr::ContainerView
 	end
 
 	def validate_value(val)
-		if not (val.size == num_button_cols and val.all? { |row| row.size == num_button_rows })
+		if not(val.size == num_button_cols and val.all? { |row| row.size == num_button_rows })
 			raise "value must be a 2-dimensional array of #{num_button_cols}x#{num_button_rows} values"
 		end
 	end
@@ -178,13 +178,13 @@ class Grrr::MultiButtonView < Grrr::ContainerView
 	end
 
 	def pr_add_actions(button, x, y)
-		button.button_pressed_action = lambda { |button|
+		button.button_pressed_action = lambda { |view|
 			@button_pressed_action.call(self, x, y) if @button_pressed_action
 		}
-		button.button_released_action = lambda { |button|
+		button.button_released_action = lambda { |view|
 			@button_released_action.call(self, x, y) if @button_released_action
 		}
-		button.action = lambda { |button, value|
+		button.action = lambda { |view, value|
 			@button_value_changed_action.call(self, x, y, value) if @button_value_changed_action
 			do_action
 		}

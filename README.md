@@ -6,7 +6,7 @@ Grid controller UI widget library for Ruby targeting the JRuby platform
 
 High level UI abstractions for grid based controllers. Simplifies interaction with for instance Monome devices.
 
-This is a Ruby port of my SuperCollider library Grrr-sc targeting the JRuby platform. It requires scext-rb. The Ruby version exists to explore commonalities of SuperCollider and Ruby. For real-time performances one should probably go SuperCollider and use Grrr-sc.
+This is a Ruby port of my SuperCollider library Grrr-sc targeting the JRuby platform. It requires scext-rb. The Ruby version was created to explore commonalities of SuperCollider and Ruby. For real-time performances one should probably go SuperCollider and use Grrr-sc.
 
 ## Examples
 
@@ -39,6 +39,11 @@ b.button_released_action = lambda { puts "the first button was released!" }
 # press top-leftmost screen grid button to test the button
 
 a.view.remove_all_children
+```
+
+### Example 3
+
+``` ruby
 ```
 
 ## Classes

@@ -5,7 +5,7 @@ class Grrr::Controller
 		attr_reader :all
 	end
 
-	@all = [] # TODO: ok to remove?
+	@all = [] # TODO: ok to remove? test case fails if removed, how to initialize this variable or get around this?
 
 	attr_reader :num_cols
 	attr_reader :num_rows
@@ -103,7 +103,7 @@ class Grrr::Controller
 	def attach(view, origin)
 		pr_attach(view, origin)
 		refresh
-		if INDICATE_ADDED_REMOVED_ATTACHED_DETACHED and using_jruby?
+		if Common.indicate_added_removed_attached_detached and using_jruby?
 			indicate_controller
 		end
 	end
@@ -154,7 +154,7 @@ class Grrr::Controller
 
 		refresh
 
-		if INDICATE_ADDED_REMOVED_ATTACHED_DETACHED and using_jruby?
+		if Common.indicate_added_removed_attached_detached and using_jruby?
 			view_saved.indicate_bounds(origin_saved, @num_cols, @num_rows)
 		end
 	end

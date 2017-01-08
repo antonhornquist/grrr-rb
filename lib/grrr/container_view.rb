@@ -55,7 +55,7 @@ class Grrr::ContainerView < Grrr::View
 
 		view.set_parent_reference(self, origin)
 
-		if (not prevent_flash) and INDICATE_ADDED_REMOVED_ATTACHED_DETACHED and using_jruby?
+		if (not prevent_flash) and Common.indicate_added_removed_attached_detached and using_jruby?
 			indicate_bounds(view.origin, view.num_cols, view.num_rows)
 		elsif view.is_enabled?
 			view.refresh
@@ -87,7 +87,7 @@ class Grrr::ContainerView < Grrr::View
 
 		@children.delete view
 
-		if (not prevent_flash) and INDICATE_ADDED_REMOVED_ATTACHED_DETACHED and using_jruby?
+		if (not prevent_flash) and Common.indicate_added_removed_attached_detached and using_jruby?
 			indicate_bounds(view.origin, view.num_cols, view.num_rows)
 		elsif view.is_enabled?
 			refresh_bounds(view.origin, view.num_cols, view.num_rows)
@@ -168,7 +168,7 @@ class Grrr::ContainerView < Grrr::View
 			if has_enabled_child_at?(point)
 				view = get_enabled_child_at(point)
 
-				if TRACE_BUTTON_EVENTS
+				if Common.trace_button_events
 					puts(
 						"in % - button %s at %s (source: [%s]) forwarded to [%s] at %s" %
 						[
@@ -201,7 +201,7 @@ class Grrr::ContainerView < Grrr::View
 			if has_enabled_child_at?(point) and refresh_children
 				view = get_enabled_child_at(point)
 
-				if TRACE_LED_EVENTS
+				if Common.trace_led_events
 					puts(
 						"refresh at %s forwarded to [%s] at %s" %
 						[
@@ -225,7 +225,7 @@ class Grrr::ContainerView < Grrr::View
 		if has_enabled_child_at?(point)
 			view = get_enabled_child_at(point)
 
-			if TRACE_LED_EVENTS
+			if Common.trace_led_events
 				puts(
 					"is_lit_at? at %s forwarded to [%s] at %s" %
 					[

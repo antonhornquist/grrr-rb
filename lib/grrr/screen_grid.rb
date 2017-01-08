@@ -1,3 +1,6 @@
+if using_jruby?
+	require 'java'
+
 class Grrr::ScreenGrid < Grrr::Controller
 	DEFAULT_NUM_COLS = 8
 	DEFAULT_NUM_ROWS = 8
@@ -430,3 +433,8 @@ class Grrr::View
 		self
 	end
 end
+
+else
+	puts "warning in #{__FILE__}: class not loaded since JRuby is required." unless defined?(GRRR_DO_NOT_POST_JRUBY_WARNINGS)
+end
+

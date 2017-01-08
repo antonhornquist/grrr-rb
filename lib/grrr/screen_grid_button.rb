@@ -1,3 +1,5 @@
+if using_jruby?
+	require 'java'
 class Grrr::ScreenGridButton < java.awt.Canvas
 	attr_reader :value
 	attr_accessor :pressed_color
@@ -70,3 +72,8 @@ class Grrr::ScreenGridButton < java.awt.Canvas
 		@action.call(self) if @action
 	end
 end
+
+else
+	puts "warning in #{__FILE__}: class not loaded since JRuby is required." unless defined?(GRRR_DO_NOT_POST_JRUBY_WARNINGS)
+end
+

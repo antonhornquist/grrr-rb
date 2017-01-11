@@ -434,13 +434,19 @@ class Grrr::View
 	def flash_points(points, delay=nil)
 		Grrr::validate_using_jruby
 
-		delay_in_seconds = (delay ? delay : DEFAULT_FLASH_DELAY) / 1000.0
+		pr_invert_leds(points)
+		pr_schedule_to_reset_leds(
+			points,
+			(delay ? delay : DEFAULT_FLASH_DELAY) / 1000.0
+		)
+	end
 
-		# invert led(s) (TODO: refactor to own method)
+	def pr_invert_leds(points)
 		points.each { |point| @inverted_leds_map[point.x][point.y] = true }
 		refresh_points(points) if is_enabled?
+	end
 
-		# schedule to reset led(s) (TODO: refactor to own method)
+	def pr_schedule_to_reset_leds(points, delay_in_seconds)
 		Thread.new do
 			sleep(delay_in_seconds)
 			points.each { |point| @inverted_leds_map[point.x][point.y] = false }
@@ -558,7 +564,7 @@ class Grrr::View
 	end
 
 	def do_action
-		@action.call(self, value) if @action # TODO: when action = lambda { puts "well" } an error is thrown, fixable?
+		@action.call(self, value) if @action # TODO: when action = lambda { puts "well" } an error is thrown, fixable? (ruby specific)
 	end
 
 	def validate_value(value)

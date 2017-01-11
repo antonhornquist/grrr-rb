@@ -96,19 +96,19 @@ class Grrr::View
 		Point.new(@num_cols-1, @num_rows-1)
 	end
 
-	def leftmost_col # TODO: add test
+	def leftmost_col
 		0
 	end
 
-	def rightmost_col # TODO: add test
+	def rightmost_col
 		@num_cols-1
 	end
 
-	def topmost_row # TODO: add test
+	def topmost_row
 		0
 	end
 
-	def bottommost_row # TODO: add test
+	def bottommost_row
 		@num_rows-1
 	end
 
@@ -400,7 +400,7 @@ class Grrr::View
 	end
 
 	def indicate_points(points, repeat=nil, interval=nil)
-		validate_using_jruby
+		Grrr::validate_using_jruby
 
 		interval_in_seconds = (interval ? interval : DEFAULT_INDICATE_INTERVAL) / 1000.0
 
@@ -432,15 +432,15 @@ class Grrr::View
 	end
 
 	def flash_points(points, delay=nil)
-		validate_using_jruby
+		Grrr::validate_using_jruby
 
 		delay_in_seconds = (delay ? delay : DEFAULT_FLASH_DELAY) / 1000.0
 
-		# invert led(s)
+		# invert led(s) (TODO: refactor to own method)
 		points.each { |point| @inverted_leds_map[point.x][point.y] = true }
 		refresh_points(points) if is_enabled?
 
-		# schedule to reset led(s)
+		# schedule to reset led(s) (TODO: refactor to own method)
 		Thread.new do
 			sleep(delay_in_seconds)
 			points.each { |point| @inverted_leds_map[point.x][point.y] = false }
@@ -558,7 +558,7 @@ class Grrr::View
 	end
 
 	def do_action
-		@action.call(self, value) if @action
+		@action.call(self, value) if @action # TODO: when action = lambda { puts "well" } an error is thrown, fixable?
 	end
 
 	def validate_value(value)

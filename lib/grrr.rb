@@ -1,8 +1,10 @@
 require 'scext'
 
 module Grrr
-	def validate_using_jruby
-		raise "this feature is only available when running jruby" unless using_jruby?
+	class <<self
+		def validate_using_jruby
+			raise "this feature is only available when running jruby" unless using_jruby?
+		end
 	end
 end
 

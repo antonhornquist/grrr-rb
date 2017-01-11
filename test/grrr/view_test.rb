@@ -239,6 +239,18 @@ class TestView < Test::Unit::TestCase
 		assert_raise(RuntimeError) { view.validate_contains_bounds(Point.new(-1, -1), 1, 1) }
 	end
 
+	test "it should be possible to retrieve leftmost and rightmost cols of view" do
+		view = @a_detached_2x3_view
+		assert_equal(0, view.leftmost_col)
+		assert_equal(1, view.rightmost_col)
+	end
+
+	test "it should be possible to retrieve topmost and bottommost rows of view" do
+		view = @a_detached_2x3_view
+		assert_equal(0, view.topmost_row)
+		assert_equal(2, view.bottommost_row)
+	end
+
 	# action and value
 	test "it should be possible to get notified of view events by adding actions to a view" do
 		view = @a_detached_2x2_view

@@ -48,7 +48,7 @@ class Grrr::TopView < Grrr::ContainerView
 	def handle_view_button_event(source, point, pressed)
 		if @enabled
 
-			if Common.trace_button_events
+			if Grrr::Common.trace_button_events
 				puts(
 					"in %s - button %s at %s (source: [%s]) received." %
 					[
@@ -65,7 +65,7 @@ class Grrr::TopView < Grrr::ContainerView
 
 					@points_pressed_by_source[point.x][point.y] << source
 
-					if Common.trace_button_events
+					if Grrr::Common.trace_button_events
 						puts(
 							"in %s - source [%s] not referenced in array - reference was added." %
 							[
@@ -81,7 +81,7 @@ class Grrr::TopView < Grrr::ContainerView
 				if is_pressed_by_source_at?(source, point)
 					@points_pressed_by_source[point.x][point.y].delete(source)
 
-					if Common.trace_button_events
+					if Grrr::Common.trace_button_events
 						puts(
 							"source [%s] referenced in array - reference was removed." %
 							[

@@ -44,7 +44,7 @@ class Grrr::ScreenGrid < Grrr::Controller
 				:backspace => 8
 			}
 		}
-		ScreenGrid.set_keymap(:swedish)
+		Grrr::ScreenGrid.set_keymap(:swedish)
 
 		@key_control_enabled = KEY_CONTROL_ENABLED_BY_DEFAULT
 		@read_only = read_only
@@ -68,7 +68,7 @@ class Grrr::ScreenGrid < Grrr::Controller
 	end
 
 	def self.new_view(view, read_only=false)
-		ScreenGrid.new(view.num_cols, view.num_rows, view, Point.new(0, 0), false, read_only)
+		Grrr::ScreenGrid.new(view.num_cols, view.num_rows, view, Point.new(0, 0), false, read_only)
 	end
 
 	def self.set_keymap(keymap_name)
@@ -149,7 +149,7 @@ Press buttons with mouse, or enable key control with ctrl-backspace and use keyb
 	end
 
 	def release_all_screen_grid_buttons_within_bounds(origin, num_cols, num_rows)
-		View.bounds_to_points(origin, num_cols, num_rows).each do |point|
+		Grrr::View.bounds_to_points(origin, num_cols, num_rows).each do |point|
 			release_screen_grid_button(point.x, point.y)
 		end
 	end
@@ -297,12 +297,12 @@ Press buttons with mouse, or enable key control with ctrl-backspace and use keyb
 				)
 				rect.grow(3, 3)
 
-				ScreenGrid.stroke_rect(g, rect.x, rect.y, rect.width, rect.height, 2, KEY_CONTROL_AREA_BORDER_COLOR)
+				Grrr::ScreenGrid.stroke_rect(g, rect.x, rect.y, rect.width, rect.height, 2, KEY_CONTROL_AREA_BORDER_COLOR)
 			end
 		end
 
 		@buttons = Array.fill2d(@num_cols, @num_rows) { |x, y|
-			button = ScreenGridButton.new
+			button = Grrr::ScreenGridButton.new
 			button.set_location(MARGIN+x*BUTTON_SIZE*1.2, MARGIN+y*BUTTON_SIZE*1.2)
 			button.set_size(BUTTON_SIZE, BUTTON_SIZE)
 
@@ -422,14 +422,14 @@ end
 
 class Grrr::TopView
 	def spawn_gui
-		ScreenGrid.new_view(self)
+		Grrr::ScreenGrid.new_view(self)
 		self
 	end
 end
 
 class Grrr::View
 	def spawn_gui
-		ScreenGrid.new_view(self, true) # TODO: see Things entry
+		Grrr::ScreenGrid.new_view(self, true) # TODO: see Things entry
 		self
 	end
 end

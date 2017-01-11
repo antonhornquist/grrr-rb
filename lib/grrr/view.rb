@@ -272,7 +272,7 @@ class Grrr::View
 				end
 				@view_button_state_changed_action.call(point, pressed) if @view_button_state_changed_action
 
-				if Common.trace_button_events
+				if Grrr::Common.trace_button_events
 					puts(
 						"in %s - button %s at %s (source: [%s]) handled in [%s]" %
 						[
@@ -287,7 +287,7 @@ class Grrr::View
 
 				[{:view => self, :point => point}]
 			else
-				if Common.trace_button_events
+				if Grrr::Common.trace_button_events
 					puts(
 						"in %s - button state is already %s in [%s] at %s %s" %
 						[
@@ -609,7 +609,7 @@ class Grrr::View
 		@parent_view_led_refreshed_listener = lambda { |source, point, on|
  			if @parent.has_view_led_refreshed_action? and @parent.is_enabled?
 
-				if Common.trace_led_events
+				if Grrr::Common.trace_led_events
 					puts(
 						"led %s at %s (source: [%s]) forwarded to [%s]" %
 						[
@@ -624,7 +624,7 @@ class Grrr::View
 				@parent.view_led_refreshed_action.call(source, point+@origin, on)
 			else
 
-				if Common.trace_led_events
+				if Grrr::Common.trace_led_events
 					reason = if not @parent.has_view_led_refreshed_action?
 						"parent has no view_led_refreshed_action"
 					elsif not @parent.is_enabled?

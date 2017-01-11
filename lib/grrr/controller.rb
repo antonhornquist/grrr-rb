@@ -36,8 +36,8 @@ class Grrr::Controller
 			end
 		end
 		@is_removed = false
-		Controller.all << self
-		Controller.init_action.call(self) if Controller.init_action
+		Grrr::Controller.all << self
+		Grrr::Controller.init_action.call(self) if Grrr::Controller.init_action
 	end
 
 	def self.new_detached(num_cols=nil, num_rows=nil)
@@ -47,7 +47,7 @@ class Grrr::Controller
 	def remove
 		cleanup
 		detach if is_attached?
-		Controller.all.delete(self)
+		Grrr::Controller.all.delete(self)
 		on_remove.call if on_remove
 	end
 
@@ -76,7 +76,7 @@ class Grrr::Controller
 	end
 
 	def to_points
-		View.bounds_to_points(Point.new(0, 0), @num_cols, @num_rows)
+		Grrr::View.bounds_to_points(Point.new(0, 0), @num_cols, @num_rows)
 	end
 
 	# Controller info
@@ -103,7 +103,7 @@ class Grrr::Controller
 	def attach(view, origin)
 		pr_attach(view, origin)
 		refresh
-		if Common.indicate_added_removed_attached_detached and using_jruby?
+		if Grrr::Common.indicate_added_removed_attached_detached and using_jruby?
 			indicate_controller
 		end
 	end
@@ -154,7 +154,7 @@ class Grrr::Controller
 
 		refresh
 
-		if Common.indicate_added_removed_attached_detached and using_jruby?
+		if Grrr::Common.indicate_added_removed_attached_detached and using_jruby?
 			view_saved.indicate_bounds(origin_saved, @num_cols, @num_rows)
 		end
 	end

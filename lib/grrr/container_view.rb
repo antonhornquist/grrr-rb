@@ -55,7 +55,7 @@ class Grrr::ContainerView < Grrr::View
 
 		view.set_parent_reference(self, origin)
 
-		if (not prevent_flash) and Common.indicate_added_removed_attached_detached and using_jruby?
+		if (not prevent_flash) and Grrr::Common.indicate_added_removed_attached_detached and using_jruby?
 			indicate_bounds(view.origin, view.num_cols, view.num_rows)
 		elsif view.is_enabled?
 			view.refresh
@@ -87,7 +87,7 @@ class Grrr::ContainerView < Grrr::View
 
 		@children.delete view
 
-		if (not prevent_flash) and Common.indicate_added_removed_attached_detached and using_jruby?
+		if (not prevent_flash) and Grrr::Common.indicate_added_removed_attached_detached and using_jruby?
 			indicate_bounds(view.origin, view.num_cols, view.num_rows)
 		elsif view.is_enabled?
 			refresh_bounds(view.origin, view.num_cols, view.num_rows)
@@ -146,9 +146,9 @@ class Grrr::ContainerView < Grrr::View
 	end
 
 	def any_enabled_children_within_bounds?(origin, num_cols, num_rows)
-		points = View.bounds_to_points(origin, num_cols, num_rows)
+		points = Grrr::View.bounds_to_points(origin, num_cols, num_rows)
 		enabled_children.any? { |child|
-			View.points_sect(child.to_points_from_origin, points).size > 0
+			Grrr::View.points_sect(child.to_points_from_origin, points).size > 0
 		}
 	end
 
@@ -168,7 +168,7 @@ class Grrr::ContainerView < Grrr::View
 			if has_enabled_child_at?(point)
 				view = get_enabled_child_at(point)
 
-				if Common.trace_button_events
+				if Grrr::Common.trace_button_events
 					puts(
 						"in % - button %s at %s (source: [%s]) forwarded to [%s] at %s" %
 						[
@@ -201,7 +201,7 @@ class Grrr::ContainerView < Grrr::View
 			if has_enabled_child_at?(point) and refresh_children
 				view = get_enabled_child_at(point)
 
-				if Common.trace_led_events
+				if Grrr::Common.trace_led_events
 					puts(
 						"refresh at %s forwarded to [%s] at %s" %
 						[
@@ -225,7 +225,7 @@ class Grrr::ContainerView < Grrr::View
 		if has_enabled_child_at?(point)
 			view = get_enabled_child_at(point)
 
-			if Common.trace_led_events
+			if Grrr::Common.trace_led_events
 				puts(
 					"is_lit_at? at %s forwarded to [%s] at %s" %
 					[

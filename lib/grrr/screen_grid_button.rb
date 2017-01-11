@@ -1,5 +1,6 @@
 if using_jruby?
 	require 'java'
+
 class Grrr::ScreenGridButton < java.awt.Canvas
 	attr_reader :value
 	attr_accessor :pressed_color
@@ -19,7 +20,7 @@ class Grrr::ScreenGridButton < java.awt.Canvas
 
 	def self.fill_stroke(g, x, y, width, height, pen_width, color)
 		g.fill_rect(x+pen_width, y+pen_width, width-pen_width*2, height-pen_width*2)
-		ScreenGrid.stroke_rect(g, x, y, width-1, height-1, pen_width, color)
+		Grrr::ScreenGrid.stroke_rect(g, x, y, width-1, height-1, pen_width, color)
 	end
 
 	def paint(g)
@@ -29,7 +30,7 @@ class Grrr::ScreenGridButton < java.awt.Canvas
 		g.set_color(fill_color)
 		pen_width = (size.width/8).to_i
 		if @pressed
-			ScreenGridButton.fill_stroke(g, 0, 0, size.width, size.height, pen_width, stroke_color)
+			Grrr::ScreenGridButton.fill_stroke(g, 0, 0, size.width, size.height, pen_width, stroke_color)
 		else
 			g.fill_rect(0, 0, size.width, size.height)
 		end

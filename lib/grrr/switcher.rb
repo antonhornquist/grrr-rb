@@ -7,6 +7,8 @@ class Grrr::Switcher < Grrr::ContainerView
 	end
 
 	def add_child(view, origin)
+		# TODO: below check added in conjunction with resolving monome repaint issues due to disabling and enabling views quickly. fix for when setting new value below could only be guaranteed to work when child view bounds are the same as GRSwitcher bounds which is why this guard clause was included for now. can be removed if *all* affected points are refreshed in one go after reenabling view led refreshed action
+		raise "View added to GRSwitcher must be of same size as the GRSwitcher view: #{@num_cols}x#{@num_rows}" unless (view.num_cols == @num_cols) and (view.num_rows == @num_rows)
 		if @current_view
 			if view.is_enabled?
 				view.disable
@@ -84,7 +86,9 @@ class Grrr::Switcher < Grrr::ContainerView
 			if @current_view != nil
 				prev_current_view = @current_view
 				@current_view = nil
+				remove_action(@parent_view_led_refreshed_listener, :view_led_refreshed_action); # TODO added to resolve monome repaint issues due to disabling and enabling views quickly. differing led repaint messages sent too quickly would not be handled sequentially and thus not yield the expected result. still a bug if child view bounds are not the same as GRSwitcher bounds why guard clause is included above
 				prev_current_view.disable
+				add_action(@parent_view_led_refreshed_listener, :view_led_refreshed_action); # TODO: added to resolve monome repaint issues
 			end
 			new_current_view.enable
 			@current_view = new_current_view

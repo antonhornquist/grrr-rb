@@ -400,7 +400,7 @@ class Grrr::View
 	end
 
 	def indicate_points(points, repeat=nil, interval=nil)
-		Grrr::validate_using_jruby
+		Grrr::Common.validate_using_jruby
 
 		interval_in_seconds = (interval ? interval : DEFAULT_INDICATE_INTERVAL) / 1000.0
 
@@ -432,7 +432,7 @@ class Grrr::View
 	end
 
 	def flash_points(points, delay=nil)
-		Grrr::validate_using_jruby
+		Grrr::Common.validate_using_jruby
 
 		pr_invert_leds(points)
 		pr_schedule_to_reset_leds(

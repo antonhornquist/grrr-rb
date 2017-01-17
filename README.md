@@ -69,12 +69,6 @@ a.view.remove_all_children
 		* Switcher - A container that only have one child view active at any given time. Has convenience methods for changing which child view is active.
 * Controller - Abstract superclass. Represents a device that may attach to and control part of or an entire view.
 	* ScreenGrid - An on-screen controller of user definable size. Button events may be triggered with mouse and keyboard.
-	* (AbstractMonome - Superclass for all monomes.)
-		* (Monome40h - monome 40h.)
-		* (Monome64 - monome 64.)
-		* (Monome128 - monome 128.)
-		* (Monome256 - monome 256.)
-	* (MPC500 - An Akai MPC 500.)
 
 ## Extending Grrr
 

@@ -41,11 +41,6 @@ b.button_released_action = lambda { puts "the first button was released!" }
 a.view.remove_all_children
 ```
 
-### Example 3
-
-``` ruby
-```
-
 ## Classes
 
 * View - Abstract superclass. Represents a 2D grid of backlit buttons.

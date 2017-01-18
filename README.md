@@ -144,6 +144,12 @@ class MyGridController < GridController
 end
 ```
 
+## Requirements
+
+Requires [scext-rb](http://github.com/antonhornquist/scext-rb).
+
+This code has been developed and tested in JRuby 9.1.6.0. Test cases work in Ruby 2.2.3 since they are not dependent on Java.
+
 ## License
 
 Copyright (c) Anton Hörnquist

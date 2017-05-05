@@ -150,7 +150,7 @@ end
 
 Requires [scext-rb](http://github.com/antonhornquist/scext-rb).
 
-This code has been developed and tested in JRuby 9.1.6.0. Test cases work in Ruby 2.2.3 since they are not dependent on Java.
+This code has been developed and tested in Ruby 2.3.3 and JRuby 9.1.6.0. Grrr::ScreenGrid only works for JRuby.
 
 ## License
 

@@ -1,5 +1,6 @@
 if (defined? ruby_engine != nil) and ruby_engine == 'jruby' # TODO: not sure this is needed, screen_grid should explicitly be require'd separately from grrr
 	require 'java'
+	require 'screen_grid_button'
 
 class Grrr::ScreenGrid < Grrr::Controller
 	DEFAULT_NUM_COLS = 8

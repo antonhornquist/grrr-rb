@@ -1,14 +1,16 @@
 # grrr-rb
 
-Grid controller UI widget library for Ruby targeting the JRuby platform
+Grid controller UI widget library for Ruby.
 
 ## Description
 
 High level UI abstractions for grid based controllers. Simplifies interaction with for instance Monome devices.
 
-This is a Ruby port of my SuperCollider library Grrr-sc targeting the JRuby platform. It requires scext-rb. The Ruby version was created to explore commonalities of SuperCollider and Ruby. For real-time performances one should probably go SuperCollider and use Grrr-sc.
+This is a Ruby port of my SuperCollider library Grrr-sc. The Ruby version was mostly created to explore commonalities of SuperCollider and Ruby. For low latency real-time performances one should probably use Grrr-sc.
 
 ## Examples
+
+### Example 1
 
 ### Example 1
 
@@ -148,7 +150,7 @@ end
 
 ## Requirements
 
-Requires [scext-rb](http://github.com/antonhornquist/scext-rb).
+This library requires [scext-rb](http://github.com/antonhornquist/scext-rb).
 
 This code has been developed and tested in Ruby 2.3.3 and JRuby 9.1.6.0. ```Grrr::ScreenGrid``` only works for JRuby.
 

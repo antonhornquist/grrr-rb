@@ -103,7 +103,7 @@ class Grrr::Controller
 	def attach(view, origin)
 		pr_attach(view, origin)
 		refresh
-		if Grrr::Common.indicate_added_removed_attached_detached and using_jruby?
+		if Grrr::Common.indicate_added_removed_attached_detached
 			indicate_controller
 		end
 	end
@@ -154,7 +154,7 @@ class Grrr::Controller
 
 		refresh
 
-		if Grrr::Common.indicate_added_removed_attached_detached and using_jruby?
+		if Grrr::Common.indicate_added_removed_attached_detached
 			view_saved.indicate_bounds(origin_saved, @num_cols, @num_rows)
 		end
 	end

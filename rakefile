@@ -31,5 +31,5 @@ end
 task :environment do
 	require 'grrr'
 	require 'unstable'
-	require 'screengrid' if using_jruby?
+	require 'screengrid' if (defined? RUBY_ENGINE != nil) and RUBY_ENGINE == 'jruby'
 end

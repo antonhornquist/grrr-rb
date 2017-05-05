@@ -1,4 +1,4 @@
-if using_jruby?
+if (defined? ruby_engine != nil) and ruby_engine == 'jruby' # TODO: not sure this is needed, screen_grid should explicitly be require'd separately from grrr
 	require 'java'
 
 class Grrr::ScreenGridButton < java.awt.Canvas
@@ -74,7 +74,5 @@ class Grrr::ScreenGridButton < java.awt.Canvas
 	end
 end
 
-else
-	puts "warning in #{__FILE__}: class not loaded since JRuby is required." unless defined?(GRRR_DO_NOT_POST_JRUBY_WARNINGS)
 end
 

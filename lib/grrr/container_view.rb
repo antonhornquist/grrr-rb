@@ -55,7 +55,7 @@ class Grrr::ContainerView < Grrr::View
 
 		view.set_parent_reference(self, origin)
 
-		if (not prevent_flash) and Grrr::Common.indicate_added_removed_attached_detached and using_jruby?
+		if (not prevent_flash) and Grrr::Common.indicate_added_removed_attached_detached
 			indicate_bounds(view.origin, view.num_cols, view.num_rows)
 		elsif view.is_enabled?
 			view.refresh
@@ -87,7 +87,7 @@ class Grrr::ContainerView < Grrr::View
 
 		@children.delete view
 
-		if (not prevent_flash) and Grrr::Common.indicate_added_removed_attached_detached and using_jruby?
+		if (not prevent_flash) and Grrr::Common.indicate_added_removed_attached_detached
 			indicate_bounds(view.origin, view.num_cols, view.num_rows)
 		elsif view.is_enabled?
 			refresh_bounds(view.origin, view.num_cols, view.num_rows)

@@ -14,6 +14,8 @@ This is a Ruby port of my SuperCollider library Grrr-sc targeting the JRuby plat
 
 ``` ruby
 require 'grrr'
+require 'grrr/screengrid' # only available for JRuby
+
 a = ScreenGrid.new
 
 b = GridButton.new(a, "0@0")

@@ -2,8 +2,7 @@ require 'rake/testtask'
 
 task :default => :tests
 
-# task :tests => [:test_grrr, :test_unstable, :test_grrr_ruby]
-task :tests => [:test_unstable, :test_grrr_ruby, :test_scext]
+task :tests => [:test_grrr, :test_unstable, :test_grrr_ruby, :test_scext]
 
 Rake::TestTask.new(:test_grrr) do |t|
 	t.test_files = ["test/tc_grrr.rb"]

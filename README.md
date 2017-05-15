@@ -6,6 +6,10 @@ Grid controller UI widget library for Ruby.
 
 High level UI abstractions for grid based controllers. Simplifies interaction with for instance Monome devices.
 
+## Usage
+
+In order to use grrr-rb add its lib folder to the Ruby load path and ```require 'grrr'```.
+
 ## Examples
 
 ### Example 1
@@ -172,8 +176,6 @@ end
 ```
 
 ## Requirements
-
-This library requires [scext-rb](http://github.com/antonhornquist/scext-rb).
 
 This code has been developed and tested in Ruby 2.3.3 and JRuby 9.1.6.0. ```Grrr::ScreenGrid``` only works for JRuby.
 

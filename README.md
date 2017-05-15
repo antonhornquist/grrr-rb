@@ -8,7 +8,7 @@ High level UI abstractions for grid based controllers. Simplifies interaction wi
 
 ## Usage
 
-In order to use grrr-rb add its lib folder to the Ruby load path and ```require 'grrr'```.
+In order to use grrr-rb add its lib folder to the Ruby load path and ```require 'grrr'```. If grrr-rb is run in JRuby ```require 'grrr/screengrid'``` to make fake screengrid available for use.
 
 ## Examples
 

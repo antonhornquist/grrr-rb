@@ -2,23 +2,26 @@ require 'rake/testtask'
 
 task :default => :tests
 
-task :tests => [:test_grrr, :test_unstable, :test_grrr_ruby]
+# task :tests => [:test_grrr, :test_unstable, :test_grrr_ruby]
+task :tests => [:test_unstable, :test_grrr_ruby, :test_scext]
 
 Rake::TestTask.new(:test_grrr) do |t|
 	t.test_files = ["test/tc_grrr.rb"]
-	t.libs << File.expand_path("../../scext-rb/lib", __FILE__) # TODO: improve, this assumes a certain directory structure
 	t.warning = true
 end
 
 Rake::TestTask.new(:test_unstable) do |t|
 	t.test_files = ["test/tc_unstable.rb"]
-	t.libs << File.expand_path("../../scext-rb/lib", __FILE__) # TODO: improve, this assumes a certain directory structure
 	t.warning = true
 end
 
 Rake::TestTask.new(:test_grrr_ruby) do |t|
 	t.test_files = ["test/tc_grrr_ruby.rb"]
-	t.libs << File.expand_path("../../scext-rb/lib", __FILE__) # TODO: improve, this assumes a certain directory structure
+	t.warning = true
+end
+
+Rake::TestTask.new(:test_scext) do |t|
+	t.test_files = ["test/tc_scext.rb"]
 	t.warning = true
 end
 

@@ -6,8 +6,6 @@ Grid controller UI widget library for Ruby.
 
 High level UI abstractions for grid based controllers. Simplifies interaction with for instance Monome devices.
 
-This is a Ruby port of my SuperCollider library Grrr-sc. The Ruby version was mostly created to explore commonalities of SuperCollider and Ruby. For low latency real-time performances one should probably use Grrr-sc.
-
 ## Examples
 
 ### Example 1
@@ -63,6 +61,12 @@ b.button_released_action = lambda { puts "the first button was released!" }
 
 a.view.remove_all_children
 ```
+
+## Implementation
+
+This is a Ruby port of my SuperCollider library Grrr-sc. The Ruby version was mostly created to explore commonalities of SuperCollider and Ruby. For low latency real-time performances one should probably use SuperCollider and Grrr-sc.
+
+If you intend to use this library beware of the monkey patching in file lib/scext.rb containing a collection of SuperCollider extensions ported to Ruby.
 
 ## Classes
 

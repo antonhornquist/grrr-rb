@@ -80,12 +80,6 @@ If you intend to use this library beware of the monkey patching in file lib/scex
 		* Toggle
 			* VToggle
 			* HToggle
-		* (AbstractRangeToggle (rename to RangeToggleBase?))
-			* (VRangeToggle)
-			* (HRangeToggle)
-		* (SliderBase)
-			* (VSlider)
-			* (HSlider)
 	* Keyboard
 	* ContainerView - Abstract class for views that may contain other views.
 		* TopView - This is the topmost view in a view tree and typically the view to which controllers attach. The view cannot be added as a child to any other view.

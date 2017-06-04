@@ -4,7 +4,7 @@ Grid controller UI widget library for Ruby.
 
 ## Description
 
-High level UI abstractions for grid based controllers. Simplifies interaction with for instance Monome devices.
+The grrr-rb library provides high level UI abstractions for grid based controllers simplifying interaction with for instance Monome devices.
 
 ## Usage
 
@@ -76,11 +76,11 @@ If you intend to use this library beware of the monkey patching in file lib/scex
 
 * View - Abstract superclass. Represents a 2D grid of backlit buttons.
 	* Button - A button that may span over several rows and columns.
-	* AbstractToggle
-		* Toggle
-			* VToggle
-			* HToggle
-	* Keyboard
+	* AbstractToggle - Abstract class for toggles.
+		* Toggle - A toggle.
+			* VToggle - Vertical toggle.
+			* HToggle - Horizontal toggle.
+	* Keyboard - A virtual Keyboard.
 	* ContainerView - Abstract class for views that may contain other views.
 		* TopView - This is the topmost view in a view tree and typically the view to which controllers attach. The view cannot be added as a child to any other view.
 		* MultiButtonView - A grid of buttons of the same size.
@@ -142,7 +142,7 @@ class MyGridController < GridController
 		refresh
 	end
 
-	# it is good form to override new_detached with custom arguments to ensure it is 
+	# it is good practice to override new_detached with custom arguments to ensure it is 
 	# possible to create an instance of the controller that is not attached to any view
 	def self.new_detached(arg1, arg2)
 		new(arg1, arg2, nil, nil, false)
@@ -160,11 +160,6 @@ class MyGridController < GridController
 	def to_s
 		# optionally return a descriptive string representation
 		"My Grid Controller connected to port #{arg1} (#{@num_cols}x#{@num_rows})"
-	end
-
-	def info
-		# optionally return a description on how to setup physical device. example:
-		"Connect My Grid Controller by USB and configure it to send button press / release osc messages to port #{arg1}"
 	end
 end
 ```

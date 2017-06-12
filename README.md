@@ -4,11 +4,13 @@ Grid controller UI widget library for Ruby.
 
 ## Description
 
-The grrr-rb library provides high level UI abstractions for grid based controllers simplifying interaction with for instance Monome devices.
+The grrr-rb library provides high level UI abstractions for grid based controllers simplifying interaction with for instance [monome](http://monome.org) grid devices.
 
 ## Usage
 
 In order to use grrr-rb add its lib folder to the Ruby load path and ```require 'grrr'```. If grrr-rb is run in JRuby ```require 'grrr/screengrid'``` to make fake screengrid available for use.
+
+To use grrr-rb with a monome install [grrr-monome-rb](http://github.com/antonhornquist/grrr-monome-rb).
 
 ## Examples
 

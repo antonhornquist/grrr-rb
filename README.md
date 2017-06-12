@@ -80,7 +80,7 @@ If you intend to use this library beware of the monkey patching in file lib/scex
 		* Toggle - A toggle.
 			* VToggle - Vertical toggle.
 			* HToggle - Horizontal toggle.
-	* Keyboard - A virtual Keyboard.
+	* Keyboard - A virtual keyboard.
 	* ContainerView - Abstract class for views that may contain other views.
 		* TopView - This is the topmost view in a view tree and typically the view to which controllers attach. The view cannot be added as a child to any other view.
 		* MultiButtonView - A grid of buttons of the same size.

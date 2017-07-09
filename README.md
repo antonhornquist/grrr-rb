@@ -88,7 +88,6 @@ If you intend to use this library beware of the monkey patching in file lib/scex
 		* MultiButtonView - A grid of buttons of the same size.
 
 		* MultiToggleView - An array of vertical or horizontal toggles of the same size.
-		* Switcher - A container that only have one child view active at any given time. Has convenience methods for changing which child view is active.
 * Controller - Abstract superclass. Represents a device that may attach to and control part of or an entire view.
 	* ScreenGrid - An on-screen controller of user definable size. Button events may be triggered with mouse and keyboard.
 

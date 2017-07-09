@@ -75,6 +75,17 @@ class TestContainerView < Test::Unit::TestCase
 		assert_equal(Point.new(2, 2), view2.origin)
 	end
 
+	test "it should be possible to attach a child view to a container view on creation of the child view using a point defined in a string" do # TODO: string thing ruby specific to overcome SuperCollider shortcut
+		container = ContainerView.new_detached(4, 4)
+		view1 = View.new(container, "0@0", 2, 2)
+		view2 = View.new(container, "2@2", 2, 2)
+
+		assert_container_is_parent_of_view(container, view1)
+		assert_equal(Point.new(0, 0), view1.origin)
+		assert_container_is_parent_of_view(container, view2)
+		assert_equal(Point.new(2, 2), view2.origin)
+	end
+
 	test "it should be possible to attach a detached view as a child to a container view" do
 		container = ContainerView.new_detached(4, 4)
 		view1 = View.new_detached(2, 2)
@@ -89,6 +100,19 @@ class TestContainerView < Test::Unit::TestCase
 		assert_equal(Point.new(2, 2), view2.origin)
 	end
 
+	test "it should be possible to attach a detached view as a child to a container view using a point defined in a string" do # TODO: string thing ruby specific to overcome SuperCollider shortcut
+		container = ContainerView.new_detached(4, 4)
+		view1 = View.new_detached(2, 2)
+		view2 = View.new_detached(2, 2)
+
+		container.add_child(view1, "0@0")
+		container.add_child(view2, "2@2")
+
+		assert_container_is_parent_of_view(container, view1)
+		assert_equal(Point.new(0, 0), view1.origin)
+		assert_container_is_parent_of_view(container, view2)
+		assert_equal(Point.new(2, 2), view2.origin)
+	end
 	test "it should be possible to remove child views from a container view" do
 		container = ContainerView.new_detached(4, 4)
 		view1 = View.new_detached(2, 2)
@@ -686,6 +710,8 @@ class TestContainerView < Test::Unit::TestCase
 
 		assert_equal([child2], container.enabled_children)
 	end
+
+	# TODO: for view switching, check that actually changed refreshed leds are correct
 
 =begin
 	TODO: from switcher tests, review and uncomment suitable tests

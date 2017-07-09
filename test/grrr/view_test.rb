@@ -777,6 +777,28 @@ class TestView < Test::Unit::TestCase
 		assert_raise(RuntimeError) { view.refresh_point(Point.new(4, 4)) }
 	end
 
+	test "it should be possible to send button events with a point defined in a string to a view and get a response of how the event was handled" do # TODO: string thing ruby specific to overcome SuperCollider shortcut
+		view = @a_detached_4x4_view
+
+		response = view.press "0@0"
+
+		assert_equal(
+			[
+				{:view => view, :point => Point.new(0, 0)}
+			],
+			response
+		)
+
+		response = view.release "0@0"
+
+		assert_equal(
+			[
+				{:view => view, :point => Point.new(0, 0)}
+			],
+			response
+		)
+	end
+
 	# led state
 	test "it should be possible to check whether a led of a view is lit" do
 		view = MockOddColsLitView.new_detached(4, 4)

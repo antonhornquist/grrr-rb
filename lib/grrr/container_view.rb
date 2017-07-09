@@ -53,7 +53,7 @@ class Grrr::ContainerView < Grrr::View
 	end
 =end
 
-	def disable_children_such_that(predicate) # TODO: naming
+	def disable_children_such_that # TODO: naming
 		enabled_children.each do |child|
 			if yield(child)
 				child.disable

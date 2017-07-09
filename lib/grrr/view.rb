@@ -401,22 +401,28 @@ class Grrr::View
 	end
 
 	def pr_do_then_refresh_changed_leds(&func)
-		pre = get_led_state_within_bounds(@origin, @num_cols, @num_rows)
-		pr_disable_led_forwarding_to_parent
+		if has_parent?
+			pre = get_led_state_within_bounds(origin_to_use, @num_cols, @num_rows)
+			pr_disable_led_forwarding_to_parent
+		end
+
 		# TODO: ensure led forwarding is enabled after a possible error - finally?
 		func.call
 		# TODO: ensure led forwarding is enabled after a possible error - finally?
-		pr_enable_led_forwarding_to_parent
-		post = get_led_state_within_bounds(@origin, @num_cols, @num_rows)
 
-		points_having_changed_state = post.select do |point_state_1|
-			pre.any? do |point_state_2|
-				(point_state_1[0] == point_state_2[0]) and (point_state_1[1] == point_state_2[1])
+		if has_parent?
+			pr_enable_led_forwarding_to_parent
+			post = get_led_state_within_bounds(origin_to_use, @num_cols, @num_rows)
+
+			points_having_changed_state = post.select do |point_state_1|
+				pre.any? do |point_state_2|
+					(point_state_1[0] == point_state_2[0]) and (point_state_1[1] == point_state_2[1])
+				end
 			end
-		end
 
-		points_to_refresh = points_having_changed_state.collect { |point_state| point_state[0] }
-		refresh_points(points_to_refresh)
+			points_to_refresh = points_having_changed_state.collect { |point_state| point_state[0] }
+			refresh_points(points_to_refresh)
+		end
 	end
 
 	# Indicate support

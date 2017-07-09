@@ -7,8 +7,11 @@ class Grrr::Switcher < Grrr::ContainerView
 	end
 
 	def add_child(view, origin)
+=begin
+	TODO: remove
 		# TODO: below check added in conjunction with resolving monome repaint issues due to disabling and enabling views quickly. fix for when setting new value below could only be guaranteed to work when child view bounds are the same as GRSwitcher bounds which is why this guard clause was included for now. can be removed if *all* affected points are refreshed in one go after reenabling view led refreshed action
 		raise "View added to GRSwitcher must be of same size as the GRSwitcher view: #{@num_cols}x#{@num_rows}" unless (view.num_cols == @num_cols) and (view.num_rows == @num_rows)
+=end
 		if @current_view
 			if view.is_enabled?
 				view.disable
@@ -74,6 +77,7 @@ class Grrr::Switcher < Grrr::ContainerView
 		@children.index(@current_view)
 	end
 
+=begin
 	def value=(index)
 		if index == nil
 			raise "it is not allowed to set switcher value to nil" # TODO: why? perhaps we should allow?
@@ -92,6 +96,27 @@ class Grrr::Switcher < Grrr::ContainerView
 			end
 			new_current_view.enable
 			@current_view = new_current_view
+		end
+	end
+=end
+	def value=(index)
+		if index == nil
+			raise "it is not allowed to set switcher value to nil" # TODO: why? perhaps we should allow?
+		end
+		if (index < 0 or index >= @children.size)
+			raise "bad child index #{index}. view has #{@children.size} children."
+		end
+		if value != index
+			pr_do_then_refresh_changed_leds(lambda {
+				new_current_view = @children[index]
+				if @current_view != nil
+					prev_current_view = @current_view
+					@current_view = nil
+					prev_current_view.disable
+				end
+				new_current_view.enable
+				@current_view = new_current_view
+			})
 		end
 	end
 end

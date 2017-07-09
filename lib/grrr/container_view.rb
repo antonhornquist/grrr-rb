@@ -24,14 +24,48 @@ class Grrr::ContainerView < Grrr::View
 
 	# Parent - Child
 
+	def switch_by_id(id)
+ 		# TODO: implement: switch to all views matching id
+	end
+
+ 	# TODO: migrate switcher tests to container_view
+	def switch_to_child_by_index(index)
+		if (index < 0 or index >= @children.size)
+			raise "bad child index #{index}. view has #{@children.size} children."
+		end
+
+		if value != index
+			pr_do_then_refresh_changed_leds do
+				disable_children_such_that do |child|
+					@children.index(child) != index
+				end
+				if @children[index].is_disabled?
+					@children[index].enable
+				end
+			end
+		end
+	end
+
+=begin
+	TODO: needed?
+	def disable_all_children
+		disable_children_such_that { |child| true }
+	end
+=end
+
+	def disable_children_such_that(predicate) # TODO: naming
+		enabled_children.each do |child|
+			if yield(child)
+				child.disable
+			end
+		end
+	end
+
 	def validate_ok_to_add_child(view, origin)
 		raise "origin is required" unless origin
 		raise "[#{view}] already has a parent" if view.has_parent?
 		raise "child view origin may not be negative" if origin.x < 0 or origin.y < 0
 		validate_within_bounds(view, origin)
-		if view.is_enabled?
-			validate_does_not_overlap_with_enabled_children(view, origin)
-		end
 	end
 
 	def add_child(view, origin)
@@ -112,22 +146,39 @@ class Grrr::ContainerView < Grrr::View
 		@children.select { |view| view.contains_point?(point-view.origin) }
 	end
 
-	def has_enabled_child_at?(point)
-		enabled_children.any? { |view| view.contains_point?(point-view.origin) }
+	def has_any_enabled_child_at?(point)
+		enabled_children.any? { |view| view.contains_point?(point-view.origin)}
 	end
 
-	def get_enabled_child_at(point)
-		enabled_children.detect { |view| view.contains_point?(point-view.origin) }
+	def get_topmost_enabled_child_at(point)
+		enabled_children.select { |view| view.contains_point?(point-view.origin) }.last
 	end
 
 	def is_empty?
 		@children.empty?
 	end
 
+	def bring_child_to_front(view)
+		children.move(pr_get_child_index(view), num_children)
+		refresh_bounds(view.origin, view.num_cols, view.num_rows)
+	end
+
+	def send_child_to_back(view)
+		children.move(this.pr_get_child_index(view), 0)
+		refresh_bounds(view.origin, view.num_cols, view.num_rows)
+	end
+
+	def num_children
+		children.size
+	end
+
+	def pr_get_child_index(child)
+		children.index(child)
+	end
+
 	# Validations
 
 	def validate_ok_to_enable_child(child)
-		validate_does_not_overlap_with_enabled_children(child, child.origin)
 	end
 
 	def validate_ok_to_disable_child(child)
@@ -139,17 +190,6 @@ class Grrr::ContainerView < Grrr::View
 
 	def is_within_bounds?(view, origin)
 		contains_bounds? origin, view.num_cols, view.num_rows
-	end
-
-	def validate_does_not_overlap_with_enabled_children(view, origin)
-		raise "[#{view}] at #{origin} overlaps with one or more enabled child views in [#{self}]" if any_enabled_children_within_bounds?(origin, view.num_cols, view.num_rows)
-	end
-
-	def any_enabled_children_within_bounds?(origin, num_cols, num_rows)
-		points = Grrr::View.bounds_to_points(origin, num_cols, num_rows)
-		enabled_children.any? { |child|
-			Grrr::View.points_sect(child.to_points_from_origin, points).size > 0
-		}
 	end
 
 	def validate_parent_of(child)
@@ -165,8 +205,8 @@ class Grrr::ContainerView < Grrr::View
 
 	def handle_view_button_event(source, point, pressed)
 		if @enabled
-			if has_enabled_child_at?(point)
-				view = get_enabled_child_at(point)
+			if has_any_enabled_child_at?(point)
+				view = get_topmost_enabled_child_at(point)
 
 				if Grrr::Common.trace_button_events
 					puts(
@@ -198,8 +238,9 @@ class Grrr::ContainerView < Grrr::View
 
 	def refresh_point(point, refresh_children=true)
 		if @enabled
-			if has_enabled_child_at?(point) and refresh_children
-				view = get_enabled_child_at(point)
+			has_enabled_child_at_point = has_any_enabled_child_at?(point) # UPCOMINGTODO: hasAnyEnabledChildrenAt
+			if has_enabled_child_at_point and refresh_children
+				view = get_topmost_enabled_child_at(point) # UPCOMINGTODO: getTopmostEnabledChildAt
 
 				if Grrr::Common.trace_led_events
 					puts(
@@ -213,7 +254,7 @@ class Grrr::ContainerView < Grrr::View
 				end
 
 				view.refresh_point(point-view.origin)
-			elsif not has_enabled_child_at?(point)
+			elsif not has_enabled_child_at_point
 				super(point)
 			end
 		else
@@ -222,8 +263,8 @@ class Grrr::ContainerView < Grrr::View
 	end
 
 	def is_lit_at?(point)
-		if has_enabled_child_at?(point)
-			view = get_enabled_child_at(point)
+		if has_any_enabled_child_at?(point)
+			view = get_topmost_enabled_child_at(point)
 
 			if Grrr::Common.trace_led_events
 				puts(
@@ -252,7 +293,7 @@ class Grrr::ContainerView < Grrr::View
 			plot_pressed_lines = Array.fill(@num_rows) { Array.new }
 			plot_led_lines = Array.fill(@num_rows) { Array.new }
 			to_points.each { |point|
-				wrap = has_enabled_child_at?(point) ? ['[', ']'] : [' ', ' ']
+				wrap = has_any_enabled_child_at?(point) ? ['[', ']'] : [' ', ' ']
 				plot_pressed_lines[point.y] << wrap.join(is_pressed_at?(point) ? 'P' : '-')
 				plot_led_lines[point.y] << wrap.join(is_lit_at?(point) ? 'L' : '-')
 			}

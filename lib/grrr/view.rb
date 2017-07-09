@@ -48,6 +48,14 @@ class Grrr::View
 
 	# Bounds
 
+	def origin=(origin)
+		# UPCOMINGTODO
+		# 1. check new origin and new bounds is within parent bounds, and if so:
+		# 2. release all buttons
+		# 3. change origin
+		# 4. refresh all points covering the bounds of the vew in the original position + the bounds of the vew in the new position
+	end
+
 	def num_view_buttons
 		@num_cols * @num_rows
 	end
@@ -380,14 +388,40 @@ class Grrr::View
 		to_points.all? { |point| is_unlit_at?(point) }
 	end
 
+	def get_led_state_within_bounds(origin, num_cols, num_rows)
+		self.class.bounds_to_points(origin, num_cols, num_rows).collect { |point| [ point,  is_lit_at?(point) ] }
+	end
+
+	def pr_disable_led_forwarding_to_parent
+		remove_action(@parent_view_led_refreshed_listener, :view_led_refreshed_action);
+	end
+
+	def pr_enable_led_forwarding_to_parent
+		add_action(@parent_view_led_refreshed_listener, :view_led_refreshed_action);
+	end
+
+	def pr_do_then_refresh_changed_leds(&func)
+		pre = get_led_state_within_bounds(@origin, @num_cols, @num_rows)
+		pr_disable_led_forwarding_to_parent
+		# TODO: ensure led forwarding is enabled after a possible error - finally?
+		func.call
+		# TODO: ensure led forwarding is enabled after a possible error - finally?
+		pr_enable_led_forwarding_to_parent
+		post = get_led_state_within_bounds(@origin, @num_cols, @num_rows)
+
+		points_having_changed_state = post.select do |point_state_1|
+			pre.any? do |point_state_2|
+				(point_state_1[0] == point_state_2[0]) and (point_state_1[1] == point_state_2[1])
+			end
+		end
+
+		points_to_refresh = points_having_changed_state.collect { |point_state| point_state[0] }
+		refresh_points(points_to_refresh)
+	end
+
 	# Indicate support
 
-=begin
-	DOC:
-	Indicate schedules to set leds of a specific area or of a collection of points to first lit and the unlit. This process is repeated a specified number of times (repeat) and with a specified delay in milliseconds (interval). When done it refreshes the points. Leds will be affected even though they are covered by child views. This is mainly used to indicate added / detached views and attached / detached controllers.
-=end
-
-	def indicate_view(repeat=nil, interval=nil)
+	def indicate_view(repeat=nil, interval=nil) # TODO: compare before and after UPCOMINGFIX
 		indicate_points(to_points, repeat, interval)
 	end
 
@@ -472,7 +506,10 @@ class Grrr::View
 		raise "already #{@enabled ? 'enabled' : 'disabled'}" if @enabled == bool
 		if bool
 			if has_parent?
+=begin
+	TODO
 				@parent.validate_ok_to_enable_child(self)
+=end
 				@parent.release_all_within_bounds(@origin, @num_cols, @num_rows)
 			end
 			@enabled = true
@@ -523,19 +560,9 @@ class Grrr::View
 		end
 	end
 
-=begin
-	DOC:
-	Returns the current state. This will not evaluate the function assigned to action. 
-=end
-
 	def value
 		@value
 	end
-
-=begin
-	DOC:
-	Sets the view to display the state of a new value. This will not evaluate the function assigned to action.
-=end
 
 	def value=(value)
 		if @value != value
@@ -546,11 +573,6 @@ class Grrr::View
 			end
 		end
 	end
-
-=begin
-	DOC:
-	Sets the view to display the state of a new value, and evaluates action, if the value has changed. 
-=end
 
 	def value_action=(value)
 		if @value != value
@@ -609,7 +631,8 @@ class Grrr::View
 		@parent = parent
 		@origin = origin
 		@parent_view_led_refreshed_listener = lambda { |source, point, on|
- 			if @parent.has_view_led_refreshed_action? and @parent.is_enabled?
+ 			# if @parent.has_view_led_refreshed_action? and @parent.is_enabled? // UPCOMINGTODO: and: parent.getTopmostEnabledChildAt(origin + point) == this
+			if @parent.has_view_led_refreshed_action? and @parent.is_enabled? and (@parent.get_topmost_enabled_child_at(origin + point) == self)
 
 				if Grrr::Common.trace_led_events
 					puts(
@@ -631,6 +654,15 @@ class Grrr::View
 						"parent has no view_led_refreshed_action"
 					elsif not @parent.is_enabled?
 						"parent is disabled"
+					else
+						if @parent.get_topmost_enabled_child_at(origin + point) != self
+							"view [%s] is not topmost at point [%s] in parent [%s]" %
+							[
+								self,
+								point.to_s,
+								@parent.to_s
+							]
+						end
 					end
 
 					puts(
@@ -661,6 +693,18 @@ class Grrr::View
 			parents << view
 		end
 		parents
+	end
+
+	def bring_to_front
+		if has_parent?
+			@parent.bring_child_to_front(self)
+		end
+	end
+
+	def send_to_back
+		if has_parent?
+			@parent.send_child_to_back(self)
+		end
 	end
 
 	# String representation

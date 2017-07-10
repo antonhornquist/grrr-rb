@@ -1,7 +1,7 @@
 require 'osc-ruby'
 require 'osc-ruby/em_server' if defined?(EventMachine)
 
-class Grrr::AbstractMonome < Grrr::Controller
+class Grrr::MonomeApp < Grrr::Controller
 	DEFAULT_HOST_ADDRESS = "127.0.0.1"
 	DEFAULT_HOST_PORT = 8000
 	DEFAULT_LISTEN_PORT = 8080
@@ -81,6 +81,7 @@ class Grrr::AbstractMonome < Grrr::Controller
 	end
 =end
 
+	# TODO: propagate to subclasses
 	def to_s
 		"Monome 64 (Prefix: \"#@prefix\", Host Address: #@host_address, Host Port: #@host_port, Listen Port: #@listen_port)" 
 	end

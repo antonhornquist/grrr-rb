@@ -19,12 +19,14 @@ Rake::TestTask.new(:test_scext) do |t|
 	t.warning = true
 end
 
+# TODO: fix, does not work right now
 task :irb => :environment do
 	require 'irb'
 	ARGV.clear
 	IRB.start
 end
 
+# TODO: fix, does not work right now
 task :environment do
 	require 'grrr'
 	require 'unstable'

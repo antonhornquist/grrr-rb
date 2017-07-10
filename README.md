@@ -10,9 +10,55 @@ The grrr-rb library provides high level UI abstractions for grid based controlle
 
 In order to use grrr-rb add its lib folder to the Ruby load path and ```require 'grrr'```. If grrr-rb is run in JRuby ```require 'grrr/screengrid'``` to make fake screengrid available for use.
 
-To use grrr-rb with a monome install [grrr-monome-rb](http://github.com/antonhornquist/grrr-monome-rb).
+First, install required dependencies.
+
+The [osc-ruby](http://github.com/aberant/osc-ruby) library is available as a gem:
+
+```
+$ gem install osc-ruby
+```
+
+Optionally, install [eventmachine](https://github.com/eventmachine/eventmachine). It is also available as a gem:
+
+```
+$ gem install eventmachine
+```
+
+If eventmachine is installed the osc-ruby OSC::EMServer is used for monome communication. If not, OSC::Server is used.
+
+The grrr-rb library currently support the legacy monome protocol. Run MonomeSerial configured with the following settings for it to work with grrr-rb:
+
+| Setting      | Value                             |
+|--------------|-----------------------------------|
+| I/O Protocol | OpenSound Control                 |
+| Host Address | your_monome_instance.host_address |
+| Host Port    | your_monome_instance.host_port    |
+| Listen Port  | your_monome_instance.listen_port  |
+| Prefix       | your_monome_instance.prefix       |
 
 ## Examples
+
+### Monome Example
+
+``` ruby
+require 'monome'
+a=Monome64.new
+
+b=Grrr::Button.new(a, "0@0")
+b.action = lambda { |button, value| puts "button value was changed to #{value}!" }
+
+c=Grrr::HToggle.new(a, "0@1")
+c.action = lambda { |toggle, value| puts "toggle value was changed to #{value}!" }
+
+d=Thread.new {
+	while true
+		c.value = (c.value+1) % 4
+		sleep 0.5
+	end
+}
+
+sleep 5
+```
 
 ### Example 1
 
@@ -56,7 +102,7 @@ c.action = lambda { |value| puts "the second button's value was changed to #{val
 a.view.remove_all_children
 ```
 
-### Example 2
+### Example 3
 
 ``` ruby
 b = GridButton.new_decoupled(a, "0@0")
@@ -70,9 +116,13 @@ a.view.remove_all_children
 
 ## Implementation
 
-This is a Ruby port of my SuperCollider library Grrr-sc. The Ruby version was mostly created to explore commonalities of SuperCollider and Ruby. For low latency real-time performances one should probably use SuperCollider and Grrr-sc.
+This is a Ruby port of my SuperCollider library Grrr-sc initially created to explore commonalities of the SuperCollider SCLang and Ruby programming languages.
+
+For low latency real-time performances one should probably use SuperCollider and Grrr-sc.
 
 If you intend to use this library beware of the monkey patching in file lib/scext.rb containing a collection of SuperCollider extensions ported to Ruby.
+
+The SuperCollider and Ruby classes are generated using the [rsclass-rb](http://github.com/antonhornquist/rsclass-rb) class generator based on meta data defined in the [grrr-meta-rb](http://github.com/antonhornquist/grrr-meta-rb) repository.
 
 ## Classes
 
@@ -89,6 +139,8 @@ If you intend to use this library beware of the monkey patching in file lib/scex
 
 		* MultiToggleView - An array of vertical or horizontal toggles of the same size.
 * Controller - Abstract superclass. Represents a device that may attach to and control part of or an entire view.
+	* AbstractMonome - Abstract class for [monome](http://monome.org) controllers.
+		* Monome64 - 8x8 monome.
 	* ScreenGrid - An on-screen controller of user definable size. Button events may be triggered with mouse and keyboard.
 
 ## Extending Grrr
@@ -166,6 +218,10 @@ end
 ```
 
 ## Requirements
+
+This library requires [osc-ruby](http://github.com/aberant/osc-ruby).
+
+An optional dependency is [eventmachine](https://github.com/eventmachine/eventmachine).
 
 This code has been developed and tested in Ruby 2.3.3 and JRuby 9.1.6.0. ```Grrr::ScreenGrid``` only works for JRuby.
 

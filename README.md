@@ -4,11 +4,11 @@ Grid controller UI widget library for Ruby.
 
 ## Description
 
-The grrr-rb library provides high level UI abstractions for grid based controllers simplifying interaction with for instance [monome](http://monome.org) grid devices.
+The grrr-rb library provides high level UI abstractions for grid based controllers simplifying interaction with for instance [monome](http://monome.org) 40h, 64, 128 and 256 grid devices.
 
 ## Usage
 
-In order to use grrr-rb add its lib folder to the Ruby load path and ```require 'grrr'```. If grrr-rb is run in JRuby ```require 'grrr/screengrid'``` to make fake screengrid available for use.
+In order to use grrr-rb add its lib folder to the Ruby load path and ```require 'grrr'```. If grrr-rb is run in JRuby ```require 'grrr/screengrid'``` will make fake screengrid available for use.
 
 First, install required dependencies.
 
@@ -140,7 +140,10 @@ The SuperCollider and Ruby classes are generated using the [rsclass-rb](http://g
 		* MultiToggleView - An array of vertical or horizontal toggles of the same size.
 * Controller - Abstract superclass. Represents a device that may attach to and control part of or an entire view.
 	* AbstractMonome - Abstract class for [monome](http://monome.org) controllers.
-		* Monome64 - 8x8 monome.
+		* Monome64App - An 8x8 monome app.
+		* MonomeV128App - An 8x16 monome app.
+		* MonomeH128App - A 16x8 monome app.
+		* Monome256App - An 8x16 monome app.
 	* ScreenGrid - An on-screen controller of user definable size. Button events may be triggered with mouse and keyboard.
 
 ## Extending Grrr

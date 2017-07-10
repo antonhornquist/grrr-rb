@@ -139,7 +139,7 @@ The SuperCollider and Ruby classes are generated using the [rsclass-rb](http://g
 
 		* MultiToggleView - An array of vertical or horizontal toggles of the same size.
 * Controller - Abstract superclass. Represents a device that may attach to and control part of or an entire view.
-	* AbstractMonome - Abstract class for [monome](http://monome.org) controllers.
+	* MonomeApp - Abstract class for [monome](http://monome.org) controller apps.
 		* Monome64App - An 8x8 monome app.
 		* MonomeV128App - An 8x16 monome app.
 		* MonomeH128App - A 16x8 monome app.

@@ -17,7 +17,7 @@ class Grrr::AbstractMonome < Grrr::Controller
 	@@all = [] # TODO
 =end
 
-	def initialize(num_cols, num_rows, view=nil, origin=nil, create_top_view_if_none_is_supplied=true)
+	def initialize(num_cols, num_rows, name, view=nil, origin=nil, create_top_view_if_none_is_supplied=true)
 		super(num_cols, num_rows, view, origin, create_top_view_if_none_is_supplied)
 
 		@host_address = host_address ? host_address : DEFAULT_HOST_ADDRESS

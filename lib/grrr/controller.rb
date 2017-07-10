@@ -81,11 +81,11 @@ class Grrr::Controller
 
 	# Controller info
 
-	def print_info
+	def print_info # TODO
 		puts info
 	end
 
-	def info
+	def info # TODO
 		# subclass responsibility
 		"No info provided"
 	end

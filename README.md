@@ -4,37 +4,11 @@ Grid controller UI widget library for Ruby.
 
 ## Description
 
-The grrr-rb library provides high level UI abstractions for grid based controllers simplifying interaction with for instance [monome](http://monome.org) 40h, 64, 128 and 256 grid devices.
+The grrr-rb library provides high level UI abstractions for grid based controllers simplifying interaction with for instance [monome](http://monome.org) 40h, 64, 128 and 256 grid devices. This library is built atop of and thus depends on [serialoscclient-rb](http://github.com/antonhornquist/serialoscclient-rb).
 
 ## Usage
 
-In order to use grrr-rb add its lib folder to the Ruby load path and ```require 'grrr'```. If grrr-rb is run in JRuby ```require 'grrr/screengrid'``` will make fake screengrid available for use.
-
-First, install required dependencies.
-
-The [osc-ruby](http://github.com/aberant/osc-ruby) library is available as a gem:
-
-```
-$ gem install osc-ruby
-```
-
-Optionally, install [eventmachine](https://github.com/eventmachine/eventmachine). It is also available as a gem:
-
-```
-$ gem install eventmachine
-```
-
-If eventmachine is installed the osc-ruby OSC::EMServer is used for monome communication. If not, OSC::Server is used.
-
-The grrr-rb library currently support the legacy monome protocol. Run MonomeSerial configured with the following settings for it to work with grrr-rb:
-
-| Setting      | Value                             |
-|--------------|-----------------------------------|
-| I/O Protocol | OpenSound Control                 |
-| Host Address | your_monome_instance.host_address |
-| Host Port    | your_monome_instance.host_port    |
-| Listen Port  | your_monome_instance.listen_port  |
-| Prefix       | your_monome_instance.prefix       |
+In order to use grrr-rb add its lib folder and the lib folder of serialoscclient-rb to the Ruby load path and ```require 'grrr'```. If grrr-rb is run in JRuby ```require 'grrr/screengrid'``` will make fake screengrid available for use.
 
 ## Examples
 
@@ -116,13 +90,13 @@ a.view.remove_all_children
 
 ## Implementation
 
-This is a Ruby port of my SuperCollider library Grrr-sc initially created to explore commonalities of the SuperCollider SCLang and Ruby programming languages.
-
-For low latency real-time performances one should probably use SuperCollider and Grrr-sc.
-
-If you intend to use this library beware of the monkey patching in file lib/scext.rb containing a collection of SuperCollider extensions ported to Ruby.
+This is a Ruby port of my SuperCollider library [Grrr-sc](http://github.com/antonhornquist/rsclass-rb).
 
 The SuperCollider and Ruby classes are generated using the [rsclass-rb](http://github.com/antonhornquist/rsclass-rb) class generator based on meta data defined in the [grrr-meta-rb](http://github.com/antonhornquist/grrr-meta-rb) repository.
+
+For low latency real-time Grid controller performance working with Grrr-sc and SuperCollider is recommended.
+
+If you intend to use this library beware of the monkey patching in file lib/scext.rb containing a collection of SuperCollider extensions ported to Ruby.
 
 ## Classes
 
@@ -222,9 +196,7 @@ end
 
 ## Requirements
 
-This library requires [osc-ruby](http://github.com/aberant/osc-ruby).
-
-An optional dependency is [eventmachine](https://github.com/eventmachine/eventmachine).
+This library requires [serialoscclient-rb](http://github.com/antonhornquist/serialoscclient-rb).
 
 This code has been developed and tested in Ruby 2.3.3 and JRuby 9.1.6.0. ```Grrr::ScreenGrid``` only works for JRuby.
 

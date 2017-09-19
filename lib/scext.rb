@@ -12,8 +12,10 @@ class Object
 	end
 
 	def changed(what, *more_args)
-		@@dependants_dictionary[self].dup.each do |item|
-			item.update(self, what, *more_args)
+		if @@dependants_dictionary[self]
+			@@dependants_dictionary[self].dup.each do |item|
+				item.update(self, what, *more_args)
+			end
 		end
 	end
 
@@ -144,6 +146,7 @@ class ProcList
 	end
 	
 	alias :add_func :add_proc
+	alias :remove_func :remove_proc
 	alias :update :call
 end
 
@@ -166,6 +169,7 @@ class NilClass
 	end
 
 	alias :add_func :add_proc
+	alias :remove_func :remove_proc
 end
 
 #
@@ -184,6 +188,7 @@ class Proc
 	end
 
 	alias :add_func :add_proc
+	alias :remove_func :remove_proc
 	alias :update :call
 end
 

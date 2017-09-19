@@ -119,6 +119,10 @@ class Grrr::MultiButtonView < Grrr::ContainerView
 		@buttons[x][y].flash(delay)
 	end
 
+	def flash_view
+		# TODO
+	end
+
 	def set_button_value(x, y, val)
 		@buttons[x][y].value = val
 	end
@@ -169,7 +173,7 @@ class Grrr::MultiButtonView < Grrr::ContainerView
 		pr_remove_all_children(true)
 
 		@buttons = Array.fill2d(num_button_cols, num_button_rows) do |x, y|
-			button = Button.new_detached(button_width, button_height)
+			button = Grrr::Button.new_detached(button_width, button_height)
 			button.coupled = @coupled
 			pr_add_actions(button, x, y)
 			pr_add_child_no_flash(button, Point.new(x*button_width, y*button_height))

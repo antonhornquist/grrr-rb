@@ -156,6 +156,10 @@ class Grrr::MultiToggleView < Grrr::ContainerView
 		@toggles[i].flash(delay)
 	end
 
+	def flash_view
+		# TODO
+	end
+
 	def set_toggle_value(i, val)
 		@toggles[i].value = val
 	end
@@ -208,7 +212,7 @@ class Grrr::MultiToggleView < Grrr::ContainerView
 		pr_remove_all_children(true)
 
 		@toggles = Array.fill(@num_toggles) do |i|
-			toggle = Toggle.new_detached(toggle_width, toggle_height, true, @coupled, @nillable, @orientation)
+			toggle = Grrr::Toggle.new_detached(toggle_width, toggle_height, true, @coupled, @nillable, @orientation)
 			if @values_are_inverted
 				toggle.values_are_inverted = @values_are_inverted
 			end

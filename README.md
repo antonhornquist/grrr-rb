@@ -113,11 +113,11 @@ If you intend to use this library beware of the monkey patching in file lib/scex
 
 		* MultiToggleView - An array of vertical or horizontal toggles of the same size.
 * Controller - Abstract superclass. Represents a device that may attach to and control part of or an entire view.
-	* MonomeApp - Abstract class for [monome](http://monome.org) controller apps.
-		* Monome64App - An 8x8 monome app.
-		* MonomeV128App - An 8x16 monome app.
-		* MonomeH128App - A 16x8 monome app.
-		* Monome256App - An 8x16 monome app.
+	* Monome - Abstract class for [monome](http://monome.org) controller apps.
+		* Monome64 - An 8x8 monome app.
+		* MonomeV128 - An 8x16 monome app.
+		* MonomeH128 - A 16x8 monome app.
+		* Monome256 - An 8x16 monome app.
 	* ScreenGrid - An on-screen controller of user definable size. Button events may be triggered with mouse and keyboard.
 
 ## Extending Grrr

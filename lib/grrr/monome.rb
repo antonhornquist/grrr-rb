@@ -1,6 +1,6 @@
 require 'serialoscclient'
 
-class Grrr::MonomeApp < Grrr::Controller
+class Grrr::Monome < Grrr::Controller
 =begin
 	class << self
 		attr_reader :all

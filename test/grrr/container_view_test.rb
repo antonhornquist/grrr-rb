@@ -2,15 +2,6 @@ class TestContainerView < Test::Unit::TestCase
 	def setup
 		save_globals
 		disable_trace_and_flash
-		top_container = MockLitContainerView.new_detached(4, 4)
-		top_container.id = :top_container
-		child_container = ContainerView.new(top_container, Point.new(1, 1), 3, 3)
-		child_container.id = :child_container
-		view = MockLitView.new(child_container, Point.new(1, 1), 2, 2)
-		view.id = :view
-		@top_container = top_container
-		@child_container = child_container
-		@view = view
 	end
 
 	def teardown
@@ -375,9 +366,15 @@ class TestContainerView < Test::Unit::TestCase
 
 	# led events and refresh
 	test "if a point of a container is refreshed and an enabled child view cover the point the child view led state should override container led state" do
-		view_led_refreshed_listener = MockViewLedRefreshedListener.new(@top_container)
+		top_container = MockLitContainerView.new_detached(4, 4)
+		top_container.id = :top_container
+		child_container = ContainerView.new(top_container, Point.new(1, 1), 3, 3)
+		child_container.id = :child_container
+		view = MockLitView.new(child_container, Point.new(1, 1), 2, 2)
+		view.id = :view
+		view_led_refreshed_listener = MockViewLedRefreshedListener.new(top_container)
 
-		@top_container.refresh_point(Point.new(0, 0))
+		top_container.refresh_point(Point.new(0, 0))
 
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(
@@ -387,25 +384,24 @@ class TestContainerView < Test::Unit::TestCase
 			)
 		)
 
-		view_led_refreshed_listener.reset_notifications
-
-		@top_container.refresh_point(Point.new(1, 1))
+		top_container.refresh_point(Point.new(1, 1))
 
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(
 				[
+					{ :source => :top_container, :point => Point.new(0, 0), :on => true },
 					{ :source => :child_container, :point => Point.new(1, 1), :on => false }
 				]
 			)
 		)
 
-		view_led_refreshed_listener.reset_notifications
-
-		@top_container.refresh_point(Point.new(2, 2))
+		top_container.refresh_point(Point.new(2, 2))
 
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(
 				[
+					{ :source => :top_container, :point => Point.new(0, 0), :on => true },
+					{ :source => :child_container, :point => Point.new(1, 1), :on => false },
 					{ :source => :view, :point => Point.new(2, 2), :on => true }
 				]
 			)
@@ -413,9 +409,15 @@ class TestContainerView < Test::Unit::TestCase
 	end
 
 	test "when an area of a container is refreshed on the points where enabled child views are the child view led state should override container led state" do
-		view_led_refreshed_listener = MockViewLedRefreshedListener.new(@top_container)
+		top_container = MockLitContainerView.new_detached(4, 4)
+		top_container.id = :top_container
+		child_container = ContainerView.new(top_container, Point.new(1, 1), 3, 3)
+		child_container.id = :child_container
+		view = MockLitView.new(child_container, Point.new(1, 1), 2, 2)
+		view.id = :view
+		view_led_refreshed_listener = MockViewLedRefreshedListener.new(top_container)
 
-		@top_container.refresh_bounds(Point.new(1, 1), 3, 2)
+		top_container.refresh_bounds(Point.new(1, 1), 3, 2)
 
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(
@@ -432,9 +434,15 @@ class TestContainerView < Test::Unit::TestCase
 	end
 
 	test "when an entire container is refreshed on the points where enabled child views are the child view led state should override container led state" do
-		view_led_refreshed_listener = MockViewLedRefreshedListener.new(@top_container)
+		top_container = MockLitContainerView.new_detached(4, 4)
+		top_container.id = :top_container
+		child_container = ContainerView.new(top_container, Point.new(1, 1), 3, 3)
+		child_container.id = :child_container
+		view = MockLitView.new(child_container, Point.new(1, 1), 2, 2)
+		view.id = :view
+		view_led_refreshed_listener = MockViewLedRefreshedListener.new(top_container)
 
-		@top_container.refresh
+		top_container.refresh
 
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(
@@ -461,9 +469,15 @@ class TestContainerView < Test::Unit::TestCase
 	end
 
 	test "when an enabled view that has a parent is refreshed led state should automatically be forwarded to the parent" do
-		view_led_refreshed_listener = MockViewLedRefreshedListener.new(@top_container)
+		top_container = MockLitContainerView.new_detached(4, 4)
+		top_container.id = :top_container
+		child_container = ContainerView.new(top_container, Point.new(1, 1), 3, 3)
+		child_container.id = :child_container
+		view = MockLitView.new(child_container, Point.new(1, 1), 2, 2)
+		view.id = :view
+		view_led_refreshed_listener = MockViewLedRefreshedListener.new(top_container)
 
-		@view.refresh
+		view.refresh
 
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(
@@ -492,9 +506,15 @@ class TestContainerView < Test::Unit::TestCase
 	end
 
 	test "it should be possible to refresh only the points of a container where led state is not overridden by any child view" do
-		view_led_refreshed_listener = MockViewLedRefreshedListener.new(@top_container)
+		top_container = MockLitContainerView.new_detached(4, 4)
+		top_container.id = :top_container
+		child_container = ContainerView.new(top_container, Point.new(1, 1), 3, 3)
+		child_container.id = :child_container
+		view = MockLitView.new(child_container, Point.new(1, 1), 2, 2)
+		view.id = :view
+		view_led_refreshed_listener = MockViewLedRefreshedListener.new(top_container)
 
-		@top_container.refresh(false)
+		top_container.refresh(false)
 
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(

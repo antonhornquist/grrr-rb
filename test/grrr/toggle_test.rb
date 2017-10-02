@@ -2,10 +2,6 @@ class TestToggle < Test::Unit::TestCase
 	def setup
 		save_globals
 		disable_trace_and_flash
-		@small_horizontal_toggle_4x1 = HToggle.new_detached(4, 1)
-		@small_horizontal_toggle_4x1.id = :small_horizontal_toggle_4x1
-		@large_horizontal_toggle_8x2 = HToggle.new_detached(8, 2)
-		@large_horizontal_toggle_8x2.id = :large_horizontal_toggle_8x2
 	end
 
 	def teardown
@@ -66,13 +62,13 @@ class TestToggle < Test::Unit::TestCase
 
 	# toggle pressed state and toggle events
 	test "a single view button press event should make a toggle pressed" do
-		toggle = @small_horizontal_toggle_4x1
+		toggle = HToggle.new_detached(4, 1)
 		toggle.press(Point.new(2, 0))
 		assert(toggle.is_pressed?)
 	end
 
 	test "a toggle should not be considered released until all view buttons are released" do
-		toggle = @small_horizontal_toggle_4x1
+		toggle = HToggle.new_detached(4, 1)
 
 		toggle.press(Point.new(0, 0))
 
@@ -92,7 +88,7 @@ class TestToggle < Test::Unit::TestCase
 	end
 
 	test "when pressed state of a toggle is updated toggle pressed and released actions should be triggered" do
-		toggle = @small_horizontal_toggle_4x1
+		toggle = HToggle.new_detached(4, 1)
 		pressed_listener = MockTogglePressedListener.new(toggle)
 		released_listener = MockToggleReleasedListener.new(toggle)
 
@@ -110,7 +106,7 @@ class TestToggle < Test::Unit::TestCase
 	end
 
 	test "every view button press event on a toggle should trigger toggle value pressed action" do
-		toggle = @small_horizontal_toggle_4x1
+		toggle = HToggle.new_detached(4, 1)
 		toggle_value_pressed_listener = MockToggleValuePressedListener.new(toggle)
 
 		toggle.press(Point.new(2, 0))
@@ -139,7 +135,7 @@ class TestToggle < Test::Unit::TestCase
 	end
 
 	test "if several buttons get pressed on view and the min and max values of the pressed buttons get changed toggle range pressed action should be triggered" do
-		toggle = @small_horizontal_toggle_4x1
+		toggle = HToggle.new_detached(4, 1)
 		toggle_range_pressed_listener = MockToggleRangePressedListener.new(toggle)
 
 		toggle.press(Point.new(1, 0))
@@ -154,7 +150,8 @@ class TestToggle < Test::Unit::TestCase
 
 	# led events and refresh
 	test "when a toggle is set to a new value leds should be refreshed and only the led corresponding to the value should be lit" do
-		toggle = @small_horizontal_toggle_4x1
+		toggle = HToggle.new_detached(4, 1)
+		toggle.id = :abc
 		view_led_refreshed_listener = MockViewLedRefreshedListener.new(toggle)
 
 		toggle.value = 3
@@ -162,17 +159,18 @@ class TestToggle < Test::Unit::TestCase
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(
 				[
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(0, 0), :on => false },
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(1, 0), :on => false },
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(2, 0), :on => false },
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(3, 0), :on => true },
+					{ :source => :abc, :point => Point.new(0, 0), :on => false },
+					{ :source => :abc, :point => Point.new(1, 0), :on => false },
+					{ :source => :abc, :point => Point.new(2, 0), :on => false },
+					{ :source => :abc, :point => Point.new(3, 0), :on => true },
 				]
 			)
 		)
 	end
 
 	test "when a nillable toggle is set to a nil value leds should be refreshed and all leds should be unlit" do
-		toggle = @small_horizontal_toggle_4x1
+		toggle = HToggle.new_detached(4, 1)
+		toggle.id = :abc
 		toggle.nillable=true
 		view_led_refreshed_listener = MockViewLedRefreshedListener.new(toggle)
 
@@ -181,17 +179,17 @@ class TestToggle < Test::Unit::TestCase
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(
 				[
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(0, 0), :on => false },
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(1, 0), :on => false },
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(2, 0), :on => false },
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(3, 0), :on => false },
+					{ :source => :abc, :point => Point.new(0, 0), :on => false },
+					{ :source => :abc, :point => Point.new(1, 0), :on => false },
+					{ :source => :abc, :point => Point.new(2, 0), :on => false },
+					{ :source => :abc, :point => Point.new(3, 0), :on => false },
 				]
 			)
 		)
 	end
 
 	test "if a non nillable toggle is set to a nil value an error should be thrown" do
-		toggle = @small_horizontal_toggle_4x1
+		toggle = HToggle.new_detached(4, 1)
 
 		assert_raise(RuntimeError) { toggle.value = nil }
 	end
@@ -221,7 +219,8 @@ class TestToggle < Test::Unit::TestCase
 	end
 
 	test "when toggle is set filled all leds should automatically refresh" do
-		toggle = @small_horizontal_toggle_4x1
+		toggle = HToggle.new_detached(4, 1)
+		toggle.id = :abc
 		toggle.value = 2
 		view_led_refreshed_listener = MockViewLedRefreshedListener.new(toggle)
 
@@ -230,17 +229,18 @@ class TestToggle < Test::Unit::TestCase
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(
 				[
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(0, 0), :on => true },
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(1, 0), :on => true },
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(2, 0), :on => true },
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(3, 0), :on => false },
+					{ :source => :abc, :point => Point.new(0, 0), :on => true },
+					{ :source => :abc, :point => Point.new(1, 0), :on => true },
+					{ :source => :abc, :point => Point.new(2, 0), :on => true },
+					{ :source => :abc, :point => Point.new(3, 0), :on => false },
 				]
 			)
 		)
 	end
 
 	test "when toggle is set not filled all leds should automatically refresh" do
-		toggle = @small_horizontal_toggle_4x1
+		toggle = HToggle.new_detached(4, 1)
+		toggle.id = :abc
 		toggle.filled = true
 		toggle.value = 2
 		view_led_refreshed_listener = MockViewLedRefreshedListener.new(toggle)
@@ -250,10 +250,10 @@ class TestToggle < Test::Unit::TestCase
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(
 				[
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(0, 0), :on => false },
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(1, 0), :on => false },
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(2, 0), :on => true },
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(3, 0), :on => false },
+					{ :source => :abc, :point => Point.new(0, 0), :on => false },
+					{ :source => :abc, :point => Point.new(1, 0), :on => false },
+					{ :source => :abc, :point => Point.new(2, 0), :on => true },
+					{ :source => :abc, :point => Point.new(3, 0), :on => false },
 				]
 			)
 		)
@@ -345,7 +345,8 @@ class TestToggle < Test::Unit::TestCase
 	end
 
 	test "when a toggle's thumb size is changed its leds should refresh" do
-		toggle = @small_horizontal_toggle_4x1
+		toggle = HToggle.new_detached(4, 1)
+		toggle.id = :abc
 		view_led_refreshed_listener = MockViewLedRefreshedListener.new(toggle)
 
 		toggle.thumb_size = [2, 1]
@@ -353,10 +354,10 @@ class TestToggle < Test::Unit::TestCase
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(
 				[
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(0, 0), :on => true },
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(1, 0), :on => true },
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(2, 0), :on => false },
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(3, 0), :on => false },
+					{ :source => :abc, :point => Point.new(0, 0), :on => true },
+					{ :source => :abc, :point => Point.new(1, 0), :on => true },
+					{ :source => :abc, :point => Point.new(2, 0), :on => false },
+					{ :source => :abc, :point => Point.new(3, 0), :on => false },
 				]
 			)
 		)
@@ -388,7 +389,8 @@ class TestToggle < Test::Unit::TestCase
 	end
 
 	test "when toggles value is set inverted all leds should automatically refresh" do
-		toggle = @small_horizontal_toggle_4x1
+		toggle = HToggle.new_detached(4, 1)
+		toggle.id = :abc
 		toggle.values_are_inverted = false
 		toggle.value = 3
 		view_led_refreshed_listener = MockViewLedRefreshedListener.new(toggle)
@@ -398,10 +400,10 @@ class TestToggle < Test::Unit::TestCase
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(
 				[
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(0, 0), :on => true },
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(1, 0), :on => false },
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(2, 0), :on => false },
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(3, 0), :on => false },
+					{ :source => :abc, :point => Point.new(0, 0), :on => true },
+					{ :source => :abc, :point => Point.new(1, 0), :on => false },
+					{ :source => :abc, :point => Point.new(2, 0), :on => false },
+					{ :source => :abc, :point => Point.new(3, 0), :on => false },
 				]
 			)
 		)
@@ -418,7 +420,8 @@ class TestToggle < Test::Unit::TestCase
 	end
 
 	test "when toggles value is set not inverted all leds should automatically refresh" do
-		toggle = @small_horizontal_toggle_4x1
+		toggle = HToggle.new_detached(4, 1)
+		toggle.id = :abc
 		toggle.values_are_inverted = true
 		toggle.value = 3
 		view_led_refreshed_listener = MockViewLedRefreshedListener.new(toggle)
@@ -428,10 +431,10 @@ class TestToggle < Test::Unit::TestCase
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(
 				[
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(0, 0), :on => false },
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(1, 0), :on => false },
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(2, 0), :on => false },
-					{ :source => :small_horizontal_toggle_4x1, :point => Point.new(3, 0), :on => true },
+					{ :source => :abc, :point => Point.new(0, 0), :on => false },
+					{ :source => :abc, :point => Point.new(1, 0), :on => false },
+					{ :source => :abc, :point => Point.new(2, 0), :on => false },
+					{ :source => :abc, :point => Point.new(3, 0), :on => true },
 				]
 			)
 		)
@@ -467,7 +470,7 @@ class TestToggle < Test::Unit::TestCase
 
 	# coupled toggle behavior
 	test "a coupled toggle should change value every time it is pressed" do
-		toggle = @small_horizontal_toggle_4x1
+		toggle = HToggle.new_detached(4, 1)
 
 		toggle.press(Point.new(3, 0))
 		assert_equal(3, toggle.value)
@@ -478,23 +481,42 @@ class TestToggle < Test::Unit::TestCase
 	end
 
 	test "a coupled toggle should trigger the main action every time it is pressed" do
-		toggle = @small_horizontal_toggle_4x1
+		toggle = HToggle.new_detached(4, 1)
 		action_listener = MockActionListener.new(toggle)
 
 		toggle.press(Point.new(3, 0))
 
-		assert( action_listener.has_been_notified_of?( [ [toggle, 3] ] ) )
-		action_listener.reset_notifications
+		assert(
+			action_listener.has_been_notified_of?(
+				[
+					[toggle, 3]
+				]
+			)
+		)
 
 		toggle.press(Point.new(1, 0))
 
-		assert( action_listener.has_been_notified_of?( [ [toggle, 1] ] ) )
-		action_listener.reset_notifications
+		assert(
+			action_listener.has_been_notified_of?(
+				[
+					[toggle, 3],
+					[toggle, 1]
+				]
+			)
+		)
 
 		toggle.press(Point.new(2, 0))
 
-		assert( action_listener.has_been_notified_of?( [ [toggle, 2] ] ) )
-		action_listener.reset_notifications
+		assert(
+			action_listener.has_been_notified_of?(
+				[
+					[toggle, 3],
+					[toggle, 1],
+					[toggle, 2]
+				]
+			)
+		)
+
 	end
 
 	# nillable toggle behavior

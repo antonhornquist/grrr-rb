@@ -1,5 +1,7 @@
 require 'set'
 
+=begin
+	TODO: sort out scext handling
 #
 # Dependancy support
 #
@@ -80,6 +82,7 @@ class TestDependant
 		puts "#{thing} was changed."
 	end
 end
+=end
 
 #
 # Symbol extensions
@@ -117,6 +120,8 @@ class Array
 	end
 end
 
+=begin
+	TODO: sort out scext handling
 #
 # ProcList:
 # Based on SuperCollider's FunctionList Class
@@ -191,7 +196,10 @@ class Proc
 	alias :remove_func :remove_proc
 	alias :update :call
 end
+=end
 
+=begin
+	TODO: sort out scext handling
 #
 # Point:
 # Based on SuperCollider's Point Class
@@ -246,6 +254,7 @@ class String
 		Point.new( *self.split('@').collect { |s| s.to_i } )
 	end
 end
+=end
 
 #
 # Array extension

@@ -8,7 +8,9 @@ The grrr-rb library provides high level UI abstractions for grid based controlle
 
 ## Usage
 
-In order to use grrr-rb add its lib folder and the lib folder of serialoscclient-rb to the Ruby load path and ```require 'grrr'```. If grrr-rb is run in JRuby ```require 'grrr/screengrid'``` will make fake screengrid available for use.
+Download serialoscclient-rb. Place it in a folder adjacent to the grrr-rb folder. Add the lib folder of grrr-rb to the Ruby load path and ```require 'grrr'```. If grrr-rb is run in JRuby ```require 'grrr/screengrid'``` will make fake screengrid available for use.
+
+TODO: this will eventually become a ruby gem
 
 ## Examples
 

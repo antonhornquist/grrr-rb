@@ -1,3 +1,10 @@
+# TODO: fix load path hack by making serialoscclient a gem
+serialoscclient_rb_path = File.expand_path(File.dirname(__FILE__) + "/../../../serialoscclient-rb")
+
+unless $LOAD_PATH.include?(serialoscclient_rb_path)
+	$LOAD_PATH.unshift(serialoscclient_rb_path)
+end
+
 require 'serialoscclient'
 
 class Grrr::Monome < Grrr::Controller
@@ -14,7 +21,7 @@ class Grrr::Monome < Grrr::Controller
 
 		@name = name
 		grid_spec = {:num_cols => @num_cols, :num_rows => @num_rows}
-		@client = SerialOSCClient.new(name, :any) # TODO: grid_spec
+		@client = SerialOSCClient.new(name, grid_spec)
 		@client.grid_refresh_action = lambda { |client| refresh }
 		@client.grid_key_action = lambda do |client, x, y, state|
 			if (contains_point?(Point.new(x, y)))

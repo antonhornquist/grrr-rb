@@ -15,7 +15,7 @@ class Grrr::View
 	attr_reader :view_led_refreshed_action
 	attr_accessor :action
 
-	def initialize(parent, origin, num_cols=nil, num_rows=nil, enabled=true)
+	def initialize(parent=nil, origin=nil, num_cols=nil, num_rows=nil, enabled=true) # TODO parent / origin may be nil!
 		@parent = nil
 		@id = nil
 		@view_led_refreshed_action = nil

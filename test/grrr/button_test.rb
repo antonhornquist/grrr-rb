@@ -2,14 +2,6 @@ class TestButton < Test::Unit::TestCase
 	def setup
 		save_globals
 		disable_trace_and_flash
-		@small_toggle_button = Button.new_detached(1, 1)
-		@small_toggle_button.id = :small_toggle_button
-		@large_toggle_button = Button.new_detached(2, 2)
-		@large_toggle_button.id = :large_toggle_button
-		@small_momentary_button = Button.new_momentary(nil, nil, 1, 1)
-		@small_momentary_button.id = :small_momentary_button
-		@large_momentary_button = Button.new_momentary(nil, nil, 2, 2)
-		@large_momentary_button.id = :large_momentary_button
 	end
 
 	def teardown
@@ -49,13 +41,13 @@ class TestButton < Test::Unit::TestCase
 
 	# button pressed state and button events
 	test "a single view button press event should make a button pressed" do
-		button = @small_toggle_button
+		button = Button.new_detached(1, 1)
 		button.press(Point.new(0, 0))
 		assert(button.is_pressed?)
 	end
 
 	test "a button should not be considered released until all view buttons are released" do
-		button = @large_toggle_button
+		button = Button.new_detached(2, 2)
 
 		button.press(Point.new(0, 0))
 
@@ -94,7 +86,8 @@ class TestButton < Test::Unit::TestCase
 
 	# led events and refresh
 	test "when the value of a button is set to true leds are lit" do
-		button = @large_toggle_button
+		button = Button.new_detached(2, 2)
+		button.id = :abc
 		view_led_refreshed_listener = MockViewLedRefreshedListener.new(button)
 
 		button.value = true
@@ -102,17 +95,18 @@ class TestButton < Test::Unit::TestCase
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(
 				[
-					{ :source => :large_toggle_button, :point => Point.new(0, 0), :on => true },
-					{ :source => :large_toggle_button, :point => Point.new(1, 0), :on => true },
-					{ :source => :large_toggle_button, :point => Point.new(0, 1), :on => true },
-					{ :source => :large_toggle_button, :point => Point.new(1, 1), :on => true },
+					{ :source => :abc, :point => Point.new(0, 0), :on => true },
+					{ :source => :abc, :point => Point.new(1, 0), :on => true },
+					{ :source => :abc, :point => Point.new(0, 1), :on => true },
+					{ :source => :abc, :point => Point.new(1, 1), :on => true },
 				]
 			)
 		)
 	end
 
 	test "when the value of a button is set to false leds are unlit" do
-		button = @large_toggle_button
+		button = Button.new_detached(2, 2)
+		button.id = :abc
 		button.value = true
 		view_led_refreshed_listener = MockViewLedRefreshedListener.new(button)
 
@@ -121,10 +115,10 @@ class TestButton < Test::Unit::TestCase
 		assert(
 			view_led_refreshed_listener.has_been_notified_of?(
 				[
-					{ :source => :large_toggle_button, :point => Point.new(0, 0), :on => false },
-					{ :source => :large_toggle_button, :point => Point.new(1, 0), :on => false },
-					{ :source => :large_toggle_button, :point => Point.new(0, 1), :on => false },
-					{ :source => :large_toggle_button, :point => Point.new(1, 1), :on => false },
+					{ :source => :abc, :point => Point.new(0, 0), :on => false },
+					{ :source => :abc, :point => Point.new(1, 0), :on => false },
+					{ :source => :abc, :point => Point.new(0, 1), :on => false },
+					{ :source => :abc, :point => Point.new(1, 1), :on => false },
 				]
 			)
 		)
@@ -146,7 +140,7 @@ class TestButton < Test::Unit::TestCase
 
 	# coupled toggle button behavior
 	test "a coupled toggle button should toggle value every time the button is pressed" do
-		button = @small_toggle_button
+		button = Button.new_detached(1, 1)
 
 		button.press(Point.new(0, 0))
 		assert_equal(true, button.value)
@@ -159,32 +153,55 @@ class TestButton < Test::Unit::TestCase
 	end
 
 	test "a coupled toggle button should trigger the main action every time a button is pressed" do
-		button = @small_toggle_button
+		button = Button.new_detached(1, 1)
 		action_listener = MockActionListener.new(button)
 
 		button.press(Point.new(0, 0))
 
-		assert( action_listener.has_been_notified_of?( [ [button, true] ] ) )
-		action_listener.reset_notifications
+		assert(
+			action_listener.has_been_notified_of?(
+				[
+					[button, true]
+				]
+			)
+		)
 
 		button.release(Point.new(0, 0))
 
-		assert( action_listener.has_not_been_notified_of_anything? )
-		action_listener.reset_notifications
+		assert(
+			action_listener.has_been_notified_of?(
+				[
+					[button, true]
+				]
+			)
+		)
 
 		button.press(Point.new(0, 0))
 
-		assert( action_listener.has_been_notified_of?( [ [button, false] ] ) )
-		action_listener.reset_notifications
+		assert(
+			action_listener.has_been_notified_of?(
+				[
+					[button, true],
+					[button, false]
+				]
+			)
+		)
 
 		button.release(Point.new(0, 0))
 
-		assert( action_listener.has_not_been_notified_of_anything? )
+		assert(
+			action_listener.has_been_notified_of?(
+				[
+					[button, true],
+					[button, false]
+				]
+			)
+		)
 	end
 
 	# coupled momentary button behavior
 	test "a coupled momentary button should toggle value both when button is pressed and when it is released" do
-		button = @small_momentary_button
+		button = Button.new_momentary(nil, nil, 1, 1)
 
 		button.press(Point.new(0, 0))
 		assert_equal(true, button.value)
@@ -200,28 +217,56 @@ class TestButton < Test::Unit::TestCase
 	end
 
 	test "a coupled momentary button should trigger main action both when button is pressed and when it is released" do
-		button = @small_momentary_button
+		button = Button.new_momentary(nil, nil, 1, 1)
 		action_listener = MockActionListener.new(button)
 
 		button.press(Point.new(0, 0))
 
-		assert( action_listener.has_been_notified_of?( [ [button, true] ] ) )
-		action_listener.reset_notifications
+		assert(
+			action_listener.has_been_notified_of?(
+				[
+					[button, true]
+				]
+			)
+		)
 
 		button.release(Point.new(0, 0))
 
-		assert( action_listener.has_been_notified_of?( [ [button, false] ] ) )
-		action_listener.reset_notifications
+		assert(
+			action_listener.has_been_notified_of?(
+				[
+					[button, true],
+					[button, false]
+				]
+			)
+		)
 
 		button.value=true
 
 		button.press(Point.new(0, 0))
 
-		assert( action_listener.has_been_notified_of?( [ [button, false] ] ) )
-		action_listener.reset_notifications
+		assert(
+			action_listener.has_been_notified_of?(
+				[
+					[button, true],
+					[button, false],
+					[button, false]
+				]
+			)
+		)
 
 		button.release(Point.new(0, 0))
 
-		assert( action_listener.has_been_notified_of?( [ [button, true] ] ) )
+		assert(
+			action_listener.has_been_notified_of?(
+				[
+					[button, true],
+					[button, false],
+					[button, false],
+					[button, true]
+				]
+			)
+		)
+
 	end
 end

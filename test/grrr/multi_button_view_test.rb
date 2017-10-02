@@ -10,43 +10,43 @@ class TestMultiButtonView < Test::Unit::TestCase
 
 	# initialization
 	test "the button array size of a multibuttonview should by default be of the same size as the view" do
-		mbv = MultiButtonView.new_detached(4, 4)
+		view = MultiButtonView.new_detached(4, 4)
 
 		assert_equal(
-			mbv.button_array_size,
+			view.button_array_size,
 			[4, 4]
 		)
 	end
 
 	# button array size
 	test "it should be possible to change the button array size of a multibuttonview" do
-		mbv = MultiButtonView.new_detached(4, 4)
-		mbv.button_array_size = [2, 2]
+		view = MultiButtonView.new_detached(4, 4)
+		view.button_array_size = [2, 2]
 
 		assert_equal(
-			mbv.button_array_size,
+			view.button_array_size,
 			[2, 2]
 		)
 	end
 
 	test "it should not be possible to change the button array size of a multibuttonview so that num_cols of the view is not divisable by num_button_cols" do
-		mbv = MultiButtonView.new_detached(4, 4)
+		view = MultiButtonView.new_detached(4, 4)
 
-		assert_raise(RuntimeError) { mbv.button_array_size = [3, 2] }
+		assert_raise(RuntimeError) { view.button_array_size = [3, 2] }
 	end
 
 	test "it should not be possible to change the button array size of a multibuttonview so that num_rows of the view is not divisable by num_button_rows" do
-		mbv = MultiButtonView.new_detached(4, 4)
+		view = MultiButtonView.new_detached(4, 4)
 
-		assert_raise(RuntimeError) { mbv.button_array_size = [2, 3] }
+		assert_raise(RuntimeError) { view.button_array_size = [2, 3] }
 	end
 
 	# value
 	test "the value of a multibuttonview should be a map of the value of its buttons" do
-		mbv = MultiButtonView.new_detached(4, 4)
+		view = MultiButtonView.new_detached(4, 4)
 
 		assert_equal(
-			mbv.value,
+			view.value,
 			[
 				[false, false, false, false],
 				[false, false, false, false],
@@ -56,7 +56,6 @@ class TestMultiButtonView < Test::Unit::TestCase
 		)
 	end
 
-	# value_action
 	test "when a multibuttonview's value is updated by a call to value_action a main action notification should be sent" do
 		view = MultiButtonView.new_detached(2, 2)
 		listener = MockActionListener.new(view)
@@ -155,7 +154,7 @@ class TestMultiButtonView < Test::Unit::TestCase
 
 	# string representation
 	test "the plot of a multibuttonview should not indicate its internal child views" do
-		mbv = MultiButtonView.new_detached(4, 4)
+		view = MultiButtonView.new_detached(4, 4)
 
 		assert_equal(
 			"  0 1 2 3      0 1 2 3\n" +
@@ -163,7 +162,7 @@ class TestMultiButtonView < Test::Unit::TestCase
 			"1 - - - -    1 - - - -\n" +
 			"2 - - - -    2 - - - -\n" +
 			"3 - - - -    3 - - - -\n",
-			mbv.to_plot
+			view.to_plot
 		)
 	end
 end

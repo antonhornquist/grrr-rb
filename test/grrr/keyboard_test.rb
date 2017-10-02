@@ -8,10 +8,6 @@ class TestKeyboard < Test::Unit::TestCase
 		restore_globals
 	end
 
-	test "nothing" do
-	end
-
-=begin
 	# Initialization
 
 	test "a keyboard should by default be 7x2, coupled, have basenote 60 and indicate both black and white keys" do
@@ -31,6 +27,8 @@ class TestKeyboard < Test::Unit::TestCase
 
 	# Basenote and keyrange
 
+=begin
+	TODO
 	test "it should only be possible to create a keyboard with a basenote that is a white key on the keyboard" do
 		assert_nothing_raised {
 			Keyboard.new_detached(7, 72)
@@ -39,6 +37,7 @@ class TestKeyboard < Test::Unit::TestCase
 			Keyboard.new_detached(7, 73)
 		}
 	end
+=end
 
 	test "it should be possible to change basenote of a keyboard" do
 		keyboard = Keyboard.new_detached(7, 60)
@@ -48,6 +47,8 @@ class TestKeyboard < Test::Unit::TestCase
 		assert_equal(62, keyboard.basenote)
 	end
 
+=begin
+	TODO
 	test "it should not be possible to change basenote to a note that is not a white key on the keyboard" do
 		keyboard = Keyboard.new_detached(7, 60)
 		
@@ -55,6 +56,7 @@ class TestKeyboard < Test::Unit::TestCase
 			keyboard.basenote = 61
 		}
 	end
+=end
 
 	test "when basenote property is changed pressed buttons on keyboard view should be released" do
 		keyboard = Keyboard.new_detached(7, 60)
@@ -67,6 +69,8 @@ class TestKeyboard < Test::Unit::TestCase
 		assert(keyboard.all_released?)
 	end
 
+=begin
+	TODO
 	test "when basenote is changed the keyboard should automatically refresh" do
 		keyboard = Keyboard.new_detached(7, 60)
 		keyboard.id = :keyboard

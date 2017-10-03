@@ -79,17 +79,6 @@ class Grrr::Controller
 		Grrr::View.bounds_to_points(Point.new(0, 0), @num_cols, @num_rows)
 	end
 
-	# Controller info
-
-	def print_info # TODO
-		puts info
-	end
-
-	def info # TODO
-		# subclass responsibility
-		"No info provided"
-	end
-
 	# Attaching and detaching
 
 	def is_attached?

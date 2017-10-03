@@ -24,43 +24,6 @@ class Grrr::ContainerView < Grrr::View
 
 	# Parent - Child
 
-	def switch_by_id(id)
- 		# TODO: implement: switch to all views matching id
-	end
-
- 	# TODO: migrate switcher tests to container_view
-	def switch_to_child_by_index(index)
-		if (index < 0 or index >= @children.size)
-			raise "bad child index #{index}. view has #{@children.size} children."
-		end
-
-		if value != index
-			pr_do_then_refresh_changed_leds do
-				disable_children_such_that do |child|
-					@children.index(child) != index
-				end
-				if @children[index].is_disabled?
-					@children[index].enable
-				end
-			end
-		end
-	end
-
-=begin
-	TODO: needed?
-	def disable_all_children
-		disable_children_such_that { |child| true }
-	end
-=end
-
-	def disable_children_such_that # TODO: naming
-		enabled_children.each do |child|
-			if yield(child)
-				child.disable
-			end
-		end
-	end
-
 	def validate_ok_to_add_child(view, origin)
 		raise "origin is required" unless origin
 		raise "[#{view}] already has a parent" if view.has_parent?

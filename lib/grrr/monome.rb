@@ -21,7 +21,7 @@ class Grrr::Monome < Grrr::Controller
 
 		@name = name
 		grid_spec = {:num_cols => @num_cols, :num_rows => @num_rows}
-		@client = SerialOSCClient.new(name, grid_spec)
+		@client = SerialOSCClient.new(name, grid_spec, :none)
 		@client.grid_refresh_action = lambda { |client| refresh }
 		@client.grid_key_action = lambda do |client, x, y, state|
 			if (contains_point?(Point.new(x, y)))

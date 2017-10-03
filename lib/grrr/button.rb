@@ -1,8 +1,8 @@
 class Grrr::Button < Grrr::View
 	DEFAULT_NUM_COLS = 1
 	DEFAULT_NUM_ROWS = 1
-	DEFAULT_FLASH_DELAY_WHEN_LIT = 25
-	DEFAULT_FLASH_DELAY_WHEN_UNLIT = 50
+	DEFAULT_FLASH_DELAY_WHEN_LIT = 50
+	DEFAULT_FLASH_DELAY_WHEN_UNLIT = 75
 
 	attr_accessor :button_pressed_action
 	attr_accessor :button_released_action

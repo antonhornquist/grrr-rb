@@ -5,7 +5,7 @@ class Grrr::View
 	DEFAULT_NUM_ROWS = 4
 	DEFAULT_INDICATE_REPEAT = 2
 	DEFAULT_INDICATE_INTERVAL = 50
-	DEFAULT_FLASH_DELAY = 25
+	DEFAULT_FLASH_DELAY = 75
 
 	attr_reader :parent
 	attr_reader :origin

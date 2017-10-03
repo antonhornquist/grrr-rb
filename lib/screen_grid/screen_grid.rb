@@ -1,3 +1,6 @@
+
+# TODO: Remove Caps Lock modifier functionality completely since it is inconsistent. Investigate whether Caps Lock is not working on all platforms: not working on Grrr-sc SC3.6 Win7 (Qt) caps not detected, grrr-rb JRuby Win7 caps detected but not working due to a physically held key retriggers key press and released all the time
+
 if (defined? ruby_engine != nil) and ruby_engine == 'jruby' # TODO: not sure this is needed, screen_grid should explicitly be require'd separately from grrr
 	require 'java'
 	require 'screen_grid_button'
@@ -269,7 +272,7 @@ Press buttons with mouse, or enable key control with ctrl-backspace and use keyb
 
 		frame_size = @frame.get_size
 		screen_size = java.awt.Toolkit.get_default_toolkit.get_screen_size
-		@frame.set_location( screen_size.width - frame_size.width - 50, screen_size.height - frame_size.height - 50 )
+		@frame.set_location( screen_size.width - frame_size.width - 100, screen_size.height - frame_size.height - 100 )
 
 		@panel.draw_hook = lambda do |g|
 			if @show_current_key_control_area

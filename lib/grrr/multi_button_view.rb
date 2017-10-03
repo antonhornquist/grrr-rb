@@ -119,10 +119,6 @@ class Grrr::MultiButtonView < Grrr::ContainerView
 		@buttons[x][y].flash(delay)
 	end
 
-	def flash_view
-		# TODO
-	end
-
 	def set_button_value(x, y, val)
 		@buttons[x][y].value = val
 	end
@@ -166,6 +162,22 @@ class Grrr::MultiButtonView < Grrr::ContainerView
 
 	def button_height
 		@num_rows / num_button_rows
+	end
+
+	def flash_view(delay)
+		num_button_cols.each { |x|
+			num_button_rows.each { |y|
+				@buttons[x][y].flash(delay)
+			}
+		}
+	end
+
+	def flash_points(points, delay)
+		raise "not implemented for multi_button_view"
+	end
+
+	def flash_point(point, delay)
+		raise "not implemented for multi_button_view"
 	end
 
 	def pr_reconstruct_children

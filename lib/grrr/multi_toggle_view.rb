@@ -156,10 +156,6 @@ class Grrr::MultiToggleView < Grrr::ContainerView
 		@toggles[i].flash(delay)
 	end
 
-	def flash_view
-		# TODO
-	end
-
 	def set_toggle_value(i, val)
 		@toggles[i].value = val
 	end
@@ -205,6 +201,20 @@ class Grrr::MultiToggleView < Grrr::ContainerView
 			when :horizontal
 				@num_rows / @num_toggles
 		end
+	end
+
+	def flash_view(delay)
+		num_toggles.each { |i|
+			@toggles[i].flash(delay)
+		}
+	end
+
+	def flash_points(points, delay)
+		raise "not implemented for multi_toggle_view"
+	end
+
+	def flash_point(point, delay)
+		raise "not implemented for multi_toggle_view"
 	end
 
 	def pr_reconstruct_children

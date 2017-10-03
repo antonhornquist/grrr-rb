@@ -90,6 +90,10 @@ b.button_released_action = lambda { puts "the first button was released!" }
 a.view.remove_all_children
 ```
 
+## Documentation
+
+Schelp documentation available for the [Grrr-sc](http://github.com/antonhornquist/rsclass-rb) SuperCollider library is applicable to this Ruby version of the library.
+
 ## Implementation
 
 This is a Ruby port of my SuperCollider library [Grrr-sc](http://github.com/antonhornquist/rsclass-rb).

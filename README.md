@@ -118,6 +118,7 @@ Classes in this library reside in the Grrr module.
 	* ContainerView - Abstract class for views that may contain other views.
 		* TopView - This is the topmost view in a view tree and typically the view to which controllers attach. The view cannot be added as a child to any other view.
 		* MultiButtonView - A grid of buttons of the same size.
+			* StepView - A grid of buttons of the same size indexed as steps with possibility to indicate playing step. Suitable for step sequencing.
 
 		* MultiToggleView - An array of vertical or horizontal toggles of the same size.
 * Controller - Abstract superclass. Represents a device that may attach to and control part of or an entire view.

@@ -39,7 +39,7 @@ class Grrr::AbstractToggle < Grrr::View
 	def values_are_inverted=(values_are_inverted)
 		release_all
 		@values_are_inverted = values_are_inverted
-		refresh
+		refresh if @enabled # TODO: perhaps embed check in refresh
 	end
 
 	def thumb_size
@@ -63,7 +63,7 @@ class Grrr::AbstractToggle < Grrr::View
 		if @value > maximum_value
 			@value = 0
 		end
-		refresh
+		refresh if @enabled # TODO: perhaps embed check in refresh
 	end
 
 	def is_pressed?

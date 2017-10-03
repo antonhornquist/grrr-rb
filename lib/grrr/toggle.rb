@@ -89,7 +89,7 @@ class Grrr::Toggle < Grrr::AbstractToggle
 
 	def filled=(filled)
 		@filled = filled
-		refresh
+		refresh if @enabled # TODO: perhaps embed check in refresh
 	end
 
 	def nillable=(nillable)
@@ -113,6 +113,13 @@ class Grrr::Toggle < Grrr::AbstractToggle
 			else
 				value_at(point) == @value
 			end
+		}
+		flash_points(points_to_flash, delay)
+	end
+
+	def flash_toggle_value(value, delay=nil)
+		points_to_flash = to_points.select { |point|
+			value_at(point) == @value
 		}
 		flash_points(points_to_flash, delay)
 	end

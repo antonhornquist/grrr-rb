@@ -1,5 +1,5 @@
 # TODO: fix load path hack by making serialoscclient a gem
-serialoscclient_rb_path = File.expand_path(File.dirname(__FILE__) + "/../../../serialoscclient-rb")
+serialoscclient_rb_path = File.expand_path(File.dirname(__FILE__) + "/../../../serialoscclient-rb/lib")
 
 unless $LOAD_PATH.include?(serialoscclient_rb_path)
 	$LOAD_PATH.unshift(serialoscclient_rb_path)

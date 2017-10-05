@@ -18,7 +18,7 @@ TODO: this will eventually become a ruby gem
 
 ``` ruby
 require 'monome'
-a=Monome64.new
+a=Monome64.new("test")
 
 b=Grrr::Button.new(a, "0@0")
 b.action = lambda { |button, value| puts "button value was changed to #{value}!" }
@@ -40,7 +40,7 @@ sleep 5
 
 ``` ruby
 require 'grrr'
-require 'grrr/screengrid' # only available for JRuby
+require 'grrr/screen_grid' # only available for JRuby
 
 a = ScreenGrid.new
 
@@ -61,7 +61,7 @@ a.view.remove_all_children
 
 ``` ruby
 require 'grrr'
-require 'grrr/screengrid' # only available for JRuby
+require 'grrr/screen_grid' # only available for JRuby
 
 a = ScreenGrid.new
 

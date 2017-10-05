@@ -14,16 +14,15 @@ Rake::TestTask.new(:test_unstable) do |t|
 	t.warning = true
 end
 
-# TODO: fix, does not work right now
 task :irb => :environment do
 	require 'irb'
 	ARGV.clear
 	IRB.start
 end
 
-# TODO: fix, does not work right now
+# TODO: does not work right now
 task :environment do
+	$LOAD_PATH.unshift("./lib")
 	require 'grrr'
-	require 'unstable'
-	require 'screengrid' if (defined? RUBY_ENGINE != nil) and RUBY_ENGINE == 'jruby'
+	require 'grrr/screen_grid' if (defined? RUBY_ENGINE != nil) and RUBY_ENGINE == 'jruby'
 end

@@ -1,4 +1,12 @@
-require 'scext'
+require 'point'
+require 'core_extensions/array/fill'
+require 'core_extensions/nil_class/to_point'
+require 'core_extensions/string/to_point'
+require 'core_extensions/symbol/setter_getter'
+
+NilClass.include CoreExtensions::NilClass::ToPoint
+String.include CoreExtensions::String::ToPoint
+Symbol.include CoreExtensions::Symbol::SetterGetter
 
 module Grrr
 end

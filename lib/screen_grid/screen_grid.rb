@@ -5,6 +5,14 @@ if (defined? ruby_engine != nil) and ruby_engine == 'jruby' # TODO: not sure thi
 	require 'java'
 	require 'screen_grid_button'
 
+#
+# java.awt.Panel Extensions - add draw_hook function for behavior similar to SC Window/View classes
+#
+class JavaAWTPanelWithDrawHook < java.awt.Panel
+	attr_accessor :draw_hook
+	def paint(g); @draw_hook.call(g); end
+end
+
 class Grrr::ScreenGrid < Grrr::Controller
 	DEFAULT_NUM_COLS = 8
 	DEFAULT_NUM_ROWS = 8

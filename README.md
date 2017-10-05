@@ -92,11 +92,11 @@ a.view.remove_all_children
 
 ## Documentation
 
-Schelp documentation available for the [Grrr-sc](http://github.com/antonhornquist/rsclass-rb) SuperCollider library is applicable to this Ruby version of the library.
+Schelp documentation available for the [Grrr-sc](http://github.com/antonhornquist/Grrr-sc) SuperCollider library is applicable to this Ruby version of the library.
 
 ## Implementation
 
-This is a Ruby port of my SuperCollider library [Grrr-sc](http://github.com/antonhornquist/rsclass-rb).
+This is a Ruby port of my SuperCollider library [Grrr-sc](http://github.com/antonhornquist/Grrr-sc).
 
 The SuperCollider and Ruby classes are generated using the [rsclass-rb](http://github.com/antonhornquist/rsclass-rb) class generator based on meta data defined in the [grrr-meta-rb](http://github.com/antonhornquist/grrr-meta-rb) repository.
 

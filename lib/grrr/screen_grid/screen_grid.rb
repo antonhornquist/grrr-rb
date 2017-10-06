@@ -1,9 +1,5 @@
-
-# TODO: Remove Caps Lock modifier functionality completely since it is inconsistent. Investigate whether Caps Lock is not working on all platforms: not working on Grrr-sc SC3.6 Win7 (Qt) caps not detected, grrr-rb JRuby Win7 caps detected but not working due to a physically held key retriggers key press and released all the time
-
-if (defined? ruby_engine != nil) and ruby_engine == 'jruby' # TODO: not sure this is needed, screen_grid should explicitly be require'd separately from grrr
-	require 'java'
-	require 'screen_grid_button'
+require 'java'
+require 'screen_grid_button'
 
 #
 # java.awt.Panel Extensions - add draw_hook function for behavior similar to SC Window/View classes
@@ -441,7 +437,7 @@ end
 
 class Grrr::View
 	def spawn_gui
-		Grrr::ScreenGrid.new_view(self, true) # TODO: see Things entry
+		Grrr::ScreenGrid.new_view(self, true)
 		self
 	end
 end

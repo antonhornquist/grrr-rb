@@ -89,7 +89,7 @@ class Grrr::Toggle < Grrr::AbstractToggle
 
 	def filled=(filled)
 		@filled = filled
-		refresh if @enabled # TODO: perhaps embed check in refresh
+		refresh if @enabled
 	end
 
 	def nillable=(nillable)
@@ -124,21 +124,6 @@ class Grrr::Toggle < Grrr::AbstractToggle
 		flash_points(points_to_flash, delay)
 	end
 
-=begin
-	TODO
-	def pr_view_button_state_change_affected_values_pressed?
-		@values_pressed.size != @points_pressed.
-			collect { |point| value_at(point) }.
-			inject([]) { |arr, value|
-				if arr.include?(value)
-					arr
-				else
-					arr << value
-				end
-			}.
-			size
-	end
-=end
 	def pr_view_button_state_change_affected_values_pressed?
 		@values_pressed.size != @points_pressed.collect { |point| value_at(point) }.uniq.size
 	end

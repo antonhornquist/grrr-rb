@@ -168,8 +168,8 @@ end
 class MockButtonValueChangedListener < MockActionListener
 	private
 		def create_listener(view)
-			lambda { |multi_button_view, x, y, value|
-				@notifications << { :multi_button_view => multi_button_view, :x => x, :y => y, :value => value }
+			lambda { |view, x, y, value|
+				@notifications << { :view => view, :x => x, :y => y, :val => value }
 			}
 		end
 		def selector; :button_value_changed_action; end
@@ -178,8 +178,8 @@ end
 class MockToggleValueChangedListener < MockActionListener
 	private
 		def create_listener(view)
-			lambda { |multi_toggle_view, i, value|
-				@notifications << { :multi_toggle_view => multi_toggle_view, :i => i, :value => value }
+			lambda { |view, i, value|
+				@notifications << { :view => view, :i => i, :val => value }
 			}
 		end
 		def selector; :toggle_value_changed_action; end

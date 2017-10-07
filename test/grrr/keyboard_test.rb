@@ -28,7 +28,6 @@ class TestKeyboard < Test::Unit::TestCase
 	# Basenote and keyrange
 
 =begin
-	TODO
 	test "it should only be possible to create a keyboard with a basenote that is a white key on the keyboard" do
 		assert_nothing_raised {
 			Keyboard.new_detached(7, 72)
@@ -48,7 +47,6 @@ class TestKeyboard < Test::Unit::TestCase
 	end
 
 =begin
-	TODO
 	test "it should not be possible to change basenote to a note that is not a white key on the keyboard" do
 		keyboard = Keyboard.new_detached(7, 60)
 		
@@ -70,7 +68,6 @@ class TestKeyboard < Test::Unit::TestCase
 	end
 
 =begin
-	TODO
 	test "when basenote is changed the keyboard should automatically refresh" do
 		keyboard = Keyboard.new_detached(7, 60)
 		keyboard.id = :keyboard

@@ -94,16 +94,16 @@ class TestMultiButtonView < Test::Unit::TestCase
 			listener.has_been_notified_of?(
 				[
 					{
-						:multi_button_view => view,
+						:view => view,
 						:x => 0,
 						:y => 1,
-						:value => true
+						:val => true
 					},
 					{
-						:multi_button_view => view,
+						:view => view,
 						:x => 1,
 						:y => 1,
-						:value => true
+						:val => true
 					}
 				]
 			)
@@ -142,10 +142,10 @@ class TestMultiButtonView < Test::Unit::TestCase
 			listener.has_been_notified_of?(
 				[
 					{
-						:multi_button_view => view,
+						:view => view,
 						:x => 0,
 						:y => 0,
-						:value => true
+						:val => true
 					}
 				]
 			)

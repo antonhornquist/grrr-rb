@@ -402,9 +402,7 @@ class Grrr::View
 			pr_disable_led_forwarding_to_parent
 		end
 
-		# TODO: ensure led forwarding is enabled after a possible error - finally?
 		func.call
-		# TODO: ensure led forwarding is enabled after a possible error - finally?
 
 		if has_parent?
 			pr_enable_led_forwarding_to_parent
@@ -423,7 +421,7 @@ class Grrr::View
 
 	# Indicate support
 
-	def indicate_view(repeat=nil, interval=nil) # TODO: compare before and after UPCOMINGFIX
+	def indicate_view(repeat=nil, interval=nil)
 		indicate_points(to_points, repeat, interval)
 	end
 
@@ -508,10 +506,6 @@ class Grrr::View
 		raise "already #{@enabled ? 'enabled' : 'disabled'}" if @enabled == bool
 		if bool
 			if has_parent?
-=begin
-	TODO
-				@parent.validate_ok_to_enable_child(self)
-=end
 				@parent.release_all_within_bounds(@origin, @num_cols, @num_rows)
 			end
 			@enabled = true
@@ -584,7 +578,7 @@ class Grrr::View
 	end
 
 	def do_action
-		@action.call(self, value) if @action # TODO: when action = lambda { puts "well" } an error is thrown, fixable? (ruby specific)
+		@action.call(self, value) if @action
 	end
 
 	def validate_value(value)

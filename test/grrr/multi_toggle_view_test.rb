@@ -101,14 +101,14 @@ class TestMultiToggleView < Test::Unit::TestCase
 			listener.has_been_notified_of?(
 				[
 					{
-						:multi_toggle_view => view,
+						:view => view,
 						:i => 0,
-						:value => 1
+						:val => 1
 					},
 					{
-						:multi_toggle_view => view,
+						:view => view,
 						:i => 2,
-						:value => 2
+						:val => 2
 					}
 				]
 			)
@@ -144,9 +144,9 @@ class TestMultiToggleView < Test::Unit::TestCase
 			listener.has_been_notified_of?(
 				[
 					{
-						:multi_toggle_view => view,
+						:view => view,
 						:i => 1,
-						:value => 3
+						:val => 3
 					}
 				]
 			)

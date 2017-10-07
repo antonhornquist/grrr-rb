@@ -1,5 +1,4 @@
-if (defined? ruby_engine != nil) and ruby_engine == 'jruby' # TODO: not sure this is needed, screen_grid should explicitly be require'd separately from grrr
-	require 'java'
+require 'java'
 
 class Grrr::ScreenGridButton < java.awt.Canvas
 	attr_reader :value
@@ -73,6 +72,3 @@ class Grrr::ScreenGridButton < java.awt.Canvas
 		@action.call(self) if @action
 	end
 end
-
-end
-

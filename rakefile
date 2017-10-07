@@ -1,16 +1,9 @@
 require 'rake/testtask'
 
-task :default => :tests
-
-task :tests => [:test_grrr, :test_unstable]
+task :default => :test_grrr
 
 Rake::TestTask.new(:test_grrr) do |t|
 	t.test_files = ["test/tc_grrr.rb"]
-	t.warning = true
-end
-
-Rake::TestTask.new(:test_unstable) do |t|
-	t.test_files = ["test/tc_unstable.rb"]
 	t.warning = true
 end
 
@@ -20,7 +13,6 @@ task :irb => :environment do
 	IRB.start
 end
 
-# TODO: does not work right now
 task :environment do
 	$LOAD_PATH.unshift("./lib")
 	require 'grrr'

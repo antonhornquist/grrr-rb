@@ -2,8 +2,6 @@ require 'test/unit'
 
 require File.expand_path('../test_helper', __FILE__)
 
-GRRR_DO_NOT_POST_JRUBY_WARNINGS = true # TODO: not really used anymore, I assume?
-
 require 'grrr'
 
 require File.expand_path('../mock_grrr', __FILE__)

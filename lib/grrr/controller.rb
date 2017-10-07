@@ -5,7 +5,7 @@ class Grrr::Controller
 		attr_reader :all
 	end
 
-	@all = [] # TODO: ok to remove? test case fails if removed, how to initialize this variable or get around this?
+	@all = []
 
 	attr_reader :num_cols
 	attr_reader :num_rows

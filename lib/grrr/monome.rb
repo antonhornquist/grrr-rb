@@ -33,19 +33,14 @@ class Grrr::Monome < Grrr::Controller
 		@client.will_free = lambda { |client| remove }
 		@client.refresh_grid
 
-		refresh
+		# TODO @@all < self
 	end
 
-	def self.new_detached(num_cols=nil, num_rows=nil)
+	def self.new_detached(num_cols=nil, num_rows=nil) # TODO: fix
 		new(prefix, host_address, host_port, listen_port, nil, nil, false)
 	end
 
-=begin
-	# TODO: works, or should this be handled as a callback?
-	def cleanup
-		@server_thread.exit # TODO: move to serialoscclient ??
-	end
-=end
+	# TODO on_remove, see GRMonome.sc
 
 	def handle_view_led_refreshed_event(point, on)
 		@client.led_set(

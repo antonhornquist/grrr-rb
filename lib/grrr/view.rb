@@ -15,7 +15,7 @@ class Grrr::View
 	attr_reader :view_led_refreshed_action
 	attr_accessor :action
 
-	def initialize(parent=nil, origin=nil, num_cols=nil, num_rows=nil, enabled=true) # TODO parent / origin may be nil!
+	def initialize(parent=nil, origin=nil, num_cols=nil, num_rows=nil, enabled=true) # TODO nil allowed for parent, origin.
 		@parent = nil
 		@id = nil
 		@view_led_refreshed_action = nil
@@ -49,11 +49,7 @@ class Grrr::View
 	# Bounds
 
 	def origin=(origin)
-		# UPCOMINGTODO
-		# 1. check new origin and new bounds is within parent bounds, and if so:
-		# 2. release all buttons
-		# 3. change origin
-		# 4. refresh all points covering the bounds of the vew in the original position + the bounds of the vew in the new position
+		raise "not yet implemented"
 	end
 
 	def num_view_buttons
@@ -637,7 +633,6 @@ class Grrr::View
 		@parent = parent
 		@origin = origin
 		@parent_view_led_refreshed_listener = lambda { |source, point, on|
- 			# if @parent.has_view_led_refreshed_action? and @parent.is_enabled? // UPCOMINGTODO: and: parent.getTopmostEnabledChildAt(origin + point) == this
 			if @parent.has_view_led_refreshed_action? and @parent.is_enabled? and (@parent.get_topmost_enabled_child_at(origin + point) == self)
 
 				if Grrr::Common.trace_led_events

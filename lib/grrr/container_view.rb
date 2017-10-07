@@ -1,7 +1,7 @@
 class Grrr::ContainerView < Grrr::View
 	attr_reader :press_through
 
-	def initialize(parent, origin, num_cols=nil, num_rows=nil, enabled=true, press_through=false)
+	def initialize(parent=nil, origin=nil, num_cols=nil, num_rows=nil, enabled=true, press_through=false) # TODO nil allowed for parent, origin.
 		super(nil, nil, num_cols, num_rows, enabled)
 
 		@press_through = press_through
@@ -201,9 +201,9 @@ class Grrr::ContainerView < Grrr::View
 
 	def refresh_point(point, refresh_children=true)
 		if @enabled
-			has_enabled_child_at_point = has_any_enabled_child_at?(point) # UPCOMINGTODO: hasAnyEnabledChildrenAt
+			has_enabled_child_at_point = has_any_enabled_child_at?(point)
 			if has_enabled_child_at_point and refresh_children
-				view = get_topmost_enabled_child_at(point) # UPCOMINGTODO: getTopmostEnabledChildAt
+				view = get_topmost_enabled_child_at(point)
 
 				if Grrr::Common.trace_led_events
 					puts(

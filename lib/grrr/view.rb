@@ -15,7 +15,7 @@ class Grrr::View
 	attr_reader :view_led_refreshed_action
 	attr_accessor :action
 
-	def initialize(parent=nil, origin=nil, num_cols=nil, num_rows=nil, enabled=true) # TODO nil allowed for parent, origin.
+	def initialize(parent=nil, origin=nil, num_cols=nil, num_rows=nil, enabled=true)
 		@parent = nil
 		@id = nil
 		@view_led_refreshed_action = nil
@@ -42,7 +42,7 @@ class Grrr::View
 		new(nil, nil, num_cols, num_rows, enabled)
 	end
 
-	def self.new_disabled(parent, origin, num_cols=nil, num_rows=nil)
+	def self.new_disabled(parent=nil, origin=nil, num_cols=nil, num_rows=nil)
 		new(parent, origin, num_cols, num_rows, false)
 	end
 

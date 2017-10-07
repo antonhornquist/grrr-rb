@@ -1,7 +1,7 @@
 class Grrr::ContainerView < Grrr::View
 	attr_reader :press_through
 
-	def initialize(parent=nil, origin=nil, num_cols=nil, num_rows=nil, enabled=true, press_through=false) # TODO nil allowed for parent, origin.
+	def initialize(parent=nil, origin=nil, num_cols=nil, num_rows=nil, enabled=true, press_through=false)
 		super(nil, nil, num_cols, num_rows, enabled)
 
 		@press_through = press_through
@@ -18,7 +18,7 @@ class Grrr::ContainerView < Grrr::View
 		new(nil, nil, num_cols, num_rows, enabled, press_through)
 	end
 
-	def self.new_disabled(parent, origin, num_cols=nil, num_rows=nil, press_through=false)
+	def self.new_disabled(parent=nil, origin=nil, num_cols=nil, num_rows=nil, press_through=false)
 		new(parent, origin, num_cols, num_rows, false, press_through)
 	end
 

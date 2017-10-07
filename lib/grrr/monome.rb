@@ -1,6 +1,4 @@
-# TODO: fix load path hack by making serialoscclient a gem
 serialoscclient_rb_path = File.expand_path(File.dirname(__FILE__) + "/../../../serialoscclient-rb/lib")
-
 unless $LOAD_PATH.include?(serialoscclient_rb_path)
 	$LOAD_PATH.unshift(serialoscclient_rb_path)
 end
@@ -68,12 +66,7 @@ class Grrr::Monome < Grrr::Controller
 		@client.grab_grid
 	end
 
-	def to_serial_osc_client
+	def to_serialoscclient
 		@client
-	end
-
-	# TODO: propagate to subclasses
-	def to_s
-		"Monome 64 (Prefix: \"#@prefix\", Host Address: #@host_address, Host Port: #@host_port, Listen Port: #@listen_port)" 
 	end
 end

@@ -2,7 +2,7 @@ class Grrr::Controller
 	class << self
 		attr_accessor :default
 		attr_accessor :init_action
-		attr_reader :all
+		attr_accessor :all
 	end
 
 	@all = []
@@ -21,6 +21,7 @@ class Grrr::Controller
 		end
 		@num_cols = num_cols
 		@num_rows = num_rows
+		@on_remove = nil
 
 		if view and origin
 			pr_attach(view, origin.to_point)
@@ -48,7 +49,7 @@ class Grrr::Controller
 		cleanup
 		detach if is_attached?
 		Grrr::Controller.all.delete(self)
-		on_remove.call if on_remove
+		@on_remove.call if @on_remove
 	end
 
 	def cleanup

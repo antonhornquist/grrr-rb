@@ -8,13 +8,11 @@ end
 require 'serialoscclient'
 
 class Grrr::Monome < Grrr::Controller
-=begin
 	class << self
 		attr_reader :all
 	end
 
-	@@all = [] # TODO
-=end
+	@@all = []
 
 	def initialize(num_cols, num_rows, name, view=nil, origin=nil, create_top_view_if_none_is_supplied=true)
 		super(num_cols, num_rows, view, origin, create_top_view_if_none_is_supplied)
@@ -33,14 +31,14 @@ class Grrr::Monome < Grrr::Controller
 		@client.will_free = lambda { |client| remove }
 		@client.refresh_grid
 
-		# TODO @@all < self
+		@on_remove = lambda { @client.free }
+
+		@@all < self
 	end
 
-	def self.new_detached(num_cols=nil, num_rows=nil) # TODO: fix
-		new(prefix, host_address, host_port, listen_port, nil, nil, false)
+	def self.new_detached(num_cols, num_rows, name)
+		new(num_cols, num_rows, name, nil, nil, false)
 	end
-
-	# TODO on_remove, see GRMonome.sc
 
 	def handle_view_led_refreshed_event(point, on)
 		@client.led_set(

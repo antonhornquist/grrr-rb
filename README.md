@@ -14,11 +14,33 @@ TODO: this will eventually become a ruby gem
 
 ## Examples
 
+### Building a UI in IRB
+
+This assumes a monome grid is connected to the computer.
+
+```
+$ cd /path/to/grrr-rb
+$ rake irb
+irb> include Grrr
+irb> monome=Monome64.new("example")
+SerialOSC Devices:
+  TODO
+irb> steps=StepView.new(monome, "0@0", 8, 1)
+irb> Thread.new do
+irb>	i = 0
+irb>	while true
+irb>        steps.playhead = i
+irb>        puts (steps.get_step_value(i) ? "ho!" : "hey" )
+irb>		sleep 0.5
+irb>		i = (i + 1) % 8
+irb>	end
+irb> end
+```
+
 ### Monome Example
 
 ``` ruby
 require 'monome'
-a=Monome64.new("test")
 
 b=Grrr::Button.new(a, "0@0")
 b.action = lambda { |button, value| puts "button value was changed to #{value}!" }

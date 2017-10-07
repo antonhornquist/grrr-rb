@@ -226,7 +226,7 @@ class Grrr::MultiToggleView < Grrr::ContainerView
 			if @values_are_inverted
 				toggle.values_are_inverted = @values_are_inverted
 			end
-			if thumb_size != [nil, nil] # TODO: what's this?
+			if thumb_size != [nil, nil]
 				if toggle.is_valid_thumb_size?(thumb_size)
 					toggle.thumb_size = thumb_size
 				else

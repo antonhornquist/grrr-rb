@@ -66,7 +66,7 @@ class TestContainerView < Test::Unit::TestCase
 		assert_equal(Point.new(2, 2), view2.origin)
 	end
 
-	test "it should be possible to attach a child view to a container view on creation of the child view using a point defined in a string" do # TODO: string thing ruby specific to overcome SuperCollider shortcut
+	test "it should be possible to attach a child view to a container view on creation of the child view using a point defined in a string" do # to specify a point as a string is ruby specific to have something equivalent to SuperCollider point shortcut
 		container = ContainerView.new_detached(4, 4)
 		view1 = View.new(container, "0@0", 2, 2)
 		view2 = View.new(container, "2@2", 2, 2)
@@ -91,7 +91,7 @@ class TestContainerView < Test::Unit::TestCase
 		assert_equal(Point.new(2, 2), view2.origin)
 	end
 
-	test "it should be possible to attach a detached view as a child to a container view using a point defined in a string" do # TODO: string thing ruby specific to overcome SuperCollider shortcut
+	test "it should be possible to attach a detached view as a child to a container view using a point defined in a string" do # to specify a point as a string is ruby specific to have something equivalent to SuperCollider point shortcut
 		container = ContainerView.new_detached(4, 4)
 		view1 = View.new_detached(2, 2)
 		view2 = View.new_detached(2, 2)
@@ -191,16 +191,6 @@ class TestContainerView < Test::Unit::TestCase
 		assert_equal( nil, container.get_topmost_enabled_child_at(Point.new(0, 1)) )
 	end
 
-=begin
-	TODO: remove
-	test "it should not be possible to add an enabled child view so that it overlaps with other enabled child views of the container" do
-		container = ContainerView.new_detached(4, 4)
-		View.new(container, Point.new(0, 0), 2, 2)
-
-		assert_raise(RuntimeError) { View.new(container, Point.new(1, 1), 3, 3) }
-	end
-=end
-
 	test "when an enabled child view is added to a container that has buttons pressed on child views bounds the buttons should be released on the container before the child view is added" do
 		container = ContainerView.new_detached(4, 4)
 		container.press(Point.new(0, 0))
@@ -242,18 +232,6 @@ class TestContainerView < Test::Unit::TestCase
 		assert_raise(RuntimeError) { container.add_child(view, Point.new(1, -1)) }
 		assert_raise(RuntimeError) { container.add_child(view, Point.new(-1, -1)) }
 	end
-
-=begin
-	TODO: remove
-	test "it should not be possible to enable a child view if it then would overlap with any other enabled child views on parent" do
-		container = ContainerView.new_detached(4, 4)
-		view1 = View.new(container, Point.new(0, 0), 2, 2)
-		view2 = View.new_disabled(container, Point.new(1, 1), 3, 3)
-		assert_raise(RuntimeError) { view2.enable }
-		view1.disable
-		assert_nothing_raised { view2.enable }
-	end
-=end
 
 	test "when a child view is enabled on a container that have buttons pressed on the child views bounds the buttons should be released on the container before the child view is enabled" do
 		container = ContainerView.new_detached(4, 4)

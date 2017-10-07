@@ -5,7 +5,7 @@ class MockActionListener
 
 	def initialize(view)
 		@view = view
-		@listener = create_listener(view)
+		@listener = create_listener
 		@view.add_action(@listener, selector)
 		@notifications = Array.new
 	end
@@ -18,7 +18,7 @@ class MockActionListener
 	def has_not_been_notified_of_anything?; @notifications.empty?; end
 
 	private
-		def create_listener(view)
+		def create_listener
 			lambda { |*args| @notifications << args }
 		end
 		def selector; :action; end
@@ -26,7 +26,7 @@ end
 
 class MockViewLedRefreshedListener < MockActionListener
 	private
-		def create_listener(view)
+		def create_listener
 			lambda { |source, point, on|
 				@notifications << { :source => source.id, :point => point, :on => on }
 			}
@@ -36,7 +36,7 @@ end
 
 class MockViewButtonStateChangedListener < MockActionListener
 	private
-		def create_listener(view)
+		def create_listener
 			lambda { |point, pressed|
 				@notifications << { :point => point, :pressed => pressed }
 			}
@@ -167,7 +167,7 @@ end
 
 class MockButtonValueChangedListener < MockActionListener
 	private
-		def create_listener(view)
+		def create_listener
 			lambda { |view, x, y, value|
 				@notifications << { :view => view, :x => x, :y => y, :val => value }
 			}
@@ -177,7 +177,7 @@ end
 
 class MockToggleValueChangedListener < MockActionListener
 	private
-		def create_listener(view)
+		def create_listener
 			lambda { |view, i, value|
 				@notifications << { :view => view, :i => i, :val => value }
 			}

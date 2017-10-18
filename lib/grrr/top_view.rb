@@ -5,7 +5,7 @@ class Grrr::TopView < Grrr::ContainerView
 		@points_pressed_by_source = Array.fill2d(@num_cols, @num_rows) { Array.new }
 	end
 
-	def self.new_detached(num_cols=nil, num_rows=nil, enabled=true)
+	def self.new_detached(num_cols=nil, num_rows=nil, enabled=true) # same as new, this is just to override superclass version
 		new(num_cols, num_rows, enabled)
 	end
 

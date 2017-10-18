@@ -111,6 +111,18 @@ class Grrr::MultiButtonView < Grrr::ContainerView
 		end
 	end
 
+	def buttons_pressed
+		@buttons.collect do |row, x|
+			row.collect do |button, y|
+				[button, Point.new(x, y)]
+			end
+		end.flatten.select do |button_and_pos|
+			button_and_pos[0].is_pressed?
+		end.collect do |button_and_pos|
+			button_and_pos[1]
+		end
+	end
+
 	def button_value(x, y)
 		@buttons[x][y].value
 	end

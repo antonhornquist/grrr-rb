@@ -45,12 +45,12 @@ class Grrr::Button < Grrr::View
 		}
 	end
 
-	def self.new_decoupled(parent, origin, num_cols=nil, num_rows=nil)
-		new(parent, origin, num_cols, num_rows, true, false)
+	def self.new_decoupled(parent, origin, num_cols=nil, num_rows=nil, enabled=true)
+		new(parent, origin, num_cols, num_rows, enabled, false)
 	end
 
-	def self.new_momentary(parent, origin, num_cols=nil, num_rows=nil)
-		new(parent, origin, num_cols, num_rows, true, true, :momentary)
+	def self.new_momentary(parent, origin, num_cols=nil, num_rows=nil, enabled=true)
+		new(parent, origin, num_cols, num_rows, enabled, true, :momentary)
 	end
 
 	def is_coupled?

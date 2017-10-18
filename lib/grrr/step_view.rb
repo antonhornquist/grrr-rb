@@ -54,7 +54,7 @@ class Grrr::StepView < Grrr::MultiButtonView
 		num_step_values_changed = 0
 		num_steps.times do |index|
 			if step_value(index) != val[index]
-				set_step_value_action(index, val[index])
+				set_step_value_action(index, val[index]) # TODO: this triggers action every time
 				num_step_values_changed = num_step_values_changed + 1
 			end
 		end
@@ -66,6 +66,12 @@ class Grrr::StepView < Grrr::MultiButtonView
 	def validate_value(val)
 		if val.size != num_steps
 			raise ("value must be a 1-dimensional array of %d values" % [num_steps])
+		end
+	end
+
+	def steps_pressed
+		buttons_pressed.collect do |button|
+			pr_xy_to_index(button.x, button.y)
 		end
 	end
 
@@ -88,6 +94,7 @@ class Grrr::StepView < Grrr::MultiButtonView
 	def set_step_value_action(index, val)
 		set_step_value(index, val)
 		@step_value_changed_action.call(self, index, val) if @step_value_changed_action
+		do_action
 	end
 
 	def num_steps

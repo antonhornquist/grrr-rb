@@ -12,22 +12,31 @@ class Grrr::Monome < Grrr::Controller
 
 	@@all = []
 
-	def initialize(num_cols, num_rows, name, view=nil, origin=nil, create_top_view_if_none_is_supplied=true)
+	def initialize(num_cols=16, num_rows=8, name=nil, view=nil, origin=nil, create_top_view_if_none_is_supplied=true)
 		super(num_cols, num_rows, view, origin, create_top_view_if_none_is_supplied)
 
 		@name = name
+		@on_grid_routed = nil
+		@on_grid_unrouted = nil
 		grid_spec = {:num_cols => @num_cols, :num_rows => @num_rows}
-		@client = SerialOSCClient.new(name, grid_spec, :none)
-		@client.grid_refresh_action = lambda { |client| refresh }
-		@client.grid_key_action = lambda do |client, x, y, state|
-			if (contains_point?(Point.new(x, y)))
-				emit_button_event(Point.new(x, y), state == 1)
-			else
-				puts "%dx%d is outside of current bounds: %dx%d".format(x, y, @num_cols, @num_rows).warn
+		@client = SerialOSCClient.new(name, grid_spec, :none, lambda { |serialoscclient|
+			serialoscclient.grid_refresh_action = lambda { |client| refresh }
+			serialoscclient.grid_key_action = lambda do |client, x, y, state|
+				if (contains_point?(Point.new(x, y)))
+					emit_button_event(Point.new(x, y), state == 1)
+				else
+					puts "%dx%d is outside of current bounds: %dx%d".format(x, y, @num_cols, @num_rows).warn
+				end
 			end
-		end
-		@client.will_free = lambda { |client| remove }
-		@client.refresh_grid
+			serialoscclient.on_free = lambda { |client| remove }
+			serialoscclient.on_grid_routed = lambda { |client, grid| @on_grid_routed.call(self, grid) if @on_grid_routed }
+			serialoscclient.on_grid_unrouted = lambda { |client, grid| @on_grid_unrouted.call(self, grid) if @on_grid_unrouted }
+			Thread.new do
+				sleep 0.5
+				@client = serialoscclient
+				@client.refresh_grid
+			end
+		})
 
 		@on_remove = lambda { @client.free }
 
@@ -39,34 +48,44 @@ class Grrr::Monome < Grrr::Controller
 	end
 
 	def handle_view_led_refreshed_event(point, on)
-		@client.led_set(
-			point.x,
-			point.y,
-			on ? 1 : 0
-		)
+		if @client
+			@client.led_set(
+				point.x,
+				point.y,
+				on ? 1 : 0
+			)
+		end
+	end
+
+	def cleanup
+		if @client
+			if @client.active
+				@client.free
+			end
+		end
 	end
 
 	def spawn_gui
 		ScreenGrid.new(@num_cols, @num_rows, @view, @origin)
 	end
 
-	def permanent
-		@client.permanent
-	end
-
-	def permanent=(permanent)
-		@client.permanent=permanent
-	end
-
 	def grab_devices
-		@client.grab_devices
+		if @client
+			@client.grab_devices
+		end
 	end
 
 	def grab_grid
-		@client.grab_grid
+		if @client
+			@client.grab_grid
+		end
 	end
 
 	def to_serialoscclient
-		@client
+		if @client
+			@client
+		else
+			raise "No client instantiated"
+		end
 	end
 end

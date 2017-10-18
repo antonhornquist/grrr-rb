@@ -92,10 +92,10 @@ class Grrr::MultiButtonView < Grrr::ContainerView
 		num_button_values_changed = 0
 		num_button_cols.times do |x|
 			num_button_rows.times do |y|
-				button = @buttons[x][y]
-				if button.value != val[x][y] then
-					button.value = val[x][y]
-					@button_value_changed_action.call(self, x, y, button.value) if @button_value_changed_action
+				new_button_value = val[x][y]
+				if button_value(x, y) != new_button_value then
+					set_button_value(x, y, new_button_value)
+					@button_value_changed_action.call(self, x, y, new_button_value) if @button_value_changed_action
 					num_button_values_changed = num_button_values_changed + 1
 				end
 			end

@@ -53,8 +53,10 @@ class Grrr::StepView < Grrr::MultiButtonView
 		validate_value(val)
 		num_step_values_changed = 0
 		num_steps.times do |index|
-			if step_value(index) != val[index]
-				set_step_value_action(index, val[index]) # TODO: this triggers action every time
+			new_step_value = val[index]
+			if step_value(index) != new_step_value
+				set_step_value(index, new_step_value)
+				@step_value_changed_action.call(self, index, new_step_value) if @step_value_changed_action
 				num_step_values_changed = num_step_values_changed + 1
 			end
 		end

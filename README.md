@@ -6,11 +6,11 @@ Grid controller UI toolkit for Ruby.
 
 The grrr-rb library provides high level UI abstractions for grid based controllers simplifying interaction with for instance [monome](http://monome.org) 40h, 64, 128 and 256 grid devices. This library is built atop of and thus depends on [serialoscclient-rb](http://github.com/antonhornquist/serialoscclient-rb).
 
+This is a less maintained port of the [Grrr-sc](http://github.com/antonhornquist/Grrr-sc) SuperCollider library. It is not as maintained as the SuperCollider version. Please report bugs.
+
 ## Usage
 
 Download serialoscclient-rb. Place it in a folder adjacent to the grrr-rb folder. Add the lib folder of grrr-rb to the Ruby load path and ```require 'grrr'```. If grrr-rb is run in JRuby ```require 'grrr/screengrid'``` will make fake screengrid available for use.
-
-TODO: this will eventually become a ruby gem
 
 ## Examples
 
@@ -24,7 +24,7 @@ $ rake irb
 irb> include Grrr
 irb> monome=Monome64.new("example")
 SerialOSC Devices:
-  TODO
+  x y z
 irb> steps=StepView.new(monome, "0@0", 8, 1)
 irb> Thread.new do
 irb>	i = 0
@@ -124,7 +124,7 @@ The SuperCollider and Ruby classes are generated using the [rsclass-rb](http://g
 
 For low latency real-time Grid controller performance working with Grrr-sc and SuperCollider is recommended.
 
-If you intend to use this library beware of the monkey patching in file lib/scext.rb containing a collection of SuperCollider extensions ported to Ruby.
+If you intend to use this library beware of the monkey patching (```lib/core_extensions/*```) due to a collection of SuperCollider extensions ported to Ruby.
 
 ## Classes
 
@@ -153,7 +153,7 @@ Classes in this library reside in the Grrr module.
 
 ## Extending Grrr
 
-TODO
+Section "Extending Grrr" in the Schelp documentation available for the [Grrr-sc](http://github.com/antonhornquist/Grrr-sc) is applicable to this version of the library.
 
 ## Requirements
 

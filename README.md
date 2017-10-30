@@ -47,8 +47,9 @@ a=Grrr::Monome.new("test")
 b=Grrr::Button.new(a, Grrr::Point.new(0, 0)) # places a 1x1 button at top left key
 b.action = lambda { |button, value| puts "#{value ? "Hello", "Goodbye"} World" }
 
-sleep 10
 # pressing the top left grid button of the grid will change led state and output to the Post Window
+
+gets # wait for enter to quit
 ```
 
 ### A Simple Step Sequencer
@@ -77,6 +78,8 @@ b.num_cols.times do |index|
 	c.set_toggle_value(index, (c.num_rows).rand)
 	b.set_step_value(index, [true, false].choose)
 end
+
+gets # wait for enter to quit
 ```
 
 ## Documentation

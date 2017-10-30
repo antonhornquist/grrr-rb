@@ -114,7 +114,7 @@ class Grrr::MultiButtonView < Grrr::ContainerView
 	def buttons_pressed
 		@buttons.collect do |row, x|
 			row.collect do |button, y|
-				[button, Point.new(x, y)]
+				[button, Grrr::Point.new(x, y)]
 			end
 		end.flatten.select do |button_and_pos|
 			button_and_pos[0].is_pressed?
@@ -200,7 +200,7 @@ class Grrr::MultiButtonView < Grrr::ContainerView
 			button = Grrr::Button.new_detached(button_width, button_height)
 			button.coupled = @coupled
 			pr_add_actions(button, x, y)
-			pr_add_child_no_flash(button, Point.new(x*button_width, y*button_height))
+			pr_add_child_no_flash(button, Grrr::Point.new(x*button_width, y*button_height))
 			button
 		end
 	end

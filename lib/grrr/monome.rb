@@ -22,8 +22,8 @@ class Grrr::Monome < Grrr::Controller
 		@client = SerialOSCClient.new(name, grid_spec, :none, lambda { |serialoscclient|
 			serialoscclient.grid_refresh_action = lambda { |client| refresh }
 			serialoscclient.grid_key_action = lambda do |client, x, y, state|
-				if (contains_point?(Point.new(x, y)))
-					emit_button_event(Point.new(x, y), state == 1)
+				if (contains_point?(Grrr::Point.new(x, y)))
+					emit_button_event(Grrr::Point.new(x, y), state == 1)
 				else
 					puts "%dx%d is outside of current bounds: %dx%d".format(x, y, @num_cols, @num_rows).warn
 				end

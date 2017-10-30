@@ -24,9 +24,10 @@ class Grrr::ContainerView < Grrr::View
 
 	# Parent - Child
 
-	def validate_ok_to_add_child(view, origin)
-		raise "origin is required" unless origin
+	def validate_ok_to_add_child(view, arg_origin)
+		raise "origin is required" unless arg_origin
 		raise "[#{view}] already has a parent" if view.has_parent?
+		origin = arg_origin.to_point
 		raise "child view origin may not be negative" if origin.x < 0 or origin.y < 0
 		validate_within_bounds(view, origin)
 	end
@@ -35,7 +36,7 @@ class Grrr::ContainerView < Grrr::View
 		if @acts_as_view
 			raise "it is not allowed to add children to a #{self.class}"
 		else
-			pr_add_child(view, origin.to_point)
+			pr_add_child(view, origin)
 		end
 	end
 
@@ -43,8 +44,10 @@ class Grrr::ContainerView < Grrr::View
 		pr_add_child(view, origin, true)
 	end
 
-	def pr_add_child(view, origin, prevent_flash=false)
-		validate_ok_to_add_child(view, origin)
+	def pr_add_child(view, arg_origin, prevent_flash=false)
+		validate_ok_to_add_child(view, arg_origin)
+
+		origin = arg_origin.to_point
 
 		release_all_within_bounds(origin, view.num_cols, view.num_rows)
 

@@ -192,9 +192,9 @@ class Grrr::Keyboard < Grrr::View
 	def get_left_edge_points
 		min_note_shown_point = get_point_of_note(min_note_shown)
 		other_point = if is_black_key?(min_note_shown)
-			min_note_shown_point + Point.new(0, 1)
+			min_note_shown_point + Grrr::Point.new(0, 1)
 		else
-			min_note_shown_point + Point.new(0, -1)
+			min_note_shown_point + Grrr::Point.new(0, -1)
 		end
 		if contains_point?(other_point)
 			[min_note_shown_point, other_point]
@@ -205,7 +205,7 @@ class Grrr::Keyboard < Grrr::View
 
 	def get_right_edge_points
 		max_note_shown_point = get_point_of_note(max_note_shown)
-		point_above = max_note_shown_point + Point.new(0, -1)
+		point_above = max_note_shown_point + Grrr::Point.new(0, -1)
 		if contains_point?(point_above)
 			[max_note_shown_point, point_above]
 		else
@@ -226,7 +226,7 @@ class Grrr::Keyboard < Grrr::View
 
 				current_note_flat = current_note-1
 
-				if contains_point?(Point.new(current_col, current_row-1)) and is_black_key?(current_note_flat) and is_allowed_midi_note_number?(current_note_flat)
+				if contains_point?(Grrr::Point.new(current_col, current_row-1)) and is_black_key?(current_note_flat) and is_allowed_midi_note_number?(current_note_flat)
 					@midi_note_lookup[current_col][current_row-1] = current_note_flat
 				end
 

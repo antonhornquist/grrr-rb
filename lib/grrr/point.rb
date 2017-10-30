@@ -15,11 +15,11 @@ class Grrr::Point
 	end
 
 	def -(point)
-		Point.new(@x-point.x, @y-point.y)
+		Grrr::Point.new(@x-point.x, @y-point.y)
 	end
 
 	def +(point)
-		Point.new(@x+point.x, @y+point.y)
+		Grrr::Point.new(@x+point.x, @y+point.y)
 	end
 
 	def dist(point)

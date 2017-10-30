@@ -10,7 +10,7 @@ class TestMultiToggleView < Test::Unit::TestCase
 
 	# initialization
 	test "the number of toggles in a vertical multitoggleview should by default be the same as the number of columns in its view" do
-		view = MultiToggleView.new_detached(8, 4, :vertical)
+		view = Grrr::MultiToggleView.new_detached(8, 4, :vertical)
 
 		assert_equal(
 			view.num_toggles,
@@ -19,7 +19,7 @@ class TestMultiToggleView < Test::Unit::TestCase
 	end
 
 	test "the number of toggles in a horizontal multitoggleview should by default be the same as the number of rows in its view" do
-		view = MultiToggleView.new_detached(8, 4, :horizontal)
+		view = Grrr::MultiToggleView.new_detached(8, 4, :horizontal)
 
 		assert_equal(
 			view.num_toggles,
@@ -29,7 +29,7 @@ class TestMultiToggleView < Test::Unit::TestCase
 
 	# number of toggles
 	test "it should be possible to change the number of toggles in a multitoggleview" do
-		view = MultiToggleView.new_detached(4, 4, :vertical)
+		view = Grrr::MultiToggleView.new_detached(4, 4, :vertical)
 		view.num_toggles = 2
 
 		assert_equal(
@@ -39,25 +39,25 @@ class TestMultiToggleView < Test::Unit::TestCase
 	end
 
 	test "it should not be possible to change the number of toggles in a vertical multitoggleview so that num_cols of the view is not divisable by num_toggles" do
-		view = MultiToggleView.new_detached(8, 7, :vertical)
+		view = Grrr::MultiToggleView.new_detached(8, 7, :vertical)
 
 		assert_raise(RuntimeError) { view.num_toggles = 7 }
 	end
 
 	test "it should not be possible to change the number of toggles in a horizontal multitoggleview so that num_rows of the view is not divisable by num_toggles" do
-		view = MultiToggleView.new_detached(3, 4, :horizontal)
+		view = Grrr::MultiToggleView.new_detached(3, 4, :horizontal)
 
 		assert_raise(RuntimeError) { view.num_toggles = 3 }
 	end
 
 	# orientation
 	test "it should be possible to change the orientation of a multitoggleview" do
- 		view = MultiToggleView.new_detached(7, 4, :horizontal)
+ 		view = Grrr::MultiToggleView.new_detached(7, 4, :horizontal)
  		assert_nothing_raised { view.orientation = :vertical }
 	end
 
 	test "when orientation of a multitoggleview is changed num_toggles should be se as default" do
- 		view = MultiToggleView.new_detached(7, 4, :horizontal)
+ 		view = Grrr::MultiToggleView.new_detached(7, 4, :horizontal)
  		view.orientation = :vertical
 
 		assert_equal(view.num_toggles, 7)
@@ -65,7 +65,7 @@ class TestMultiToggleView < Test::Unit::TestCase
 
 	# value
 	test "the value of a multitoggleview should be a map of the value of its toggles" do
-		view = MultiToggleView.new_detached(4, 4, :horizontal)
+		view = Grrr::MultiToggleView.new_detached(4, 4, :horizontal)
 
 		assert_equal(
 			view.value,
@@ -74,7 +74,7 @@ class TestMultiToggleView < Test::Unit::TestCase
 	end
 
 	test "when a multitoggleview's value is updated by a call to value_action a main action notification should be sent" do
-		view = MultiToggleView.new_detached(4, 4, :horizontal)
+		view = Grrr::MultiToggleView.new_detached(4, 4, :horizontal)
 		listener = MockActionListener.new(view)
 
 		view.value_action = [1, 0, 2, 0]
@@ -92,7 +92,7 @@ class TestMultiToggleView < Test::Unit::TestCase
 	end
 
 	test "when a multitoggleview's value is updated by a call to value_action toggle value changed notifications should be sent for all toggles whose value has changed" do
-		view = MultiToggleView.new_detached(4, 4, :horizontal)
+		view = Grrr::MultiToggleView.new_detached(4, 4, :horizontal)
 		listener = MockToggleValueChangedListener.new(view)
 
 		view.value_action = [1, 0, 2, 0]
@@ -117,10 +117,10 @@ class TestMultiToggleView < Test::Unit::TestCase
 
 	# button events
 	test "when a multitoggleview's value is updated by a button event a main action notification should be sent" do
-		view = MultiToggleView.new_detached(4, 4, :horizontal)
+		view = Grrr::MultiToggleView.new_detached(4, 4, :horizontal)
 		listener = MockActionListener.new(view)
 
-		view.press(Point.new(3, 1))
+		view.press(Grrr::Point.new(3, 1))
 
 		assert(
 			listener.has_been_notified_of?(
@@ -135,10 +135,10 @@ class TestMultiToggleView < Test::Unit::TestCase
 	end
 
 	test "when a multitoggleview's value is updated by a button event a button value changed notification should be sent" do
-		view = MultiToggleView.new_detached(4, 4, :horizontal)
+		view = Grrr::MultiToggleView.new_detached(4, 4, :horizontal)
 		listener = MockToggleValueChangedListener.new(view)
 
-		view.press(Point.new(3, 1))
+		view.press(Grrr::Point.new(3, 1))
 
 		assert(
 			listener.has_been_notified_of?(
@@ -155,7 +155,7 @@ class TestMultiToggleView < Test::Unit::TestCase
 
 	# string representation
 	test "the plot of a multitoggleview should not indicate its internal child views" do
-		view = MultiToggleView.new_detached(4, 4, :vertical)
+		view = Grrr::MultiToggleView.new_detached(4, 4, :vertical)
 
 		assert_equal(
 			"  0 1 2 3      0 1 2 3\n" +

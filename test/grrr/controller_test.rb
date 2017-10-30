@@ -2,11 +2,11 @@ class TestController < Test::Unit::TestCase
 	def setup
 		save_globals
 		disable_trace_and_flash
-		Controller.all.each { |controller| controller.remove }
+		Grrr::Controller.all.each { |controller| controller.remove }
 	end
 
 	def teardown
-		Controller.all.each { |controller| controller.remove }
+		Grrr::Controller.all.each { |controller| controller.remove }
 		restore_globals
 	end
 
@@ -24,7 +24,7 @@ class TestController < Test::Unit::TestCase
 			controller.view.num_rows
 		)
 		assert_equal(
-			Point.new(0, 0),
+			Grrr::Point.new(0, 0),
 			controller.origin
 		)
 	end
@@ -42,9 +42,9 @@ class TestController < Test::Unit::TestCase
 	end	
 
 	test "it should be possible to attach a controller to an existing view during creation of the controller" do
-		view = View.new_detached(4, 4)
+		view = Grrr::View.new_detached(4, 4)
 
-		controller = MockController.new(4, 4, view, Point.new(0, 0))
+		controller = MockController.new(4, 4, view, Grrr::Point.new(0, 0))
 
 		assert(controller.is_attached?)
 		assert_equal(
@@ -61,13 +61,13 @@ class TestController < Test::Unit::TestCase
 
 		assert_equal(
 			[mock_controller_1, mock_controller_2, mock_controller_3, mock_controller_4],
-			Controller.all
+			Grrr::Controller.all
 		)
 	end
 
 	test "when a controller is created init_action should be invoked" do
 		result = nil
-		Controller.init_action = lambda { |controller|
+		Grrr::Controller.init_action = lambda { |controller|
 			result = controller
 		}
 
@@ -81,10 +81,10 @@ class TestController < Test::Unit::TestCase
 
 	# attach / detach view
 	test "it should be possible to attach a detached controller to a view of same bounds as controller" do
-		view = View.new_detached(4, 4)
+		view = Grrr::View.new_detached(4, 4)
 		controller = MockController.new_detached(4, 4)
 
-		controller.attach(view, Point.new(0, 0))
+		controller.attach(view, Grrr::Point.new(0, 0))
 
 		assert(controller.is_attached?)
 		assert_equal(
@@ -94,10 +94,10 @@ class TestController < Test::Unit::TestCase
 	end
 
 	test "it should be possible to attach a detached controller to a view that is larger than the controller as long as the controller is within view bounds" do
-		view = View.new_detached(8, 8)
+		view = Grrr::View.new_detached(8, 8)
 		controller = MockController.new_detached(4, 4)
 
-		controller.attach(view, Point.new(2, 2))
+		controller.attach(view, Grrr::Point.new(2, 2))
 
 		assert(controller.is_attached?)
 		assert_equal(
@@ -107,29 +107,29 @@ class TestController < Test::Unit::TestCase
 	end
 
 	test "if a controller that is attached to a view at a specific origin is out of bounds of the view an error should occur" do
-		view = View.new_detached(4, 4)
+		view = Grrr::View.new_detached(4, 4)
 		controller = MockController.new_detached(4, 4)
 
 		assert_raise(RuntimeError) { 
-			controller.attach(view, Point.new(2, 2))
+			controller.attach(view, Grrr::Point.new(2, 2))
 		}
 	end
 
 	test "attaching a view to an already attached controller should throw an error" do
-		view1 = View.new_detached(4, 4)
-		view2 = View.new_detached(4, 4)
+		view1 = Grrr::View.new_detached(4, 4)
+		view2 = Grrr::View.new_detached(4, 4)
 		controller = MockController.new_detached(4, 4)
 
-		controller.attach(view1, Point.new(0, 0))
+		controller.attach(view1, Grrr::Point.new(0, 0))
 
 		assert_raise(RuntimeError) { 
-			controller.attach(view2, Point.new(0, 0))
+			controller.attach(view2, Grrr::Point.new(0, 0))
 		}
 	end
 
 	test "it should be possible to detach an attached controller from a view" do
-		view = View.new_detached(4, 4)
-		controller = MockController.new(4, 4, view, Point.new(0, 0))
+		view = Grrr::View.new_detached(4, 4)
+		controller = MockController.new(4, 4, view, Grrr::Point.new(0, 0))
 
 		controller.detach
 
@@ -149,93 +149,93 @@ class TestController < Test::Unit::TestCase
 	# button and led state
 	test "the led state of an attached controller should match the led state of the attached view" do
 		view = MockOddColsLitView.new_detached(4, 4)
-		controller = MockController.new(2, 2, view, Point.new(1, 1))
+		controller = MockController.new(2, 2, view, Grrr::Point.new(1, 1))
 
-		assert_equal( true, controller.is_lit_at?(Point.new(0, 0)) )
-		assert_equal( false, controller.is_lit_at?(Point.new(1, 0)) )
-		assert_equal( true, controller.is_lit_at?(Point.new(0, 1)) )
-		assert_equal( false, controller.is_lit_at?(Point.new(1, 1)) )
+		assert_equal( true, controller.is_lit_at?(Grrr::Point.new(0, 0)) )
+		assert_equal( false, controller.is_lit_at?(Grrr::Point.new(1, 0)) )
+		assert_equal( true, controller.is_lit_at?(Grrr::Point.new(0, 1)) )
+		assert_equal( false, controller.is_lit_at?(Grrr::Point.new(1, 1)) )
 	end
 
 	test "all leds of a detached controller should be unlit" do
 		controller = MockController.new_detached(2, 2)
 
-		assert_equal( false, controller.is_lit_at?(Point.new(0, 0)) )
-		assert_equal( false, controller.is_lit_at?(Point.new(1, 0)) )
-		assert_equal( false, controller.is_lit_at?(Point.new(0, 1)) )
-		assert_equal( false, controller.is_lit_at?(Point.new(1, 1)) )
+		assert_equal( false, controller.is_lit_at?(Grrr::Point.new(0, 0)) )
+		assert_equal( false, controller.is_lit_at?(Grrr::Point.new(1, 0)) )
+		assert_equal( false, controller.is_lit_at?(Grrr::Point.new(0, 1)) )
+		assert_equal( false, controller.is_lit_at?(Grrr::Point.new(1, 1)) )
 	end
 
 	test "an out of bounds led state check should throw an error" do
 		controller = MockController.new(4, 4)
 
 		assert_raise(RuntimeError) {
-			controller.is_lit_at?(Point.new(4, 4))
+			controller.is_lit_at?(Grrr::Point.new(4, 4))
 		}
 	end
 
 	test "the button state of an attached controller should match the button state of the attached view" do
 		view = MockOddColsLitView.new_detached(4, 4)
-		controller = MockController.new(2, 2, view, Point.new(1, 1))
+		controller = MockController.new(2, 2, view, Grrr::Point.new(1, 1))
 
-		view.press(Point.new(1, 2))
-		view.press(Point.new(2, 2))
+		view.press(Grrr::Point.new(1, 2))
+		view.press(Grrr::Point.new(2, 2))
 
-		assert_equal( false, controller.is_pressed_at?(Point.new(0, 0)) )
-		assert_equal( false, controller.is_pressed_at?(Point.new(1, 0)) )
-		assert_equal( true, controller.is_pressed_at?(Point.new(0, 1)) )
-		assert_equal( true, controller.is_pressed_at?(Point.new(1, 1)) )
+		assert_equal( false, controller.is_pressed_at?(Grrr::Point.new(0, 0)) )
+		assert_equal( false, controller.is_pressed_at?(Grrr::Point.new(1, 0)) )
+		assert_equal( true, controller.is_pressed_at?(Grrr::Point.new(0, 1)) )
+		assert_equal( true, controller.is_pressed_at?(Grrr::Point.new(1, 1)) )
 	end
 
 	test "all buttons of a detached controller should be released" do
 		controller = MockController.new_detached(2, 2)
 
-		assert_equal( false, controller.is_pressed_at?(Point.new(0, 0)) )
-		assert_equal( false, controller.is_pressed_at?(Point.new(1, 0)) )
-		assert_equal( false, controller.is_pressed_at?(Point.new(0, 1)) )
-		assert_equal( false, controller.is_pressed_at?(Point.new(1, 1)) )
+		assert_equal( false, controller.is_pressed_at?(Grrr::Point.new(0, 0)) )
+		assert_equal( false, controller.is_pressed_at?(Grrr::Point.new(1, 0)) )
+		assert_equal( false, controller.is_pressed_at?(Grrr::Point.new(0, 1)) )
+		assert_equal( false, controller.is_pressed_at?(Grrr::Point.new(1, 1)) )
 	end
 
 	test "an out of bounds button state check should throw an error" do
 		controller = MockController.new(4, 4)
 
 		assert_raise(RuntimeError) {
-			controller.is_pressed_at?(Point.new(4, 4))
+			controller.is_pressed_at?(Grrr::Point.new(4, 4))
 		}
 	end
 
 	# emit button events
 	test "when a controller is pressed it should emit button events to its attached view" do
-		view = View.new_detached(8, 8)
-		controller = MockController.new(4, 4, view, Point.new(1, 1))
+		view = Grrr::View.new_detached(8, 8)
+		controller = MockController.new(4, 4, view, Grrr::Point.new(1, 1))
 
-		controller.emit_press(Point.new(2, 3))
+		controller.emit_press(Grrr::Point.new(2, 3))
 
-		assert(view.is_pressed_at?(Point.new(3, 4)))
+		assert(view.is_pressed_at?(Grrr::Point.new(3, 4)))
 	end
 
 	test "emitting a button event out of bounds of controller should throw an error" do
-		view = View.new_detached(8, 8)
-		controller = MockController.new(4, 4, view, Point.new(2, 2))
+		view = Grrr::View.new_detached(8, 8)
+		controller = MockController.new(4, 4, view, Grrr::Point.new(2, 2))
 
 		assert_raise(RuntimeError) {
-			controller.emit_press(Point.new(4, 4))
+			controller.emit_press(Grrr::Point.new(4, 4))
 		}
 	end
 
 	# refreshing controller
 	test "it should be possible to refresh a controller that is attached to a view" do
 		view = MockOddColsLitView.new_detached(4, 4)
-		controller = MockController.new(2, 2, view, Point.new(1, 1))
+		controller = MockController.new(2, 2, view, Grrr::Point.new(1, 1))
 
 		controller.refresh
 
 		assert_equal(
 			[	
-				{ :point => Point.new(0, 0), :on => true },
-				{ :point => Point.new(1, 0), :on => false },
-				{ :point => Point.new(0, 1), :on => true },
-				{ :point => Point.new(1, 1), :on => false },
+				{ :point => Grrr::Point.new(0, 0), :on => true },
+				{ :point => Grrr::Point.new(1, 0), :on => false },
+				{ :point => Grrr::Point.new(0, 1), :on => true },
+				{ :point => Grrr::Point.new(1, 1), :on => false },
 			],
 			controller.view_led_refreshed_notifications
 		)
@@ -248,10 +248,10 @@ class TestController < Test::Unit::TestCase
 
 		assert_equal(
 			[	
-				{ :point => Point.new(0, 0), :on => false },
-				{ :point => Point.new(1, 0), :on => false },
-				{ :point => Point.new(0, 1), :on => false },
-				{ :point => Point.new(1, 1), :on => false },
+				{ :point => Grrr::Point.new(0, 0), :on => false },
+				{ :point => Grrr::Point.new(1, 0), :on => false },
+				{ :point => Grrr::Point.new(0, 1), :on => false },
+				{ :point => Grrr::Point.new(1, 1), :on => false },
 			],
 			controller.view_led_refreshed_notifications
 		)
@@ -261,14 +261,14 @@ class TestController < Test::Unit::TestCase
 		view = MockOddColsLitView.new_detached(4, 4)
 		controller = MockController.new_detached(2, 2)
 
-		controller.attach(view, Point.new(1, 1))
+		controller.attach(view, Grrr::Point.new(1, 1))
 
 		assert_equal(
 			[	
-				{ :point => Point.new(0, 0), :on => true },
-				{ :point => Point.new(1, 0), :on => false },
-				{ :point => Point.new(0, 1), :on => true },
-				{ :point => Point.new(1, 1), :on => false },
+				{ :point => Grrr::Point.new(0, 0), :on => true },
+				{ :point => Grrr::Point.new(1, 0), :on => false },
+				{ :point => Grrr::Point.new(0, 1), :on => true },
+				{ :point => Grrr::Point.new(1, 1), :on => false },
 			],
 			controller.view_led_refreshed_notifications
 		)
@@ -276,16 +276,16 @@ class TestController < Test::Unit::TestCase
 
 	test "when a controller is detached from a view the controller should be refreshed" do
 		view = MockOddColsLitView.new_detached(4, 4)
-		controller = MockController.new(2, 2, view, Point.new(1, 1))
+		controller = MockController.new(2, 2, view, Grrr::Point.new(1, 1))
 
 		controller.detach
 
 		assert_equal(
 			[	
-				{ :point => Point.new(0, 0), :on => false },
-				{ :point => Point.new(1, 0), :on => false },
-				{ :point => Point.new(0, 1), :on => false },
-				{ :point => Point.new(1, 1), :on => false },
+				{ :point => Grrr::Point.new(0, 0), :on => false },
+				{ :point => Grrr::Point.new(1, 0), :on => false },
+				{ :point => Grrr::Point.new(0, 1), :on => false },
+				{ :point => Grrr::Point.new(1, 1), :on => false },
 			],
 			controller.view_led_refreshed_notifications
 		)
@@ -302,7 +302,7 @@ class TestController < Test::Unit::TestCase
 
 		assert_equal(
 			[mock_controller_1, mock_controller_2, mock_controller_4],
-			Controller.all
+			Grrr::Controller.all
 		)
 	end
 
@@ -334,39 +334,39 @@ class TestController < Test::Unit::TestCase
 	# view events
 	test "when a view attached to a controller is refreshed controller should receive notifications of refreshed leds within the controllers bounds" do
 		view = MockOddColsLitView.new_detached(4, 4)
-		controller = MockController.new(2, 2, view, Point.new(1, 1))
+		controller = MockController.new(2, 2, view, Grrr::Point.new(1, 1))
 
 		view.refresh
 
 		assert_equal(
 			[	
-				{ :point => Point.new(0, 0), :on => true },
-				{ :point => Point.new(1, 0), :on => false },
-				{ :point => Point.new(0, 1), :on => true },
-				{ :point => Point.new(1, 1), :on => false },
+				{ :point => Grrr::Point.new(0, 0), :on => true },
+				{ :point => Grrr::Point.new(1, 0), :on => false },
+				{ :point => Grrr::Point.new(0, 1), :on => true },
+				{ :point => Grrr::Point.new(1, 1), :on => false },
 			],
 			controller.view_led_refreshed_notifications
 		)
 	end
 
 	test "when a view attached to a controller receives button events within the controllers bounds the controller should receive notifications of changes in button state" do
-		view = View.new_detached(4, 4)
-		controller = MockController.new(3, 3, view, Point.new(1, 1))
+		view = Grrr::View.new_detached(4, 4)
+		controller = MockController.new(3, 3, view, Grrr::Point.new(1, 1))
 
-		view.press(Point.new(0, 0)) # not within controller bounds
-		view.press(Point.new(0, 1)) # not within controller bounds
-		view.press(Point.new(1, 0)) # not within controller bounds
-		view.press(Point.new(2, 3))
-		view.press(Point.new(3, 3))
-		view.release(Point.new(2, 3))
-		view.release(Point.new(3, 3))
+		view.press(Grrr::Point.new(0, 0)) # not within controller bounds
+		view.press(Grrr::Point.new(0, 1)) # not within controller bounds
+		view.press(Grrr::Point.new(1, 0)) # not within controller bounds
+		view.press(Grrr::Point.new(2, 3))
+		view.press(Grrr::Point.new(3, 3))
+		view.release(Grrr::Point.new(2, 3))
+		view.release(Grrr::Point.new(3, 3))
 
 		assert_equal(
 			[	
-				{ :point => Point.new(1, 2), :pressed => true },
-				{ :point => Point.new(2, 2), :pressed => true },
-				{ :point => Point.new(1, 2), :pressed => false },
-				{ :point => Point.new(2, 2), :pressed => false },
+				{ :point => Grrr::Point.new(1, 2), :pressed => true },
+				{ :point => Grrr::Point.new(2, 2), :pressed => true },
+				{ :point => Grrr::Point.new(1, 2), :pressed => false },
+				{ :point => Grrr::Point.new(2, 2), :pressed => false },
 			],
 			controller.view_button_state_changed_notifications
 		)

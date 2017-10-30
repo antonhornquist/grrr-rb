@@ -57,7 +57,7 @@ class Grrr::View
 	end
 
 	def to_points
-		to_points_from(Point.new(0, 0))
+		to_points_from(Grrr::Point.new(0, 0))
 	end
 
 	def to_points_from_origin
@@ -69,7 +69,7 @@ class Grrr::View
 	end
 
 	def self.bounds_to_points(origin, num_cols, num_rows)
-		Array.fill(num_cols * num_rows) { |i| Point.new(origin.x+(i % num_cols), origin.y+(i / num_cols)) }
+		Array.fill(num_cols * num_rows) { |i| Grrr::Point.new(origin.x+(i % num_cols), origin.y+(i / num_cols)) }
 	end
 
 	def self.points_sect(points1, points2)
@@ -85,19 +85,19 @@ class Grrr::View
 	end
 
 	def left_top_point
-		Point.new(0, 0)
+		Grrr::Point.new(0, 0)
 	end
 
 	def right_top_point
-		Point.new(@num_cols-1, 0)
+		Grrr::Point.new(@num_cols-1, 0)
 	end
 
 	def left_bottom_point
-		Point.new(0, @num_rows-1)
+		Grrr::Point.new(0, @num_rows-1)
 	end
 
 	def right_bottom_point
-		Point.new(@num_cols-1, @num_rows-1)
+		Grrr::Point.new(@num_cols-1, @num_rows-1)
 	end
 
 	def leftmost_col
@@ -145,7 +145,7 @@ class Grrr::View
 	end
 
 	def release_all
-		release_all_within_bounds(Point.new(0, 0), @num_cols, @num_rows)
+		release_all_within_bounds(Grrr::Point.new(0, 0), @num_cols, @num_rows)
 	end
 
 	def release_all_within_bounds(origin, num_cols, num_rows)

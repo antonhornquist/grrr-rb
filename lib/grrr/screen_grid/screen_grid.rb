@@ -61,7 +61,7 @@ class Grrr::ScreenGrid < Grrr::Controller
 			(@num_cols.to_f / KEY_CONTROL_AREA_NUM_COLS).ceil,
 			(@num_rows.to_f / KEY_CONTROL_AREA_NUM_ROWS).ceil
 		) do |x, y|
-			Point.new(x * KEY_CONTROL_AREA_NUM_COLS, y * KEY_CONTROL_AREA_NUM_ROWS)
+			Grrr::Point.new(x * KEY_CONTROL_AREA_NUM_COLS, y * KEY_CONTROL_AREA_NUM_ROWS)
 		end.flatten
 
 		pr_create_window
@@ -76,7 +76,7 @@ class Grrr::ScreenGrid < Grrr::Controller
 	end
 
 	def self.new_view(view, read_only=false)
-		Grrr::ScreenGrid.new(view.num_cols, view.num_rows, view, Point.new(0, 0), false, read_only)
+		Grrr::ScreenGrid.new(view.num_cols, view.num_rows, view, Grrr::Point.new(0, 0), false, read_only)
 	end
 
 	def self.set_keymap(keymap_name)
@@ -249,7 +249,7 @@ Press buttons with mouse, or enable key control with ctrl-backspace and use keyb
 	end
 
 	def lookup_screen_grid_button(area_index, keymap_keys_index)
-		point = @key_control_area_origins[area_index]+Point.new(keymap_keys_index % KEY_CONTROL_AREA_NUM_COLS, keymap_keys_index / KEY_CONTROL_AREA_NUM_COLS)
+		point = @key_control_area_origins[area_index]+Grrr::Point.new(keymap_keys_index % KEY_CONTROL_AREA_NUM_COLS, keymap_keys_index / KEY_CONTROL_AREA_NUM_COLS)
 		if contains_point?(point) then @buttons[point.x][point.y] end
 	end
 
@@ -282,11 +282,11 @@ Press buttons with mouse, or enable key control with ctrl-backspace and use keyb
 			if @show_current_key_control_area
 				current_origin = @key_control_area_origins[@current_key_control_area]
 
-				origin_button = Point.new(
+				origin_button = Grrr::Point.new(
 					[current_origin.x, 0].max,
 					[current_origin.y, 0].max
 				)
-				corner_button = Point.new(
+				corner_button = Grrr::Point.new(
 					[current_origin.x+KEY_CONTROL_AREA_NUM_COLS, @num_cols].min - 1,
 					[current_origin.y+KEY_CONTROL_AREA_NUM_ROWS, @num_rows].min - 1
 				)
@@ -328,7 +328,7 @@ Press buttons with mouse, or enable key control with ctrl-backspace and use keyb
 			}
 			if not @read_only
 				button.action = lambda do |view|
-					emit_button_event(Point.new(x, y), button.value)
+					emit_button_event(Grrr::Point.new(x, y), button.value)
 				end
 			end
 			@panel.add(button)

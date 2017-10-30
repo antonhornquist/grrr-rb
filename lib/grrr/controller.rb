@@ -33,7 +33,7 @@ class Grrr::Controller
 				raise "if an origin is supplied a view must also be supplied"
 			end
 			if create_top_view_if_none_is_supplied
-				pr_attach(Grrr::TopView.new(num_cols, num_rows), Point.new(0, 0))
+				pr_attach(Grrr::TopView.new(num_cols, num_rows), Grrr::Point.new(0, 0))
 			end
 		end
 		@is_removed = false
@@ -77,7 +77,7 @@ class Grrr::Controller
 	end
 
 	def to_points
-		Grrr::View.bounds_to_points(Point.new(0, 0), @num_cols, @num_rows)
+		Grrr::View.bounds_to_points(Grrr::Point.new(0, 0), @num_cols, @num_rows)
 	end
 
 	# Attaching and detaching
@@ -108,7 +108,7 @@ class Grrr::Controller
 		@view = view
 		@origin = origin
 
-		if @origin == Point.new(0, 0) and @num_cols == view.num_cols and @num_rows == view.num_rows
+		if @origin == Grrr::Point.new(0, 0) and @num_cols == view.num_cols and @num_rows == view.num_rows
 			@view_led_refreshed_listener = lambda { |source, point, on|
 				handle_view_led_refreshed_event(point-@origin, on)
 			}
@@ -116,7 +116,7 @@ class Grrr::Controller
 				handle_view_button_state_changed_event(point-@origin, pressed)
 			}
 		else
-			@bottom_right = @origin + Point.new(@num_cols-1, @num_rows-1)
+			@bottom_right = @origin + Grrr::Point.new(@num_cols-1, @num_rows-1)
 			@view_led_refreshed_listener = lambda { |source, point, on|
 				if (@origin.x..@bottom_right.x).include?(point.x) and (@origin.y..@bottom_right.y).include?(point.y)
 					handle_view_led_refreshed_event(point-@origin, on)
@@ -160,7 +160,7 @@ class Grrr::Controller
 	def emit_button_event(point, pressed)
 		validate_contains_point(point)
 		if is_attached?
-			@view.handle_view_button_event(self, @origin+point, pressed)
+			@view.handle_view_button_event(self, @origin+point.to_point, pressed)
 		end
 	end
 

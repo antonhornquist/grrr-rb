@@ -55,8 +55,8 @@ sleep 10
 
 ``` ruby
 a=Grrr::Monome.new # creates a monome
-b=Grrr::StepView.new(a, Point.new(0, 7), a.num_cols, 1) # the step view defines when to play notes 
-c=Grrr::MultiToggleView.new(a, Point.new(0, 0), a.num_cols, 7) # toggles representing note pitch
+b=Grrr::StepView.new(a, Grrr::Point.new(0, 7), a.num_cols, 1) # the step view defines when to play notes 
+c=Grrr::MultiToggleView.new(a, Grrr::Point.new(0, 0), a.num_cols, 7) # toggles representing note pitch
 c.values_are_inverted=true
 
 # sequence that posts a degree for steps that are lit

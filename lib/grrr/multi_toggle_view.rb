@@ -236,9 +236,9 @@ class Grrr::MultiToggleView < Grrr::ContainerView
 			pr_add_actions(toggle, i)
 
 			position = if @orientation == :vertical
-				Point.new(i*toggle_width, 0)
+				Grrr::Point.new(i*toggle_width, 0)
 			else
-				Point.new(0, i*toggle_height)
+				Grrr::Point.new(0, i*toggle_height)
 			end
 
 			pr_add_child_no_flash(toggle, position)

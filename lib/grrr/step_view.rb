@@ -89,7 +89,7 @@ class Grrr::StepView < Grrr::MultiButtonView
 	end
 
 	def set_step_value(index, val)
-		steps[index] = val
+		@steps[index] = val
 		if pr_button_value_by_step_index(index) != (val || (@playhead == index))
 			pr_set_button_value_by_step_index(index, val)
 		end

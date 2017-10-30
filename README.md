@@ -31,7 +31,7 @@ irb> Thread.new do
 irb>   i = 0
 irb>   while true
 irb>     steps.playhead = i
-irb>     puts (steps.get_step_value(i) ? "ho!" : "hey" )
+irb>     puts (steps.step_value(i) ? "ho!" : "hey" )
 irb>     sleep 0.5
 irb>     i = (i + 1) % monome.num_cols
 irb>   end

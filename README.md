@@ -6,7 +6,7 @@ Grid controller UI toolkit for Ruby.
 
 The grrr-rb library provides high level UI abstractions for grid based controllers simplifying interaction with for instance [monome](http://monome.org) 40h, 64, 128 and 256 grid devices. This library is built atop of and thus depends on [serialoscclient-rb](http://github.com/antonhornquist/serialoscclient-rb).
 
-This is a less maintained port of the [Grrr-sc](http://github.com/antonhornquist/Grrr-sc) SuperCollider library. It is not as maintained as the SuperCollider version. Please report bugs.
+This is a less maintained port of the [Grrr-sc](http://github.com/antonhornquist/Grrr-sc) SuperCollider library. Please report bugs.
 
 ## Usage
 
@@ -21,100 +21,65 @@ This assumes a monome grid is connected to the computer.
 ```
 $ cd /path/to/grrr-rb
 $ rake irb
-irb> include Grrr
-irb> monome=Monome64.new("example")
+irb> monome=Grrr::Monome.new
 SerialOSC Devices:
   x y z
-irb> steps=StepView.new(monome, "0@0", 8, 1)
+irb> steps=Grrr::StepView.new(monome, "0@0", monome.num_cols, 1)
 irb> Thread.new do
-irb>	i = 0
-irb>	while true
-irb>        steps.playhead = i
-irb>        puts (steps.get_step_value(i) ? "ho!" : "hey" )
-irb>		sleep 0.5
-irb>		i = (i + 1) % 8
-irb>	end
+irb>   i = 0
+irb>   while true
+irb>     steps.playhead = i
+irb>     puts (steps.get_step_value(i) ? "ho!" : "hey" )
+irb>     sleep 0.5
+irb>     i = (i + 1) % monome.num_cols
+irb>   end
 irb> end
 ```
 
-### Monome Example
-
-``` ruby
-require 'monome'
-
-b=Grrr::Button.new(a, "0@0")
-b.action = lambda { |button, value| puts "button value was changed to #{value}!" }
-
-c=Grrr::HToggle.new(a, "0@1")
-c.action = lambda { |toggle, value| puts "toggle value was changed to #{value}!" }
-
-d=Thread.new {
-	while true
-		c.value = (c.value+1) % 4
-		sleep 0.5
-	end
-}
-
-sleep 5
-```
-
-### Example 1
+### Hello World
 
 ``` ruby
 require 'grrr'
-require 'grrr/screen_grid' # only available for JRuby
 
-a = ScreenGrid.new
+a=Grrr::Monome.new("test")
+b=Grrr::Button.new(a, Point.new(0, 0)) # places a 1x1 button at top left key
+b.action = lambda { |button, value| puts "#{value ? "Hello", "Goodbye"} World" }
 
-b = GridButton.new(a, "0@0")
-b.action = lambda { |value| puts "the first button's value was changed to #{value}!" }
-
-# press top-leftmost screen grid button to test the first button
-
-c = GridButton.new_momentary(a, "1@1", 2, 2)
-c.action = lambda { |value| puts "the second button's value was changed to #{value}!" }
-
-# press screen grid button anywhere at 1@1 to 2@2 to test the second button
-
-a.view.remove_all_children
+sleep 10
+# pressing the top left grid button of the grid will change led state and output to the Post Window
 ```
 
-### Example 2
+### A simple step sequencer
 
 ``` ruby
-require 'grrr'
-require 'grrr/screen_grid' # only available for JRuby
+a=Grrr::Monome.new; // creates a monome
+b=Grrr::StepView.new(a, 0@7, a.num_cols, 1); // the step view defines when to play notes 
+c=Grrr::MultiToggleView.new(a, 0@0, a.num_cols, 7); // toggles representing note pitch
+c.values_are_inverted=true;
 
-a = ScreenGrid.new
+# sequence that posts a degree for steps that are lit
+Thread.new do
+  i = 0
+  while true
+    b.playhead = i
+    if b.get_step_value(i)
+      puts "degree: #{c.toggle_value(b.playhead)}"
+    end
+    sleep 0.15
+    i = (i + 1) % a.num_cols
+  end
+end
 
-b = GridButton.new(a, "0@0")
-b.action = lambda { |value| puts "the first button's value was changed to #{value}!" }
-
-# press top-leftmost screen grid button to test the first button
-
-c = GridButton.new_momentary(a, "1@1", 2, 2)
-c.action = lambda { |value| puts "the second button's value was changed to #{value}!" }
-
-# press screen grid button anywhere at 1@1 to 2@2 to test the second button
-
-a.view.remove_all_children
-```
-
-### Example 3
-
-``` ruby
-b = GridButton.new_decoupled(a, "0@0")
-b.button_pressed_action = lambda { puts "the first button was pressed!" }
-b.button_released_action = lambda { puts "the first button was released!" }
-
-# press top-leftmost screen grid button to test the button
-
-a.view.remove_all_children
+# randomize pattern
+b.num_cols.times do |index|
+	c.set_toggle_value(index, (c.num_rows).rand);
+	b.set_step_value(index, [true, false].choose);
+end
 ```
 
 ## Documentation
 
-Schelp documentation available for the [Grrr-sc](http://github.com/antonhornquist/Grrr-sc) SuperCollider library is applicable to this Ruby version of the library.
+Schelp documentation available for the [Grrr-sc](http://github.com/antonhornquist/Grrr-sc) SuperCollider library is applicable to this Ruby version of the library. No other documentation is available.
 
 ## Implementation
 
@@ -124,7 +89,7 @@ The SuperCollider and Ruby classes are generated using the [rsclass-rb](http://g
 
 For low latency real-time Grid controller performance working with Grrr-sc and SuperCollider is recommended.
 
-If you intend to use this library beware of the monkey patching (```lib/core_extensions/*```) due to a collection of SuperCollider extensions ported to Ruby.
+If you intend to use this library beware of monkey patching (```lib/core_extensions/*```) due to port of a collection of required SuperCollider extensions to Ruby.
 
 ## Classes
 

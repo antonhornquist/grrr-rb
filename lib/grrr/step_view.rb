@@ -5,6 +5,8 @@ class Grrr::StepView < Grrr::MultiButtonView
 	attr_reader :playhead
 
 	def initialize(parent, origin, num_cols=nil, num_rows=nil, enabled=true, coupled=true)
+		super(parent, origin, num_cols, num_rows, enabled, false, :toggle)
+
 		@step_pressed_action = nil
 		@step_released_action = nil
 		@step_value_changed_action = nil

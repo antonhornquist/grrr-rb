@@ -40,7 +40,7 @@ class Grrr::Monome < Grrr::Controller
 
 		@on_remove = lambda { @client.free }
 
-		@@all < self
+		@@all << self
 	end
 
 	def self.new_detached(num_cols, num_rows, name)

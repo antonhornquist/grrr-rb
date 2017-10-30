@@ -4,13 +4,15 @@ Grid controller UI toolkit for Ruby.
 
 ## Description
 
-The grrr-rb library provides high level UI abstractions for grid based controllers simplifying interaction with for instance [monome](http://monome.org) 40h, 64, 128 and 256 grid devices. This library is built atop of and thus depends on [serialoscclient-rb](http://github.com/antonhornquist/serialoscclient-rb).
+This is a **less maintained** port of the [Grrr-sc](http://github.com/antonhornquist/Grrr-sc) SuperCollider library. Please report bugs.
 
-This is a less maintained port of the [Grrr-sc](http://github.com/antonhornquist/Grrr-sc) SuperCollider library. Please report bugs.
+The grrr-rb library provides high level UI abstractions for grid based controllers simplifying interaction with for instance [monome](http://monome.org) 40h, 64, 128 and 256 grid devices. This library is built atop of and thus depends on [serialoscclient-rb](http://github.com/antonhornquist/serialoscclient-rb).
 
 ## Usage
 
-Download serialoscclient-rb. Place it in a folder adjacent to the grrr-rb folder. Add the lib folder of grrr-rb to the Ruby load path and ```require 'grrr'```. If grrr-rb is run in JRuby ```require 'grrr/screengrid'``` will make fake screengrid available for use.
+Install grrr-rb and its dependenct serialoscclient-rb (details below).
+
+Requiring ```require 'grrr'``` will make Grrr module containing the Grrr class library available. If grrr-rb is run in JRuby ```require 'grrr/screengrid'``` will make fake screengrid available for use.
 
 ## Examples
 
@@ -24,7 +26,7 @@ $ rake irb
 irb> monome=Grrr::Monome.new
 SerialOSC Devices:
   x y z
-irb> steps=Grrr::StepView.new(monome, "0@0", monome.num_cols, 1)
+irb> steps=Grrr::StepView.new(monome, Grrr::Point.new(0, 0), monome.num_cols, 1)
 irb> Thread.new do
 irb>   i = 0
 irb>   while true
@@ -42,20 +44,20 @@ irb> end
 require 'grrr'
 
 a=Grrr::Monome.new("test")
-b=Grrr::Button.new(a, Point.new(0, 0)) # places a 1x1 button at top left key
+b=Grrr::Button.new(a, Grrr::Point.new(0, 0)) # places a 1x1 button at top left key
 b.action = lambda { |button, value| puts "#{value ? "Hello", "Goodbye"} World" }
 
 sleep 10
 # pressing the top left grid button of the grid will change led state and output to the Post Window
 ```
 
-### A simple step sequencer
+### A Simple Step Sequencer
 
 ``` ruby
-a=Grrr::Monome.new; // creates a monome
-b=Grrr::StepView.new(a, 0@7, a.num_cols, 1); // the step view defines when to play notes 
-c=Grrr::MultiToggleView.new(a, 0@0, a.num_cols, 7); // toggles representing note pitch
-c.values_are_inverted=true;
+a=Grrr::Monome.new # creates a monome
+b=Grrr::StepView.new(a, 0@7, a.num_cols, 1) # the step view defines when to play notes 
+c=Grrr::MultiToggleView.new(a, 0@0, a.num_cols, 7) # toggles representing note pitch
+c.values_are_inverted=true
 
 # sequence that posts a degree for steps that are lit
 Thread.new do
@@ -72,8 +74,8 @@ end
 
 # randomize pattern
 b.num_cols.times do |index|
-	c.set_toggle_value(index, (c.num_rows).rand);
-	b.set_step_value(index, [true, false].choose);
+	c.set_toggle_value(index, (c.num_rows).rand)
+	b.set_step_value(index, [true, false].choose)
 end
 ```
 
@@ -125,6 +127,11 @@ Section "Extending Grrr" in the Schelp documentation available for the [Grrr-sc]
 This library requires [serialoscclient-rb](http://github.com/antonhornquist/serialoscclient-rb).
 
 This code has been developed and tested in Ruby 2.3.3 and JRuby 9.1.6.0. ```Grrr::ScreenGrid``` only works for JRuby.
+
+## Installation
+
+Download dependency serialoscclient-rb. Place it in a folder adjacent to the grrr-rb folder. 
+Add the lib folder of grrr-rb to the Ruby load path.
 
 ## License
 

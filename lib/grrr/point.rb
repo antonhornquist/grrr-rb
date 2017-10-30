@@ -2,7 +2,7 @@
 # Point:
 # Based on SuperCollider's Point Class
 #
-class Point
+class Grrr::Point
 	attr_accessor :x, :y
 
 	def initialize(x, y)

@@ -90,7 +90,9 @@ This grrr-rb library requires [serialoscclient-rb](http://github.com/antonhornqu
 
 ## Installation
 
-Download and install dependency serialoscclient-rb and place it in a folder adjacent to the grrr-rb folder. Add the lib folder of grrr-rb to the Ruby load path.
+Download and install dependency [serialoscclient-rb](http://github.com/antonhornquist/serialoscclient-rb). Place it in a folder adjacent to the grrr-rb folder.
+
+Download grrr-rb. Add the ```lib``` folder of grrr-rb to the Ruby load path.
 
 ## Documentation
 

@@ -6,13 +6,15 @@ Grid controller UI toolkit for Ruby.
 
 This is a **less maintained** port of the [Grrr-sc](http://github.com/antonhornquist/Grrr-sc) SuperCollider library. Please report bugs.
 
-The grrr-rb library provides high level UI abstractions for grid based controllers simplifying interaction with for instance [monome](http://monome.org) 40h, 64, 128 and 256 grid devices. This library is built atop of and thus depends on [serialoscclient-rb](http://github.com/antonhornquist/serialoscclient-rb).
+The grrr-rb library provides high level UI abstractions for grid based controllers such as [monome](http://monome.org) 40h, 64, 128 and 256 devices. Widgets, ie. buttons and toggles, are placed on controllers. Widgets can be nested in containers which allows for modes and paging. The library adheres to principles of the standard GUI class library in SuperCollider.
 
 ## Usage
 
-Install grrr-rb and its dependenct serialoscclient-rb (details below).
+Grrr can be used as a framework for building full featured apps or in live coding.
 
-Requiring ```require 'grrr'``` will make Grrr module containing the Grrr class library available. If grrr-rb is run in JRuby ```require 'grrr/screengrid'``` will make fake screengrid available for use.
+Requiring ```require 'grrr'``` includes the Grrr module containing the classes described below.
+
+If Grrr is run in JRuby ```require 'grrr/screengrid'``` will make a virtual on-csreen grid available for use.
 
 ## Examples
 
@@ -82,9 +84,25 @@ end
 gets # wait for enter to quit
 ```
 
+## Requirements
+
+This grrr-rb library requires [serialoscclient-rb](http://github.com/antonhornquist/serialoscclient-rb). The library has been developed and tested in Ruby 2.3.3 and JRuby 9.1.6.0. ```Grrr::ScreenGrid``` only works for JRuby due to its reliance on Java GUI.
+
+## Installation
+
+Download and install dependency serialoscclient-rb and place it in a folder adjacent to the grrr-rb folder. Add the lib folder of grrr-rb to the Ruby load path.
+
 ## Documentation
 
-Schelp documentation available for the [Grrr-sc](http://github.com/antonhornquist/Grrr-sc) SuperCollider library is applicable to this Ruby version of the library. No other documentation is available.
+No Ruby specific documentation is available. Schelp documentation available for the [Grrr-sc](http://github.com/antonhornquist/Grrr-sc) SuperCollider library is applicable to this version of the library. Be aware, however, that in contrast to Grrr-sc methods in grrr-rb are snake_case.
+
+## Tests
+
+An automated test suite is included. Just execute:
+
+```
+$ rake
+```
 
 ## Implementation
 
@@ -93,6 +111,8 @@ This is a Ruby port of my SuperCollider library [Grrr-sc](http://github.com/anto
 The SuperCollider and Ruby classes are generated using the [rsclass-rb](http://github.com/antonhornquist/rsclass-rb) class generator based on meta data defined in the [grrr-meta-rb](http://github.com/antonhornquist/grrr-meta-rb) repository.
 
 For low latency real-time Grid controller performance working with Grrr-sc and SuperCollider is recommended.
+
+Code readability has been favored over optimizations.
 
 If you intend to use this library beware of monkey patching (```lib/core_extensions/*```) due to port of a collection of required SuperCollider extensions to Ruby.
 
@@ -111,30 +131,18 @@ Classes in this library reside in the Grrr module.
 		* TopView - This is the topmost view in a view tree and typically the view to which controllers attach. The view cannot be added as a child to any other view.
 		* MultiButtonView - A grid of buttons of the same size.
 			* StepView - A grid of buttons of the same size indexed as steps with possibility to indicate playing step. Suitable for step sequencing.
-
 		* MultiToggleView - An array of vertical or horizontal toggles of the same size.
 * Controller - Abstract superclass. Represents a device that may attach to and control part of or an entire view.
-	* Monome - Abstract class for [monome](http://monome.org) controllers.
-		* Monome64 - An 8x8 monome.
-		* MonomeV128 - An 8x16 monome.
-		* MonomeH128 - A 16x8 monome.
-		* Monome256 - An 8x16 monome.
+	* Monome - Generic [Monome](http://monome.org) controller.
+		* Monome64 - 8x8 monome.
+		* MonomeV128 - 8x16 monome.
+		* MonomeH128 - 16x8 monome.
+		* Monome256 - 16x16 monome.
 	* ScreenGrid - An on-screen controller of user definable size. Button events may be triggered with mouse and keyboard. Only available for JRuby since it depends on Java GUI. Use ```require 'grrr/screengrid'```
 
 ## Extending Grrr
 
-Section "Extending Grrr" in the Schelp documentation available for the [Grrr-sc](http://github.com/antonhornquist/Grrr-sc) is applicable to this version of the library.
-
-## Requirements
-
-This library requires [serialoscclient-rb](http://github.com/antonhornquist/serialoscclient-rb).
-
-This code has been developed and tested in Ruby 2.3.3 and JRuby 9.1.6.0. ```Grrr::ScreenGrid``` only works for JRuby.
-
-## Installation
-
-Download dependency serialoscclient-rb. Place it in a folder adjacent to the grrr-rb folder. 
-Add the lib folder of grrr-rb to the Ruby load path.
+Section "Extending Grrr" in the Schelp documentation available for the [Grrr-sc](http://github.com/antonhornquist/Grrr-sc) is applicable to this version of the library. In contrast to Grrr-sc methods in grrr-rb are snake_case.
 
 ## License
 

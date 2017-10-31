@@ -97,7 +97,7 @@ $ ruby -I/path/to/grrr-rb/lib -I/path/to/serialoscclient-rb/lib example2.rb
 
 ## Requirements
 
-This grrr-rb library requires [serialoscclient-rb](http://github.com/antonhornquist/serialoscclient-rb). The library has been developed and tested in Ruby 2.3.3 and JRuby 9.1.6.0. ```Grrr::ScreenGrid``` only works for JRuby due to its reliance on Java GUI.
+This library requires [serialoscclient-rb](http://github.com/antonhornquist/serialoscclient-rb). The library has been developed and tested in Ruby 2.3.3 and JRuby 9.1.6.0. ```Grrr::ScreenGrid``` only works for JRuby due to its reliance on Java GUI.
 
 ## Installation
 

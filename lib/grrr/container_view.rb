@@ -125,25 +125,15 @@ class Grrr::ContainerView < Grrr::View
 	end
 
 	def bring_child_to_front(view)
-		child_index = pr_get_child_index(view)
-		destination_index = num_children-1
-		@children[child_index], @children[destination_index] = @children[destination_index], @children[child_index]
+		@children.delete(view)
+		@children.push(view)
 		refresh_bounds(view.origin, view.num_cols, view.num_rows)
 	end
 
 	def send_child_to_back(view)
-		child_index = pr_get_child_index(view)
-		destination_index = 0
-		@children[child_index], @children[destination_index] = @children[destination_index], @children[child_index]
+		@children.delete(view)
+		@children.unshift(view)
 		refresh_bounds(view.origin, view.num_cols, view.num_rows)
-	end
-
-	def num_children
-		@children.size
-	end
-
-	def pr_get_child_index(child)
-		@children.index(child)
 	end
 
 	# Validations

@@ -61,7 +61,7 @@ class Grrr::Monome < Grrr::Controller
 	end
 
 	def spawn_gui
-		ScreenGrid.new(@num_cols, @num_rows, @view, @origin)
+		Grrr::ScreenGrid.new(@num_cols, @num_rows, @view, @origin)
 	end
 
 	def grab_devices

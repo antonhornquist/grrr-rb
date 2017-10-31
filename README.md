@@ -26,19 +26,19 @@ This assumes a monome grid is connected to the computer.
 $ cd /path/to/grrr-rb
 $ rake irb
 
-irb(main)> monome=Grrr::Monome.new
-SerialOSC Devices:
-  x y z
-irb(main)> steps=Grrr::StepView.new(monome, Grrr::Point.new(0, 0), monome.num_cols, 1)
-irb(main)> Thread.new do
-irb(main)>   i = 0
-irb(main)>   while true
-irb(main)>     steps.playhead = i
-irb(main)>     puts (steps.step_value(i) ? "ho!" : "hey" )
-irb(main)>     sleep 0.5
-irb(main)>     i = (i + 1) % monome.num_cols
-irb(main)>   end
-irb(main)> end
+  irb(main)> monome=Grrr::Monome.new
+  SerialOSC Devices:
+    x y z
+  irb(main)> steps=Grrr::StepView.new(monome, Grrr::Point.new(0, 0), monome.num_cols, 1)
+  irb(main)> Thread.new do
+  irb(main)>   i = 0
+  irb(main)>   while true
+  irb(main)>     steps.playhead = i
+  irb(main)>     puts (steps.step_value(i) ? "ho!" : "hey" )
+  irb(main)>     sleep 0.5
+  irb(main)>     i = (i + 1) % monome.num_cols
+  irb(main)>   end
+  irb(main)> end
 ```
 
 ### Hello World
@@ -46,15 +46,15 @@ irb(main)> end
 ```
 $ cat example1.rb
 
-require 'grrr'
-
-a=Grrr::Monome.new # creates a monome
-b=Grrr::Button.new(a, Grrr::Point.new(0, 0)) # places a 1x1 button at top left key
-b.action = lambda { |button, value| puts "#{value ? "Hello" : "Goodbye"} World" }
-
-# pressing the top left grid button of the grid will change led state and output to the Post Window
-
-gets # wait for enter to quit
+  require 'grrr'
+  
+  a=Grrr::Monome.new # creates a monome
+  b=Grrr::Button.new(a, Grrr::Point.new(0, 0)) # places a 1x1 button at top left key
+  b.action = lambda { |button, value| puts "#{value ? "Hello" : "Goodbye"} World" }
+  
+  # pressing the top left grid button of the grid will change led state and output to the Post Window
+  
+  gets # wait for enter to quit
 
 $ ruby -I/path/to/grrr-rb/lib -I/path/to/serialoscclient-rb/lib example1.rb
 ```
@@ -64,33 +64,33 @@ $ ruby -I/path/to/grrr-rb/lib -I/path/to/serialoscclient-rb/lib example1.rb
 ```
 $ cat example2.rb
 
-require 'grrr'
-
-a=Grrr::Monome.new # creates a monome
-b=Grrr::StepView.new(a, Grrr::Point.new(0, 7), a.num_cols, 1) # the step view defines when to play notes 
-c=Grrr::MultiToggleView.new(a, Grrr::Point.new(0, 0), a.num_cols, 7) # toggles representing note pitch
-c.values_are_inverted=true
-
-# sequence that posts a degree for steps that are lit
-Thread.new do
-  i = 0
-  while true
-    b.playhead = i
-    if b.get_step_value(i)
-      puts "degree: #{c.toggle_value(b.playhead)}"
+  require 'grrr'
+  
+  a=Grrr::Monome.new # creates a monome
+  b=Grrr::StepView.new(a, Grrr::Point.new(0, 7), a.num_cols, 1) # the step view defines when to play notes 
+  c=Grrr::MultiToggleView.new(a, Grrr::Point.new(0, 0), a.num_cols, 7) # toggles representing note pitch
+  c.values_are_inverted=true
+  
+  # sequence that posts a degree for steps that are lit
+  Thread.new do
+    i = 0
+    while true
+      b.playhead = i
+      if b.get_step_value(i)
+        puts "degree: #{c.toggle_value(b.playhead)}"
+      end
+      sleep 0.15
+      i = (i + 1) % a.num_cols
     end
-    sleep 0.15
-    i = (i + 1) % a.num_cols
   end
-end
-
-# randomize pattern
-b.num_cols.times do |index|
-	c.set_toggle_value(index, rand(c.num_rows))
-	b.set_step_value(index, [true, false].sample)
-end
-
-gets # wait for enter to quit
+  
+  # randomize pattern
+  b.num_cols.times do |index|
+  	c.set_toggle_value(index, rand(c.num_rows))
+  	b.set_step_value(index, [true, false].sample)
+  end
+  
+  gets # wait for enter to quit
 
 $ ruby -I/path/to/grrr-rb/lib -I/path/to/serialoscclient-rb/lib example2.rb
 ```

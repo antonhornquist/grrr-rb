@@ -76,7 +76,7 @@ $ cat example2.rb
     i = 0
     while true
       b.playhead = i
-      if b.get_step_value(i)
+      if b.step_value(i)
         puts "degree: #{c.toggle_value(b.playhead)}"
       end
       sleep 0.15

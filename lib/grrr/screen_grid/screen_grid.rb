@@ -1,5 +1,5 @@
 require 'java'
-require 'screen_grid_button'
+require "#{File.expand_path(File.dirname(__FILE__))}/screen_grid_button"
 
 #
 # java.awt.Panel Extensions - add draw_hook function for behavior similar to SC Window/View classes

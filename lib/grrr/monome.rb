@@ -1,8 +1,3 @@
-serialoscclient_rb_path = File.expand_path(File.dirname(__FILE__) + "/../../../serialoscclient-rb/lib")
-unless $LOAD_PATH.include?(serialoscclient_rb_path)
-	$LOAD_PATH.unshift(serialoscclient_rb_path)
-end
-
 require 'serialoscclient'
 
 class Grrr::Monome < Grrr::Controller

@@ -25,63 +25,74 @@ This assumes a monome grid is connected to the computer.
 ```
 $ cd /path/to/grrr-rb
 $ rake irb
-irb> monome=Grrr::Monome.new
-SerialOSC Devices:
-  x y z
-irb> steps=Grrr::StepView.new(monome, Grrr::Point.new(0, 0), monome.num_cols, 1)
-irb> Thread.new do
-irb>   i = 0
-irb>   while true
-irb>     steps.playhead = i
-irb>     puts (steps.step_value(i) ? "ho!" : "hey" )
-irb>     sleep 0.5
-irb>     i = (i + 1) % monome.num_cols
-irb>   end
-irb> end
+
+  irb(main)> monome=Grrr::Monome.new
+  SerialOSC Devices:
+    x y z
+  irb(main)> steps=Grrr::StepView.new(monome, Grrr::Point.new(0, 0), monome.num_cols, 1)
+  irb(main)> Thread.new do
+  irb(main)>   i = 0
+  irb(main)>   while true
+  irb(main)>     steps.playhead = i
+  irb(main)>     puts (steps.step_value(i) ? "ho!" : "hey" )
+  irb(main)>     sleep 0.5
+  irb(main)>     i = (i + 1) % monome.num_cols
+  irb(main)>   end
+  irb(main)> end
 ```
 
 ### Hello World
 
-``` ruby
-require 'grrr'
+```
+$ cat example1.rb
 
-a=Grrr::Monome.new("test")
-b=Grrr::Button.new(a, Grrr::Point.new(0, 0)) # places a 1x1 button at top left key
-b.action = lambda { |button, value| puts "#{value ? "Hello", "Goodbye"} World" }
-
-# pressing the top left grid button of the grid will change led state and output to the Post Window
-
-gets # wait for enter to quit
+  require 'grrr'
+  
+  a=Grrr::Monome.new("test")
+  b=Grrr::Button.new(a, Grrr::Point.new(0, 0)) # places a 1x1 button at top left key
+  b.action = lambda { |button, value| puts "#{value ? "Hello", "Goodbye"} World" }
+  
+  # pressing the top left grid button of the grid will change led state and output to the Post Window
+  
+  gets # wait for enter to quit
+  
+$ ruby -I/path/to/grrr-rb/lib -I/path/to/serialoscclient-rb/lib example1.rb
 ```
 
 ### A Simple Step Sequencer
 
-``` ruby
-a=Grrr::Monome.new # creates a monome
-b=Grrr::StepView.new(a, Grrr::Point.new(0, 7), a.num_cols, 1) # the step view defines when to play notes 
-c=Grrr::MultiToggleView.new(a, Grrr::Point.new(0, 0), a.num_cols, 7) # toggles representing note pitch
-c.values_are_inverted=true
+```
+$ cat example2.rb
 
-# sequence that posts a degree for steps that are lit
-Thread.new do
-  i = 0
-  while true
-    b.playhead = i
-    if b.get_step_value(i)
-      puts "degree: #{c.toggle_value(b.playhead)}"
+  require 'grrr'
+  
+  a=Grrr::Monome.new # creates a monome
+  b=Grrr::StepView.new(a, Grrr::Point.new(0, 7), a.num_cols, 1) # the step view defines when to play notes 
+  c=Grrr::MultiToggleView.new(a, Grrr::Point.new(0, 0), a.num_cols, 7) # toggles representing note pitch
+  c.values_are_inverted=true
+  
+  # sequence that posts a degree for steps that are lit
+  Thread.new do
+    i = 0
+    while true
+      b.playhead = i
+      if b.get_step_value(i)
+        puts "degree: #{c.toggle_value(b.playhead)}"
+      end
+      sleep 0.15
+      i = (i + 1) % a.num_cols
     end
-    sleep 0.15
-    i = (i + 1) % a.num_cols
   end
-end
+  
+  # randomize pattern
+  b.num_cols.times do |index|
+  	c.set_toggle_value(index, (c.num_rows).rand)
+  	b.set_step_value(index, [true, false].choose)
+  end
+  
+  gets # wait for enter to quit
 
-# randomize pattern
-b.num_cols.times do |index|
-	c.set_toggle_value(index, (c.num_rows).rand)
-	b.set_step_value(index, [true, false].choose)
-end
-
-gets # wait for enter to quit
+$ ruby -I/path/to/grrr-rb/lib -I/path/to/serialoscclient-rb/lib example2.rb
 ```
 
 ## Requirements
@@ -90,7 +101,7 @@ This grrr-rb library requires [serialoscclient-rb](http://github.com/antonhornqu
 
 ## Installation
 
-Download and install dependency [serialoscclient-rb](http://github.com/antonhornquist/serialoscclient-rb). Place it in a folder adjacent to the grrr-rb folder.
+Download and install dependency [serialoscclient-rb](http://github.com/antonhornquist/serialoscclient-rb).
 
 Download grrr-rb. Add the ```lib``` folder of grrr-rb to the Ruby load path.
 
@@ -100,9 +111,12 @@ No Ruby specific documentation is available. Schelp documentation available for 
 
 ## Tests
 
-An automated test suite is included. Just execute:
+An automated test suite is included.
+
+Make sure serialoscclient-rb is installed in a folder adjacent to the grrr-rb folder and execute:
 
 ```
+$ cd /path/to/grrr-rb
 $ rake
 ```
 

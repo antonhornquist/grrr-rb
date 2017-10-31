@@ -1,10 +1,18 @@
 require 'rake/testtask'
 
+# fallback if serialoscclient path is not set: serialoscclient-rb folder adjacent to grrr-rb folder can be used
+def adjacent_serialoscclient_path
+	File.expand_path(File.dirname(__FILE__) + "/../serialoscclient-rb/lib")
+end
+
 task :default => :test_grrr
 
 Rake::TestTask.new(:test_grrr) do |t|
+	t.libs << "test"
+	t.libs << adjacent_serialoscclient_path if $LOAD_PATH.grep(/serialoscclient-rb/).empty?
 	t.test_files = ["test/tc_grrr.rb"]
 	t.warning = true
+	t.verbose = true
 end
 
 task :irb => :environment do
@@ -13,8 +21,9 @@ task :irb => :environment do
 	IRB.start
 end
 
-task :environment do
+task :environment do |t|
 	$LOAD_PATH.unshift("./lib")
+	$LOAD_PATH.unshift(adjacent_serialoscclient_path) if $LOAD_PATH.grep(/serialoscclient-rb/).empty?
 	require 'grrr'
 	require 'grrr/screen_grid' if (defined? RUBY_ENGINE != nil) and RUBY_ENGINE == 'jruby'
 end

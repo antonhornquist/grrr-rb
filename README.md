@@ -14,7 +14,7 @@ Grrr can be used as a framework for building full featured apps or in live codin
 
 Requiring ```require 'grrr'``` includes the Grrr module containing the classes described below.
 
-If Grrr is run in JRuby ```require 'grrr/screengrid'``` will make a virtual on-csreen grid available for use.
+If Grrr is run in JRuby ```require 'grrr/screengrid'``` will make a virtual grid available for use.
 
 ## Examples
 

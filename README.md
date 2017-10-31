@@ -135,7 +135,7 @@ Classes in this library reside in the Grrr module.
 			* StepView - A grid of buttons of the same size indexed as steps with possibility to indicate playing step. Suitable for step sequencing.
 		* MultiToggleView - An array of vertical or horizontal toggles of the same size.
 * Controller - Abstract superclass. Represents a device that may attach to and control part of or an entire view.
-	* Monome - Generic [Monome](http://monome.org) controller.
+	* Monome - Generic [monome](http://monome.org) controller.
 		* Monome64 - 8x8 monome.
 		* MonomeV128 - 8x16 monome.
 		* MonomeH128 - 16x8 monome.

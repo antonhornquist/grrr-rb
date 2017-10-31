@@ -441,5 +441,3 @@ class Grrr::View
 		self
 	end
 end
-
-end

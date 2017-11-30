@@ -122,7 +122,7 @@ $ rake
 
 ## Implementation
 
-This is a Ruby port of my SuperCollider library [Grrr-sc](http://github.com/antonhornquist/Grrr-sc).
+This is a Ruby port of the [Grrr-sc](http://github.com/antonhornquist/Grrr-sc) SuperCollider library.
 
 The SuperCollider and Ruby classes are generated using the [rsclass-rb](http://github.com/antonhornquist/rsclass-rb) class generator based on meta data defined in the [grrr-meta-rb](http://github.com/antonhornquist/grrr-meta-rb) repository.
 

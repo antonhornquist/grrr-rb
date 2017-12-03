@@ -23,6 +23,7 @@ class Grrr::View
 		@is_lit_at_func = nil
 		@value = nil
 		@view_button_state_changed_action = nil
+		@parent_view_led_refreshed_listener = nil
 		@view_was_enabled_action = nil
 		@view_was_disabled_action = nil
 
@@ -391,11 +392,15 @@ class Grrr::View
 	end
 
 	def pr_disable_led_forwarding_to_parent
-		remove_action(@parent_view_led_refreshed_listener, :view_led_refreshed_action);
+		if @parent_view_led_refreshed_listener
+			remove_action(@parent_view_led_refreshed_listener, :view_led_refreshed_action);
+		end
 	end
 
 	def pr_enable_led_forwarding_to_parent
-		add_action(@parent_view_led_refreshed_listener, :view_led_refreshed_action);
+		if @parent_view_led_refreshed_listener
+			add_action(@parent_view_led_refreshed_listener, :view_led_refreshed_action);
+		end
 	end
 
 	def pr_do_then_refresh_changed_leds(&func)

@@ -110,10 +110,10 @@ class Grrr::Controller
 
 		if @origin == Grrr::Point.new(0, 0) and @num_cols == view.num_cols and @num_rows == view.num_rows
 			@view_led_refreshed_listener = lambda { |source, point, on|
-				handle_view_led_refreshed_event(point-@origin, on)
+				handle_view_led_refreshed_event(point, on)
 			}
 			@view_button_state_changed_listener = lambda { |point, pressed|
-				handle_view_button_state_changed_event(point-@origin, pressed)
+				handle_view_button_state_changed_event(point, pressed)
 			}
 		else
 			@bottom_right = @origin + Grrr::Point.new(@num_cols-1, @num_rows-1)

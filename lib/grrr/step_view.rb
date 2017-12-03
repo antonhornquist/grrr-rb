@@ -155,29 +155,10 @@ class Grrr::StepView < Grrr::View
 			else
 				pr_set_button_value_by_step_index(@playhead, true)
 			end
-			if previous_playhead_value # TODO: can be moved out of outer if clause?
-				pr_refresh_step(previous_playhead_value)
-			end
-		else
-			if previous_playhead_value
-				pr_refresh_step(previous_playhead_value)
-			end
 		end
-=begin
-
- 		TODO: the two occurences of this:
-
-		if previous_playhead_value
-			pr_refresh_step(previous_playhead_value)
-		end
-		
-		...ought to be possible to remove, and improved by having a clause after the "if @playhead" section:
-
 		if previous_playhead_value != nil and previous_playhead_value != @playhead
 			pr_refresh_step(previous_playhead_value)
 		end
-
-=end
 	end
 
 	def pr_refresh_step(index)

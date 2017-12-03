@@ -396,7 +396,7 @@ class TestView < Test::Unit::TestCase
 	test "a disabled view should not respond to button events" do
 		view = Grrr::View.new_disabled(nil, nil, 4, 4)
 		response = view.press(Grrr::Point.new(0, 0))
-		assert_equal(nil, response)
+		assert_equal([], response)
 	end
 
 	test "a disabled view should not update button state according to incoming button events" do

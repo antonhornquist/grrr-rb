@@ -119,7 +119,7 @@ class Grrr::Toggle < Grrr::AbstractToggle
 
 	def flash_toggle_value(value, delay=nil)
 		points_to_flash = to_points.select { |point|
-			value_at(point) == @value
+			value_at(point) == value
 		}
 		flash_points(points_to_flash, delay)
 	end

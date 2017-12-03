@@ -104,6 +104,13 @@ class TestContainerView < Test::Unit::TestCase
 		assert_container_is_parent_of_view(container, view2)
 		assert_equal(Grrr::Point.new(2, 2), view2.origin)
 	end
+
+	test "it should not be possible to attach a parent of a container view as its child view" do
+		parent_container = Grrr::ContainerView.new_detached(4, 4)
+		container = Grrr::ContainerView.new(parent_container, Grrr::Point.new(0, 0), 4, 4)
+		assert_raise(RuntimeError) { container.add_child(parent_container, Grrr::Point.new(0, 0)) }
+	end
+
 	test "it should be possible to remove child views from a container view" do
 		container = Grrr::ContainerView.new_detached(4, 4)
 		view1 = Grrr::View.new_detached(2, 2)

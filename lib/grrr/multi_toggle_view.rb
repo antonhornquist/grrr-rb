@@ -1,4 +1,4 @@
-class Grrr::MultiToggleView < Grrr::ContainerView
+class Grrr::MultiToggleView < Grrr::View
 	attr_accessor :toggle_pressed_action
 	attr_accessor :toggle_released_action
 	attr_accessor :toggle_value_pressed_action
@@ -10,7 +10,7 @@ class Grrr::MultiToggleView < Grrr::ContainerView
 	attr_reader :thumb_height
 
 	def initialize(parent, origin, num_cols=nil, num_rows=nil, orientation=:vertical, enabled=true, coupled=true, nillable=false)
-		super(nil, nil, num_cols, num_rows, enabled, true)
+		super(nil, nil, num_cols, num_rows, enabled)
 
 		@toggle_pressed_action = nil
 		@toggle_value_pressed_action = nil
@@ -24,7 +24,15 @@ class Grrr::MultiToggleView < Grrr::ContainerView
 		@nillable = nillable
 		pr_set_num_toggles_defaults
 
-		@acts_as_view = true
+		@container_view = Grrr::ContainerView.new_detached(@num_cols, @num_rows)
+		@container_view.add_action(lambda { |originating_button, point, on|
+			if has_view_led_refreshed_action?
+				view_led_refreshed_action.call(self, point, on)
+			end
+		}, :view_led_refreshed_action)
+		add_action(lambda { |point, pressed|
+			@container_view.handle_view_button_event(self, point, pressed)
+		}, :view_button_state_changed_action)
 
 		pr_reconstruct_children
 
@@ -41,10 +49,6 @@ class Grrr::MultiToggleView < Grrr::ContainerView
 
 	def self.new_detached(num_cols=nil, num_rows=nil, orientation=:vertical, enabled=true, coupled=true, nillable=false)
 		new(nil, nil, num_cols, num_rows, orientation, enabled, coupled, nillable)
-	end
-
-	def self.new_disabled(parent, origin, num_cols=nil, num_rows=nil, orientation=:vertical, coupled=true, nillable=false)
-		new(parent, origin, num_cols, num_rows, orientation, false, coupled, nillable)
 	end
 
 	def self.new_decoupled(parent, origin, num_cols=nil, num_rows=nil, orientation=:vertical, enabled=true, nillable=false)
@@ -128,10 +132,10 @@ class Grrr::MultiToggleView < Grrr::ContainerView
 		validate_value(val)
 		num_toggle_values_changed = 0
 		@num_toggles.times do |i|
-			toggle = @toggles[i]
-			if toggle.value != val[i] then
-				toggle.value = val[i]
-				@toggle_value_changed_action.call(self, i, toggle.value) if @toggle_value_changed_action
+			new_toggle_value = val[i]
+			if toggle_value(i) != new_toggle_value
+				set_toggle_value(i, new_toggle_value)
+				@toggle_value_changed_action.call(self, i, new_toggle_value) if @toggle_value_changed_action
 				num_toggle_values_changed = num_toggle_values_changed + 1
 			end
 		end
@@ -142,6 +146,9 @@ class Grrr::MultiToggleView < Grrr::ContainerView
 
 	def validate_value(val)
 		raise "array must be of size #{@num_toggles}" if val.length != @num_toggles
+		@num_toggles.times do |i|
+			@toggles[i].validate_value(val[i])
+		end
 	end
 
 	def maximum_toggle_value
@@ -150,10 +157,6 @@ class Grrr::MultiToggleView < Grrr::ContainerView
 
 	def toggle_value(i)
 		@toggles[i].value
-	end
-
-	def flash_toggle(i, delay)
-		@toggles[i].flash(delay)
 	end
 
 	def set_toggle_value(i, val)
@@ -203,6 +206,15 @@ class Grrr::MultiToggleView < Grrr::ContainerView
 		end
 	end
 
+	def is_lit_at?(point)
+		validate_contains_point(point)
+		@container_view.is_lit_at?(point)
+	end
+
+	def flash_toggle(i, delay)
+		@toggles[i].flash(delay)
+	end
+
 	def flash_view(delay)
 		num_toggles.each { |i|
 			@toggles[i].flash(delay)
@@ -213,36 +225,34 @@ class Grrr::MultiToggleView < Grrr::ContainerView
 		raise "not implemented for multi_toggle_view"
 	end
 
-	def flash_point(point, delay)
-		raise "not implemented for multi_toggle_view"
-	end
-
 	def pr_reconstruct_children
 		release_all
-		pr_remove_all_children(true)
 
-		@toggles = Array.fill(@num_toggles) do |i|
-			toggle = Grrr::Toggle.new_detached(toggle_width, toggle_height, true, @coupled, @nillable, @orientation)
-			if @values_are_inverted
-				toggle.values_are_inverted = @values_are_inverted
-			end
-			if thumb_size != [nil, nil]
-				if toggle.is_valid_thumb_size?(thumb_size)
-					toggle.thumb_size = thumb_size
-				else
-					self.thumb_size_(toggle.thumb_size)
+		pr_do_then_refresh_changed_leds do
+			@container_view.pr_remove_all_children(true)
+			@toggles = Array.fill(@num_toggles) do |i|
+				toggle = Grrr::Toggle.new_detached(toggle_width, toggle_height, true, @coupled, @nillable, @orientation)
+				if @values_are_inverted
+					toggle.values_are_inverted = @values_are_inverted
 				end
+				if thumb_size != [nil, nil]
+					if toggle.is_valid_thumb_size?(thumb_size)
+						toggle.thumb_size = thumb_size
+					else
+						self.thumb_size_(toggle.thumb_size)
+					end
+				end
+	
+				position = if @orientation == :vertical
+					Grrr::Point.new(i*toggle_width, 0)
+				else
+					Grrr::Point.new(0, i*toggle_height)
+				end
+	
+				pr_add_actions(toggle, i)
+				@container_view.pr_add_child_no_flash(toggle, position)
+				toggle
 			end
-			pr_add_actions(toggle, i)
-
-			position = if @orientation == :vertical
-				Grrr::Point.new(i*toggle_width, 0)
-			else
-				Grrr::Point.new(0, i*toggle_height)
-			end
-
-			pr_add_child_no_flash(toggle, position)
-			toggle
 		end
 	end
 

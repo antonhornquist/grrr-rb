@@ -14,31 +14,31 @@ class TestMultiButtonView < Test::Unit::TestCase
 
 		assert_equal(
 			view.button_array_size,
-			[4, 4]
+			Grrr::Point.new(4, 4)
 		)
 	end
 
 	# button array size
 	test "it should be possible to change the button array size of a multibuttonview" do
 		view = Grrr::MultiButtonView.new_detached(4, 4)
-		view.button_array_size = [2, 2]
+		view.button_array_size = Grrr::Point.new(2, 2)
 
 		assert_equal(
 			view.button_array_size,
-			[2, 2]
+			Grrr::Point.new(2, 2)
 		)
 	end
 
 	test "it should not be possible to change the button array size of a multibuttonview so that num_cols of the view is not divisable by num_button_cols" do
 		view = Grrr::MultiButtonView.new_detached(4, 4)
 
-		assert_raise(RuntimeError) { view.button_array_size = [3, 2] }
+		assert_raise(RuntimeError) { view.button_array_size = Grrr::Point.new(3, 2) }
 	end
 
 	test "it should not be possible to change the button array size of a multibuttonview so that num_rows of the view is not divisable by num_button_rows" do
 		view = Grrr::MultiButtonView.new_detached(4, 4)
 
-		assert_raise(RuntimeError) { view.button_array_size = [2, 3] }
+		assert_raise(RuntimeError) { view.button_array_size = Grrr::Point.new(2, 3) }
 	end
 
 	# value

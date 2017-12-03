@@ -7,8 +7,6 @@ class Grrr::ContainerView < Grrr::View
 		@press_through = press_through
 		@children = Array.new
 
-		@acts_as_view = false
-
 		# view has to be added to parent after class-specific properties
 		# have been initialized, otherwise it is not properly refreshed
 		validate_parent_origin_and_add_to_parent(parent, origin)
@@ -34,18 +32,14 @@ class Grrr::ContainerView < Grrr::View
 	end
 
 	def add_child(view, origin)
-		if @acts_as_view
-			raise "it is not allowed to add children to a #{self.class}"
-		else
-			pr_add_child(view, origin)
-		end
+		pr_add_child(view, origin, false)
 	end
 
 	def pr_add_child_no_flash(view, origin)
 		pr_add_child(view, origin, true)
 	end
 
-	def pr_add_child(view, arg_origin, prevent_flash=false)
+	def pr_add_child(view, arg_origin, prevent_flash)
 		validate_ok_to_add_child(view, arg_origin)
 
 		origin = arg_origin.to_point
@@ -64,27 +58,19 @@ class Grrr::ContainerView < Grrr::View
 	end
 
 	def remove_all_children
-		if @acts_as_view
-			raise "it is not allowed to remove children from a #{self.class}"
-		else
-			pr_remove_all_children
-		end
+		pr_remove_all_children(false)
 	end
 
-	def pr_remove_all_children(prevent_flash=false)
+	def pr_remove_all_children(prevent_flash)
 		@children.dup.each { |child| pr_remove_child(child, prevent_flash) }
 	end
 
 	def remove_child(view)
-		if @acts_as_view
-			raise "it is not allowed to remove children from a #{self.class}"
-		else
-			pr_remove_child(view)
-		end
+		pr_remove_child(view, false)
 	end
 
-	def pr_remove_child(view, prevent_flash=false)
-		raise "[#{view}] not a child of [#{self}]" if not is_parent_of? view
+	def pr_remove_child(view, prevent_flash)
+		validate_parent_of(view)
 
 		@children.delete view
 
@@ -241,36 +227,28 @@ class Grrr::ContainerView < Grrr::View
 	# String representation
 
 	def to_plot(indent_level=0)
-		if @acts_as_view
-			super(indent_level)
-		else
-			delimiter = "    "
-			plot_pressed_lines = Array.fill(@num_rows) { Array.new }
-			plot_led_lines = Array.fill(@num_rows) { Array.new }
-			to_points.each { |point|
-				wrap = has_any_enabled_child_at?(point) ? ['[', ']'] : [' ', ' ']
-				plot_pressed_lines[point.y] << wrap.join(is_pressed_at?(point) ? 'P' : '-')
-				plot_led_lines[point.y] << wrap.join(is_lit_at?(point) ? 'L' : '-')
-			}
-			plot_pressed_lines = plot_pressed_lines.enum_for(:each_with_index).collect { |row, i| i.to_s + ' ' + row.join(' ') }
-			plot_led_lines = plot_led_lines.enum_for(:each_with_index).collect { |row, i| i.to_s + ' ' + row.join(' ') }
-			plot = '  ' + (0...@num_cols).to_a.collect { |num| " #{num} " }.join(' ')
-			plot = "\t"*indent_level + plot + delimiter + plot + "\n"
-			@num_rows.times { |i|
-				plot << "\t"*indent_level + plot_pressed_lines[i] + delimiter + plot_led_lines[i] + "\n"
-			}
-			plot
-		end
+		delimiter = "    "
+		plot_pressed_lines = Array.fill(@num_rows) { Array.new }
+		plot_led_lines = Array.fill(@num_rows) { Array.new }
+		to_points.each { |point|
+			wrap = has_any_enabled_child_at?(point) ? ['[', ']'] : [' ', ' ']
+			plot_pressed_lines[point.y] << wrap.join(is_pressed_at?(point) ? 'P' : '-')
+			plot_led_lines[point.y] << wrap.join(is_lit_at?(point) ? 'L' : '-')
+		}
+		plot_pressed_lines = plot_pressed_lines.enum_for(:each_with_index).collect { |row, i| i.to_s + ' ' + row.join(' ') }
+		plot_led_lines = plot_led_lines.enum_for(:each_with_index).collect { |row, i| i.to_s + ' ' + row.join(' ') }
+		plot = '  ' + (0...@num_cols).to_a.collect { |num| " #{num} " }.join(' ')
+		plot = "\t"*indent_level + plot + delimiter + plot + "\n"
+		@num_rows.times { |i|
+			plot << "\t"*indent_level + plot_pressed_lines[i] + delimiter + plot_led_lines[i] + "\n"
+		}
+		plot
 	end
 
 	def to_tree(include_details=false, indent_level=0)
-		if @acts_as_view
-			super(include_details, indent_level)
-		else
-			super(include_details, indent_level) +
-			@children.collect { |child|
-				child.to_tree(include_details, indent_level+1)
-			}.join
-		end
+		super(include_details, indent_level) +
+		@children.collect { |child|
+			child.to_tree(include_details, indent_level+1)
+		}.join
 	end
 end

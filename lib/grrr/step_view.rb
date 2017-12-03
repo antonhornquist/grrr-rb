@@ -1,27 +1,46 @@
-class Grrr::StepView < Grrr::MultiButtonView
+class Grrr::StepView < Grrr::View
+	PLAYHEAD_FLASH_DELAY_WHEN_LIT = 100
+
 	attr_accessor :step_pressed_action
 	attr_accessor :step_released_action
 	attr_accessor :step_value_changed_action
 	attr_reader :playhead
 
 	def initialize(parent, origin, num_cols=nil, num_rows=nil, enabled=true, coupled=true)
-		super(parent, origin, num_cols, num_rows, enabled, false, :toggle)
+		super(nil, nil, num_cols, num_rows, enabled)
 
 		@step_pressed_action = nil
 		@step_released_action = nil
 		@step_value_changed_action = nil
-		@step_view_is_coupled = coupled
-		@steps = Array.fill(num_steps, false)
-		@button_pressed_action = lambda { |view, x, y|
+		@playhead = nil
+		@coupled = coupled
+
+		@multi_button_view = Grrr::MultiButtonView.new_detached(@num_cols, @num_rows, true, false, :toggle)
+		@multi_button_view.add_action(lambda { |originating_button, point, on|
+			if has_view_led_refreshed_action?
+				view_led_refreshed_action.call(self, point, on)
+			end
+		}, :view_led_refreshed_action)
+		add_action(lambda { |point, pressed|
+			@multi_button_view.handle_view_button_event(self, point, pressed)
+		}, :view_button_state_changed_action)
+
+		@multi_button_view.button_pressed_action = lambda { |view, x, y|
 			index = pr_xy_to_index(x, y)
-			if @step_view_is_coupled
+			if @coupled
 				set_step_value_action(index, !step_value(index))
 			end
 			@step_pressed_action.call(self, index) if @step_pressed_action
 		}
-		@button_released_action = lambda { |view, x, y|
+		@multi_button_view.button_released_action = lambda { |view, x, y|
 			@step_released_action.call(self, pr_xy_to_index(x, y)) if @step_released_action
 		}
+
+		@steps = Array.fill(num_steps, false)
+
+		# view has to be added to parent after class-specific properties
+		# have been initialized, otherwise it is not properly refreshed
+		validate_parent_origin_and_add_to_parent(parent, origin)
 	end
 
 	def self.new_detached(num_cols=nil, num_rows=nil, enabled=true, coupled=true)
@@ -32,14 +51,19 @@ class Grrr::StepView < Grrr::MultiButtonView
 		new(parent, origin, num_cols, num_rows, enabled, false)
 	end
 
+	def is_lit_at?(point)
+		validate_contains_point(point)
+		@multi_button_view.is_lit_at?(point)
+	end
+
 	def step_is_pressed?(index)
-		x, y = *pr_index_to_xy(index)
-		button_is_pressed?(x, y)
+		point = pr_index_to_xy(index)
+		@multi_button_view.button_is_pressed?(point.x, point.y)
 	end
 
 	def step_is_released?(index)
-		x, y = *pr_index_to_xy(index)
-		button_is_released?(x, y)
+		point = pr_index_to_xy(index)
+		@multi_button_view.button_is_released?(point.x, point.y)
 	end
 
 	def value
@@ -74,8 +98,8 @@ class Grrr::StepView < Grrr::MultiButtonView
 	end
 
 	def steps_pressed
-		buttons_pressed.collect do |button|
-			pr_xy_to_index(button.x, button.y)
+		@multi_button_view.buttons_pressed.collect do |pos|
+			pr_xy_to_index(pos.x, pos.y)
 		end
 	end
 
@@ -84,8 +108,8 @@ class Grrr::StepView < Grrr::MultiButtonView
 	end
 
 	def flash_step(index, delay)
-		x, y = *pr_index_to_xy(index)
-		flash_button(x, y, delay)
+		point = pr_index_to_xy(index)
+		@multi_button_view.flash_button(point.x, point.y, delay)
 	end
 
 	def set_step_value(index, val)
@@ -102,7 +126,7 @@ class Grrr::StepView < Grrr::MultiButtonView
 	end
 
 	def num_steps
-		num_buttons
+		@multi_button_view.num_buttons
 	end
 
 	def clear
@@ -126,45 +150,60 @@ class Grrr::StepView < Grrr::MultiButtonView
 		@playhead = index
 
 		if @playhead
-			if step_value(@playhead)
-				flash_step(@playhead, 100)
+			if step_value(@playhead) or previous_playhead_value == @playhead
+				flash_step(@playhead, PLAYHEAD_FLASH_DELAY_WHEN_LIT)
 			else
 				pr_set_button_value_by_step_index(@playhead, true)
 			end
-			if previous_playhead_value
+			if previous_playhead_value # TODO: can be moved out of outer if clause?
 				pr_refresh_step(previous_playhead_value)
 			end
 		else
-			if previous_playhead_value.notNil
+			if previous_playhead_value
 				pr_refresh_step(previous_playhead_value)
 			end
 		end
+=begin
+
+ 		TODO: the two occurences of this:
+
+		if previous_playhead_value
+			pr_refresh_step(previous_playhead_value)
+		end
+		
+		...ought to be possible to remove, and improved by having a clause after the "if @playhead" section:
+
+		if previous_playhead_value != nil and previous_playhead_value != @playhead
+			pr_refresh_step(previous_playhead_value)
+		end
+
+=end
 	end
 
 	def pr_refresh_step(index)
-		x, y = *pr_index_to_xy(index)
+		point = pr_index_to_xy(index)
 		step_should_be_lit = step_value(index) || (index == @playhead)
 
-		if button_value(x, y) != step_should_be_lit
-			set_button_value(x, y, step_should_be_lit)
+		if @multi_button_view.button_value(point.x, point.y) != step_should_be_lit
+			@multi_button_view.set_button_value(point.x, point.y, step_should_be_lit)
 		end
 	end
 
 	def pr_xy_to_index(x, y)
-		x + (y * num_button_cols)
+		x + (y * @multi_button_view.num_button_cols)
 	end
 
 	def pr_index_to_xy(index)
-		[index.to_i % num_button_cols, index.to_i / num_button_cols]
+		Grrr::Point.new(index.to_i % @multi_button_view.num_button_cols, index.to_i / @multi_button_view.num_button_cols)
 	end
 
 	def pr_button_value_by_step_index(index)
-		x, y = *pr_index_to_xy(index)
-		button_value(x, y)
+		point = pr_index_to_xy(index)
+		@multi_button_view.button_value(point.x, point.y)
 	end
 
 	def pr_set_button_value_by_step_index(index, val)
-		x, y = *pr_index_to_xy(index)
-		set_button_value(x, y, val)
+		point = pr_index_to_xy(index)
+		@multi_button_view.set_button_value(point.x, point.y, val)
 	end
 end

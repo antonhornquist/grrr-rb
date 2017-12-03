@@ -666,42 +666,4 @@ class TestContainerView < Test::Unit::TestCase
 			top_container.to_tree(true)
 		)
 	end
-
-	# subclassing
-	test "it should be possible to create a subclass of container that do not indicate enabled children in plot" do
-		subclass = MockContainerViewSubclassThatActsAsAView.new_detached(4, 3)
-
-		subclass.press(Grrr::Point.new(1, 2))
-		subclass.press(Grrr::Point.new(3, 0))
-
-		assert_equal(
-			"  0 1 2 3      0 1 2 3\n" +
-			"0 - - - P    0 - - - L\n" +
-			"1 - - - -    1 - - - -\n" +
-			"2 - P - -    2 - - - -\n",
-			subclass.to_plot
-		)
-	end
-
-	test "it should be possible to create a subclass of container that do not recursively plot children" do
-		subclass = MockContainerViewSubclassThatActsAsAView.new_detached(4, 3)
-
-		assert_equal(
-			"a MockContainerViewSubclassThatActsAsAView (4x3, enabled)\n" +
-			"  0 1 2 3      0 1 2 3\n" +
-			"0 - - - -    0 - - - -\n" +
-			"1 - - - -    1 - - - -\n" +
-			"2 - - - -    2 - - - -\n" +
-			"\n",
-			subclass.to_tree(true)
-		)
-	end
-
-	test "it should be possible to create a subclass of container that do not allow addition and removal of children" do
-		subclass = MockContainerViewSubclassThatActsAsAView.new_detached(8, 8)
-
-		assert_raise(RuntimeError) {
-			subclass.add_child(Grrr::View.new_detached(4, 4), Grrr::Point.new(0, 0))
-		}
-	end
 end

@@ -117,21 +117,6 @@ class MockOddColsLitContainerView < Grrr::ContainerView
 	end
 end
 
-class MockContainerViewSubclassThatActsAsAView < Grrr::ContainerView
-	def initialize(parent, origin, num_cols=nil, num_rows=nil)
-		super(parent, origin, num_cols, num_rows, true, true)
-		@acts_as_view = true
-		button1 = Grrr::Button.new_detached(1, 1)
-		button2 = Grrr::Button.new_detached(1, 1)
-		pr_add_child(button1, Grrr::Point.new(3, 0), true)
-		pr_add_child(button2, Grrr::Point.new(2, 1), true)
-	end
-
-	def self.new_detached(num_cols, num_rows)
-		new(nil, nil, num_cols, num_rows)
-	end
-end
-
 class MockController < Grrr::Controller
 	attr_reader :view_button_state_changed_notifications, :view_led_refreshed_notifications
 

@@ -35,6 +35,7 @@ class Grrr::View
 
 		@points_pressed = Array.new
 		@inverted_leds_map = Array.fill2d(@num_cols, @num_rows) { false }
+		@inverted_leds_mutex = Mutex.new
 
 		validate_parent_origin_and_add_to_parent(parent, origin)
 	end
@@ -471,23 +472,24 @@ class Grrr::View
 	end
 
 	def flash_points(points, delay=nil)
-		pr_invert_leds(points)
+		pr_set_inverted_leds_map(points, true)
 		pr_schedule_to_reset_leds(
 			points,
 			(delay ? delay : DEFAULT_FLASH_DELAY) / 1000.0
 		)
 	end
 
-	def pr_invert_leds(points)
-		points.each { |point| @inverted_leds_map[point.x][point.y] = true }
-		refresh_points(points) if is_enabled?
+	def pr_set_inverted_leds_map(points, bool)
+		@inverted_leds_mutex.synchronize do # ruby specific mutex not needed in SuperCollider due to SuperCollider's cooperative multithreading
+			points.each { |point| @inverted_leds_map[point.x][point.y] = bool }
+			refresh_points(points) if is_enabled?
+		end
 	end
 
 	def pr_schedule_to_reset_leds(points, delay_in_seconds)
 		Thread.new do
 			sleep(delay_in_seconds)
-			points.each { |point| @inverted_leds_map[point.x][point.y] = false }
-			refresh_points(points) if is_enabled?
+			pr_set_inverted_leds_map(points, false)
 		end
 	end
 

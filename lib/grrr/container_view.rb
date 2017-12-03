@@ -25,6 +25,7 @@ class Grrr::ContainerView < Grrr::View
 	# Parent - Child
 
 	def validate_ok_to_add_child(view, arg_origin)
+		raise "[#{view}] is parent of [#{self}]" if get_parents.include?(view)
 		raise "origin is required" unless arg_origin
 		raise "[#{view}] already has a parent" if view.has_parent?
 		origin = arg_origin.to_point
@@ -137,12 +138,6 @@ class Grrr::ContainerView < Grrr::View
 	end
 
 	# Validations
-
-	def validate_ok_to_enable_child(child)
-	end
-
-	def validate_ok_to_disable_child(child)
-	end
 
 	def validate_within_bounds(view, origin)
 		raise "[#{view}] at #{origin} not within bounds of [#{self}]" if not is_within_bounds?(view, origin)

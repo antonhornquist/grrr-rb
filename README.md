@@ -137,17 +137,17 @@ If you intend to use this library beware of monkey patching (```lib/core_extensi
 Classes in this library reside in the Grrr module.
 
 * View - Abstract superclass. Represents a 2D grid of backlit buttons.
+	* ContainerView - Abstract class for views that may contain other views.
+		* TopView - This is the topmost view in a view tree and typically the view to which controllers attach. The view cannot be added as a child to any other view.
 	* Button - A button that may span over several rows and columns.
 	* AbstractToggle - Abstract class for toggles.
 		* Toggle - A toggle.
 			* VToggle - Vertical toggle.
 			* HToggle - Horizontal toggle.
+	* MultiButtonView - A grid of buttons of the same size.
+	* MultiToggleView - An array of vertical or horizontal toggles of the same size.
+	* StepView - A grid of buttons of the same size indexed as steps with possibility to indicate playing step. Suitable for step sequencing.
 	* Keyboard - A virtual keyboard.
-	* ContainerView - Abstract class for views that may contain other views.
-		* TopView - This is the topmost view in a view tree and typically the view to which controllers attach. The view cannot be added as a child to any other view.
-		* MultiButtonView - A grid of buttons of the same size.
-			* StepView - A grid of buttons of the same size indexed as steps with possibility to indicate playing step. Suitable for step sequencing.
-		* MultiToggleView - An array of vertical or horizontal toggles of the same size.
 * Controller - Abstract superclass. Represents a device that may attach to and control part of or an entire view.
 	* Monome - Generic [monome](http://monome.org) controller.
 		* Monome64 - 8x8 monome.

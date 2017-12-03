@@ -85,19 +85,19 @@ class Grrr::View
 	end
 
 	def left_top_point
-		Grrr::Point.new(0, 0)
+		Grrr::Point.new(leftmost_col, topmost_row)
 	end
 
 	def right_top_point
-		Grrr::Point.new(@num_cols-1, 0)
+		Grrr::Point.new(rightmost_col, topmost_row)
 	end
 
 	def left_bottom_point
-		Grrr::Point.new(0, @num_rows-1)
+		Grrr::Point.new(leftmost_col, bottommost_row)
 	end
 
 	def right_bottom_point
-		Grrr::Point.new(@num_cols-1, @num_rows-1)
+		Grrr::Point.new(rightmost_col, bottommost_row)
 	end
 
 	def leftmost_col
@@ -306,6 +306,8 @@ class Grrr::View
 
 				[]
 			end
+		else
+			[]
 		end
 	end
 
@@ -512,9 +514,6 @@ class Grrr::View
 			refresh
 			@view_was_enabled_action.call(self) if @view_was_enabled_action
 		else
-			if has_parent?
-				@parent.validate_ok_to_disable_child(self)
-			end
 			release_all
 			@enabled = false
 			if has_parent?
@@ -649,15 +648,13 @@ class Grrr::View
 						"parent has no view_led_refreshed_action"
 					elsif not @parent.is_enabled?
 						"parent is disabled"
-					else
-						if @parent.get_topmost_enabled_child_at(origin + point) != self
-							"view [%s] is not topmost at point [%s] in parent [%s]" %
-							[
-								self,
-								point.to_s,
-								@parent.to_s
-							]
-						end
+					elsif @parent.get_topmost_enabled_child_at(origin + point) != self
+						"view [%s] is not topmost at point [%s] in parent [%s]" %
+						[
+							self,
+							point.to_s,
+							@parent.to_s
+						]
 					end
 
 					puts(

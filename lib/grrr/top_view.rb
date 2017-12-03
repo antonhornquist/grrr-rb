@@ -83,7 +83,7 @@ class Grrr::TopView < Grrr::ContainerView
 
 					if Grrr::Common.trace_button_events
 						puts(
-							"source [%s] referenced in array - reference was removed." %
+							"in %s - source [%s] referenced in array - reference was removed." %
 							[
 								"Method " + self.class.to_s + "#handle_view_button_event",
  								source.to_s

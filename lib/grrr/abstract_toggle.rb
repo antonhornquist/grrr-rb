@@ -4,8 +4,8 @@ class Grrr::AbstractToggle < Grrr::View
 	attr_reader :thumb_width
 	attr_reader :thumb_height
 
-	def initialize(parent, origin, num_cols=nil, num_rows=nil, enabled=true, coupled=true, nillable=false, orientation=:vertical)
-		super(parent, origin, num_cols, num_rows, enabled)
+	def initialize(num_cols=nil, num_rows=nil, enabled=true, coupled=true, nillable=false, orientation=:vertical)
+		super(nil, nil, num_cols, num_rows, enabled)
 
 		@coupled = coupled
 		@nillable = nillable

@@ -5,7 +5,7 @@ class Grrr::Toggle < Grrr::AbstractToggle
 	attr_accessor :toggle_range_pressed_action
 
 	def initialize(parent, origin, num_cols=nil, num_rows=nil, enabled=true, coupled=true, nillable=false, orientation=:vertical)
-		super(nil, nil, num_cols, num_rows, enabled, coupled, nillable, orientation)
+		super(num_cols, num_rows, enabled, coupled, nillable, orientation)
 
 		@toggle_pressed_action = nil
 		@toggle_released_action = nil

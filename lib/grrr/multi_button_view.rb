@@ -161,17 +161,6 @@ class Grrr::MultiButtonView < Grrr::View
 		pr_reconstruct_children
 	end
 
-	def validate_button_array_size(button_array_size)
-		new_num_button_cols = button_array_size[0]
-		new_num_button_rows = button_array_size[1]
-		if @num_cols % new_num_button_cols != 0
-			raise "#{self.class} width (#@num_cols) must be divisable by number of button columns (#{new_num_button_cols})"
-		end
-		if @num_rows % new_num_button_rows != 0
-			raise "#{self.class} height (#@num_rows) must be divisable by number of button rows (#{new_num_button_rows})"
-		end
-	end
-
 	def num_buttons
 		@num_button_cols * @num_button_rows
 	end

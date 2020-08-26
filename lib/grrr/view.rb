@@ -392,21 +392,9 @@ class Grrr::View
 		self.class.bounds_to_points(origin, num_cols, num_rows).collect { |point| [ point,  is_lit_at?(point) ] }
 	end
 
-	def pr_disable_led_forwarding_to_parent
-		if @parent_view_led_refreshed_listener
-			remove_action(@parent_view_led_refreshed_listener, :view_led_refreshed_action);
-		end
-	end
-
-	def pr_enable_led_forwarding_to_parent
-		if @parent_view_led_refreshed_listener
-			add_action(@parent_view_led_refreshed_listener, :view_led_refreshed_action);
-		end
-	end
-
 	def pr_do_then_refresh_changed_leds(&func)
 		if has_parent?
-			pre = get_led_state_within_bounds(origin_to_use, @num_cols, @num_rows)
+			pre = get_led_state_within_bounds(@origin, @num_cols, @num_rows) # TODO: Point.new(0, 0) instead of @origin?
 			pr_disable_led_forwarding_to_parent
 		end
 
@@ -414,7 +402,7 @@ class Grrr::View
 
 		if has_parent?
 			pr_enable_led_forwarding_to_parent
-			post = get_led_state_within_bounds(origin_to_use, @num_cols, @num_rows)
+			post = get_led_state_within_bounds(@origin, @num_cols, @num_rows) # TODO: Point.new(0, 0) instead of @origin?
 
 			points_having_changed_state = post.select do |point_state_1|
 				pre.any? do |point_state_2|
@@ -424,6 +412,18 @@ class Grrr::View
 
 			points_to_refresh = points_having_changed_state.collect { |point_state| point_state[0] }
 			refresh_points(points_to_refresh)
+		end
+	end
+
+	def pr_disable_led_forwarding_to_parent
+		if @parent_view_led_refreshed_listener
+			remove_action(@parent_view_led_refreshed_listener, :view_led_refreshed_action);
+		end
+	end
+
+	def pr_enable_led_forwarding_to_parent
+		if @parent_view_led_refreshed_listener
+			add_action(@parent_view_led_refreshed_listener, :view_led_refreshed_action);
 		end
 	end
 

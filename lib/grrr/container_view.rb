@@ -1,10 +1,10 @@
 class Grrr::ContainerView < Grrr::View
 	attr_reader :press_through
 
-	def initialize(parent=nil, origin=nil, num_cols=nil, num_rows=nil, enabled=true, press_through=false)
+	def initialize(parent=nil, origin=nil, num_cols=nil, num_rows=nil, enabled=true, press_through=false) # TODO: press through is not needed anymore, right?
 		super(nil, nil, num_cols, num_rows, enabled)
 
-		@press_through = press_through
+		@press_through = press_through # TODO: press through is not needed anymore, right?
 		@children = Array.new
 
 		# view has to be added to parent after class-specific properties
